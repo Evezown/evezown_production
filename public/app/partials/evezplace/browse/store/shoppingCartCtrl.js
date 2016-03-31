@@ -4,11 +4,14 @@
 
 
 evezownApp.controller('ShoppingCartCtrl', function ($scope, $cookieStore, StoreService,
-                                                    usSpinnerService, ngTableParams, $rootScope) {
+                                                    usSpinnerService, ngTableParams, $rootScope,
+                                                    PATHS, $location) {
 
     $scope.shoppingCartItems = StoreService.getShoppingCartItems();
 
     $scope.isShoppingCartEmpty = StoreService.isShoppingCartEmpty();
+
+    $scope.imageUrl = PATHS.api_url;
 
     $scope.removeFromCart = function ($product) {
 
@@ -56,6 +59,12 @@ evezownApp.controller('ShoppingCartCtrl', function ($scope, $cookieStore, StoreS
             $scope.shoppingCartCount = +$scope.shoppingCartCount + +value.products.length;
         });
 
+        if($cookieStore.get('shoppingCartItems')) {
+            $cookieStore.remove('shoppingCartItems');
+        }
+
+        $cookieStore.put('shoppingCartItems', $scope.shoppingCartItems);
+
         $rootScope.$broadcast('shoppingCartItems', {message: $scope.shoppingCartItems});
     }
 
@@ -76,5 +85,9 @@ evezownApp.controller('ShoppingCartCtrl', function ($scope, $cookieStore, StoreS
                 params.page() * params.count()));
         }
     })
+
+    $scope.placeOrder = function() {
+        $location.path('/store/order/place');
+    }
 });
 

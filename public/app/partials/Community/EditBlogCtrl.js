@@ -19,6 +19,18 @@ evezownApp.controller('EditBlogCtrl' ,function($scope, PATHS,$cookieStore,$http,
     $scope.selectedsubcategories = null;
     $scope.selectedVisibility = null;
 
+    //breadcrumb link
+    if($routeParams.id != undefined)
+    {
+        $scope.currentUserId = $routeParams.id;
+        $scope.isProfile = true;
+    }
+    else
+    {
+        $scope.currentUserId = $scope.loggedInUserId;
+        $scope.isProfile = false;
+    }
+
     //Loading subcategories based on categoryId
     $scope.GetSubCategories = function ()
     {
@@ -139,12 +151,12 @@ evezownApp.controller('EditBlogCtrl' ,function($scope, PATHS,$cookieStore,$http,
 
                             }).then(function()
                             {
-                                $location.path('/blogs');
+                                $location.path('/myblogs/' + $scope.loggedInUserId);
                             });
                     }
                     else
                     {
-                        $location.path('/blogs');
+                        $location.path('/myblogs/' + $scope.loggedInUserId);
                     }
                 });
         }
@@ -181,7 +193,7 @@ evezownApp.controller('EditBlogCtrl' ,function($scope, PATHS,$cookieStore,$http,
                 success(function (data, status, headers, config)
                 {
                     console.log(data);
-                    toastr.success(data.message, 'Blog');
+                    //toastr.success(data.message, 'Blog');
 
                 }).error(function (data)
                 {
@@ -198,7 +210,8 @@ evezownApp.controller('EditBlogCtrl' ,function($scope, PATHS,$cookieStore,$http,
                             }).
                             success(function (data, status, headers, config)
                             {
-                                toastr.success(data.message, 'Blog');
+                                //toastr.success(data.message, 'Blog');
+                                toastr.success('Blog updated and published successfully');
 
                             }).error(function (data)
                             {
@@ -206,12 +219,29 @@ evezownApp.controller('EditBlogCtrl' ,function($scope, PATHS,$cookieStore,$http,
 
                             }).then(function()
                             {
-                                $location.path('/blogs');
+                                $location.path('/myblogs/' + $scope.loggedInUserId);
                             });
                     }
                     else
                     {
-                        $location.path('/blogs');
+                        console.log(data.data);
+                        $http.post($scope.service_url + 'users/blogs/'+data.data.id+'/editasdraft'
+                            , {
+                                headers: {'Content-Type': 'application/json'}
+                            }).
+                            success(function (data, status, headers, config)
+                            {
+                                //toastr.success(data.message, 'Blog');
+                                toastr.success('Blog saved as draft');
+
+                            }).error(function (data)
+                            {
+                                toastr.error(data.error.message, 'Blog');
+
+                            }).then(function()
+                            {
+                                $location.path('/myblogs/' + $scope.loggedInUserId);
+                            });
                     }
                 });
         }
@@ -328,7 +358,7 @@ evezownApp.controller('EditBlogCtrl' ,function($scope, PATHS,$cookieStore,$http,
 
     $scope.convertToDate = function (stringDate){
         var dateOut = new Date(stringDate);
-        dateOut.setDate(dateOut.getDate() + 1);
+        dateOut.setDate(dateOut.getDate());
         return dateOut;
     };
 

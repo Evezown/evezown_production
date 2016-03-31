@@ -90,6 +90,34 @@ evezownApp
             });
         }
 
+        // Show the dialog to set the options for show blog in evezplace
+        //  Eg: evezplace section (product, service etc) and priority.
+        $scope.showInEvezplaceDialog = function (forum) {
+
+            console.log('Click show in marketplace');
+            var showInEvezplaceDialog = ngDialog.open(
+                {
+                    template: 'showForumInEvezplaceTemplateId',
+                    scope: $scope,
+                    controller: $controller('showForumEvezplaceCtrl', {
+                        $scope: $scope,
+                        forum: forum
+                    })
+                });
+
+            showInEvezplaceDialog.closePromise.then(function (data) {
+
+                fetchForum();
+
+                console.log(data);
+
+                if (data.value.status) {
+                    toastr.success(data.value.message, 'Discussion added to marketplace section');
+                }
+            });
+
+        };
+
     });
 
 evezownApp.controller('EditForumCtrl', function ($scope,
@@ -204,6 +232,56 @@ evezownApp.controller('deleteForumCtrl', function($scope, ForumService, $cookieS
     }
 
     $scope.cancelDeleteForum = function() {
+        ngDialog.close();
+    }
+});
+
+
+evezownApp.controller('showForumEvezplaceCtrl', function ($scope, ForumService, EvezplaceHomeService, $cookieStore,
+                                                          usSpinnerService, forum, ngDialog) {
+
+    $scope.forumId = forum.id;
+    $scope.userId = $cookieStore.get('userId');
+
+    function getEvezplaceSection(userId) {
+        EvezplaceHomeService.getSections(userId).
+        then(function (data) {
+            $scope.sections = data;
+            $scope.selectedSectionId = $scope.sections[0].id;
+        }, function (error) {
+            toastr.error(error.error.message, 'Marketplace Sections');
+        });
+    }
+
+    $scope.options = {
+        priority: 0,
+        selectedSectionId: 3,
+        is_show_evezplace: false
+    };
+
+    if(forum.trending != null) {
+        $scope.options.priority = forum.trending.priority;
+        $scope.options.selectedSectionId = forum.trending.evezown_section_id;
+        $scope.options.is_show_evezplace = forum.trending.is_show_evezplace;
+    }
+
+    getEvezplaceSection($scope.userId);
+
+    $scope.addForumShowEvezplace = function () {
+
+        usSpinnerService.spin('spinner-1');
+        ForumService.addForumShowEvezplace($scope.userId, $scope.forumId, $scope.options).then(function (data) {
+            usSpinnerService.stop('spinner-1');
+            ngDialog.close("", data);
+        });
+    };
+
+    $scope.$watch('options.priority',function(val,old){
+        console.log(val);
+        $scope.options.priority = val;
+    });
+
+    $scope.cancelShowInEvezplaceForum = function () {
         ngDialog.close();
     }
 });

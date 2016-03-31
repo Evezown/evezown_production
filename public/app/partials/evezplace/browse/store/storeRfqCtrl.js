@@ -137,8 +137,7 @@ evezownApp.controller('storeRfqCtrl', function ($scope, storeId, usSpinnerServic
         }
     })
 
-    // Crop Title image
-    $scope.saveProductRfiDetails = function () {
+    $scope.saveStoreRfqDetails = function () {
 
         usSpinnerService.spin('spinner-1');
 

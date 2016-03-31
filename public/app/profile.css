@@ -75,7 +75,7 @@ div.user-menu-container a, div.user-menu-container .btn  {
 
 div.user-menu-container .thumbnail {
     width:100%;
-    min-height:200px;
+    min-height:220px;
     border: 0px!important;
     padding: 0px;
     border-radius: 0;
@@ -316,12 +316,9 @@ div.user-menu div.user-menu-content:not(.active){
 
 .overlay
 {
-    /*position: absolute;*/
-    width: 100%;
+    position: absolute;
     color: #fff;
-    bottom: 0;
-    background-color: black;
-    background-color: rgba(0,0,0,0.5);
+    opacity: 0.5;
     padding: 10px;
 }
 

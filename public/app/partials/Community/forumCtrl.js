@@ -14,7 +14,8 @@ evezownApp.controller('forums' ,function($scope, friendsService, PATHS,$http,$co
     $scope.isProfile = false;
     $scope.selectedVisibility = null;
     $rootScope.showVisibility = "";
-
+    $scope.isActive = ['', 'active', '', ''];
+    
     //breadcrumb link
     if($routeParams.id != undefined)
     {

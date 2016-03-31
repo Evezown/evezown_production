@@ -1,7 +1,42 @@
+<!-- Static navbar -->
+<nav class="navbar navbar-default" id="navContainer">
+    <div id="navbar1">
+        <ul class="nav navbar-nav">
+            <li ng-class="">
+                <a href="#profile/{{userId}}" >Mysite</a>
+            </li>
+            <li><a class="{{isActive[1]}}" href="#mydiscussion/{{currentUserId}}" >Discussions</a>
+            </li>
+            <li ng-class="{ active: isActive('/explore')}">
+                <!-- Template which needs to be shown on click -->
+                <script type="text/ng-template" id="explore">
+                    <div class="triangle"></div>
+                    <div class="ns-popover-tooltip">
+                        <ul>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
+                        </ul>
+                    </div>
+                </script>
+
+                <a ns-popover
+                   ns-popover-template="explore"
+                   ns-popover-trigger="click"
+                   ns-popover-theme="ns-popover-list-theme">
+                    Explore
+                </a>
+            </li>
+            <li ng-class="{ active: isActive('/search/advanced')}"><a href="#search/advanced"
+                                                                      id="search">Search&nbsp;<span
+                    class="fa fa-search" id="searchIcon"></span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <ul class="breadcrumb" ng-controller="activity">
     <li><a href="#home">Home</a></li>
-    <li ng-if="isProfile == true"><a href="#mydiscussion/{{currentUserId}}">Discussion</a></li>
-    <li ng-if="isProfile == false"><a href="#forums">Discussion</a></li>
+    <li><a href="#mydiscussion/{{currentUserId}}">Discussion</a></li>
 </ul>
 <div class="custom-forum-details-section">
 <div class="col-md-12 trending-section custom-forum-header" ng-controller="forums">

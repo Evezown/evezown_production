@@ -3,70 +3,75 @@ evezownApp
         $scope.title = "EvezPlace";
     });
 
-evezownApp.controller('ProductMenuController', function ($rootScope, $scope, $location, EvezplaceHomeService, $routeParams) {
+evezownApp.controller('ProductMenuController', function ($rootScope, $scope, $location,
+                                                         EvezplaceHomeService, $routeParams, SECTIONS) {
 
     $scope.productNavLinks = [{
+        Index: 0,
         Title: 'evezplace',
-        LinkText: 'Product'
+        LinkText: 'Stores'
     }, {
+        Index: 1,
         Title: 'services',
-        LinkText: 'Services'
+        LinkText: 'Business'
     }, {
+        Index: 2,
         Title: 'productServices',
-        LinkText: 'Product + Services'
+        LinkText: 'Store/Business'
     }, {
-        Title: 'classifieds',
-        LinkText: 'Classifieds'
+        Index: 3,
+        Title: 'Ads & Campaigns',
+        LinkText: 'Ads & Campaigns'
     }];
+
+    $scope.selectedIndex = 0;
+
+    $scope.selectMenu = function(index) {
+
+        $scope.selectedIndex = index;
+
+        $rootScope.$broadcast('selectedEvezplaceSectionIndex', { index : $scope.selectedIndex });
+
+        getCategories();
+    };
 
     $scope.currentSection = 0;
 
-    $scope.navClass = function (page) {
+    $scope.navClass = function (index) {
 
-        var currentRoute = $location.path().substring(1) || 'home';
-
-        if (currentRoute == 'evezplace' || currentRoute == 'store/' + $routeParams.id
-                                        || currentRoute == 'store/products/' + $routeParams.id) {
-            currentRoute = 'evezplace';
+        if (index == 0) {
             $rootScope.currentSection = 3;
             $rootScope.storeType = "Store"
         }
-        else if (currentRoute == 'services') {
-            currentRoute = 'services';
+        else if (index == 1) {
             $rootScope.currentSection = 4;
             $rootScope.storeType = "Service"
         }
-        else if (currentRoute == 'classifieds'
-                    || currentRoute == 'classifieds/' + $routeParams.id) {
-            currentRoute = 'classifieds';
-            $rootScope.currentSection = 5;
-        }
-        else if (currentRoute == 'productServices'
-                    || currentRoute == 'productServices/' + $routeParams.id) {
-            currentRoute = 'productServices';
+        else if (index == 2) {
             $rootScope.currentSection = 6;
         }
+        else if (index == 3) {
+            $rootScope.currentSection = 5;
+        }
 
-        return page === currentRoute ? 'active' : '';
+        return index == $scope.selectedIndex ? 'active' : '';
     };
 
     getCategories();
 
     function getCategories() {
-        var currentRoute = $location.path().substring(1);
 
-        if (currentRoute == 'evezplace' || currentRoute == 'store/' + $routeParams.id
-                                        || currentRoute == 'store/products/' + $routeParams.id) {
+        if ($scope.selectedIndex == 0) {
             $scope.currentSection = 3;
         }
-        else if (currentRoute == 'services') {
+        else if ($scope.selectedIndex == 1) {
             $scope.currentSection = 4;
         }
-        else if (currentRoute == 'classifieds' || currentRoute == 'classifieds/' + $routeParams.id) {
-            $scope.currentSection = 5;
-        }
-        else if (currentRoute == 'productServices' || currentRoute == 'productServices/' + $routeParams.id) {
+        else if ($scope.selectedIndex == 2) {
             $scope.currentSection = 6;
+        }
+        else if ($scope.selectedIndex == 3) {
+            $scope.currentSection = 5;
         }
 
         EvezplaceHomeService.getCategories($scope.currentSection)
@@ -77,9 +82,7 @@ evezownApp.controller('ProductMenuController', function ($rootScope, $scope, $lo
 
 });
 
-evezownApp.controller('CreateBrowseController', function ($scope) {
 
-});
 
 evezownApp.controller('BrowseStoreController', function ($scope) {
 
@@ -129,7 +132,7 @@ evezownApp.controller('StoreInfoController', function ($scope, $location) {
         LinkText: 'What Do I Get'
     }, {
         Title: 'typeofstores',
-        LinkText: 'Types of Eve-Stores'
+        LinkText: 'Types of Stores'
     }, {
         Title: 'faq',
         LinkText: 'FAQ'

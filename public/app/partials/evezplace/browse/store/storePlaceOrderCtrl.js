@@ -3,8 +3,9 @@
  */
 
 evezownApp.controller('StorePlaceOrderCtrl', function ($scope, StoreService, usSpinnerService,
-                                                       ngFabForm, $cookieStore, $rootScope) {
+                                                       ngFabForm, $cookieStore, $rootScope, PATHS) {
 
+    $scope.imageUrl = PATHS.api_url;
 
     $scope.defaultFormOptions = ngFabForm.config;
     $scope.customFormOptions = angular.copy(ngFabForm.config);

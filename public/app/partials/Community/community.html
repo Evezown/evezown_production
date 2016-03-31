@@ -1,32 +1,12 @@
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
-     role="alert" ng-controller="ApplicationCtrl">
-<div class="carousel-inner"
-             ng-intro-options="IntroOptions" ng-intro-method="CallMe"
-             ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
-             ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
-             ng-intro-autostart="false">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-    </button>
-    <h1>Build Community</h1>
-
-    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Evez, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to WoiceIt, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
-    </p>
-    <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();">Take a Tour</button>
-</div>
-</div>
 <!-- Static navbar -->
 <nav class="navbar navbar-default" id="navContainer">
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li id="step1"  data-toggle="tab" data-slide-to="0">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Mysite</a>
             </li>
             <li id="step2"  data-toggle="tab" data-slide-to="1">
                 <a href="#community" ng-class="{ active: isActive('/community')}">Build Community</a>
-            </li>
-            <li id="step10"  data-toggle="tab" data-slide-to="9">
-                <a href="#recco" ng-class="{ active: isActive('/recco')}">Stream It</a>
             </li>
             <li id="step11"  data-toggle="tab" data-slide-to="10" ng-class="{ active: isActive('/explore')}">
                 <!-- Template which needs to be shown on click -->
@@ -34,8 +14,8 @@
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -54,28 +34,48 @@
         </ul>
     </div>
 </nav>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
+     role="alert" ng-controller="ApplicationCtrl">
+<div class="carousel-inner"
+             ng-intro-options="IntroOptions" ng-intro-method="CallMe"
+             ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
+             ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
+             ng-intro-autostart="false">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    <h1>Build Community</h1>
+
+    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Connect, Advertise, Circles, Invite People, Invite history. These features are linked to Stream It, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
+    </p>
+    <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();">Take a Tour</button>
+</div>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+    <ul class="breadcrumb" style="background: transparent; padding-left: 0px" >
+        <li><a href="#home">Home</a> <span class="divider"></span></li>
+        <li><a href="#profile/{{userId}}">Mysite</a></li>
+        <li class="active">Build Community</li>
+    </ul>
+</div>
+
 <div class="col-md-2 user-menu-btns">
     <div class="btn-group-vertical square" id="responsive">
         <a id="step3"  data-toggle="tab" data-slide-to="2" href="#community" class="btn btn-block btn-default active">
-            <p>Eves</p>
+            <p>Connects</p>
         </a>
-        <a id="step4"  data-toggle="tab" data-slide-to="3" href="#circles" class="btn btn-default">
+        <a id="step4"  data-toggle="tab" data-slide-to="3" href="#advertise" class="btn btn-default">
+            <p>Advertise</p>
+        </a>
+        <a id="step5"  data-toggle="tab" data-slide-to="3" href="#circles" class="btn btn-default">
             <p>Circles</p>
         </a>
-        <a id="step5"  data-toggle="tab" data-slide-to="4" href="#albums" class="btn btn-default">
-            <p>Gallery</p>
+        <a id="step6"  data-toggle="tab" data-slide-to="4" href="#friends/invite" class="btn btn-default">
+            <p>Invite People</p>
         </a>
-        <a id="step6"  data-toggle="tab" data-slide-to="5" href="#groups" class="btn btn-default">
-            <p>Groups</p>
-        </a>
-        <a id="step7"  data-toggle="tab" data-slide-to="6" href="#events" class="btn btn-default">
-            <p>Events</p>
-        </a>
-        <a id="step8"  data-toggle="tab" data-slide-to="7" href="#blogs" class="btn btn-default">
-            <p>Blogs</p>
-        </a>
-        <a id="step9"  data-toggle="tab" data-slide-to="8" href="#forums" class="btn btn-default">
-            <p>Discussion</p>
+        <a id="step6"  data-toggle="tab" data-slide-to="4" href="#invitehistory" class="btn btn-default">
+            <p>Invite History</p>
         </a>
     </div>
 </div>
@@ -83,44 +83,46 @@
     <div class="col-md-12 panel-heading" style="padding-left: 0px;padding-right: 0px;">
         <div class="fragment">
             <a><span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span></a>
-            <h4>Eves</h4>
+            <h4>Connect</h4>
             <p>
-                Connect with women through inviting them to join your community. Send invite code over email or through phone (SMS or What’sAPP).
+                Connect with people through inviting them to join your community. Send invite code over email or through phone (SMS or What’sAPP).
             </p>
         </div>
     </div>
     <div class="col-md-12 panel-heading  custom-invite-eves" style="padding-left: 0px">
         <div class="col-md-2" style="padding-left: 0px">
             <h5 style="color: #337ab7; font-weight: 600; font-size: 16px">
-                Eves ({{friendList.length}})
+                Friends ({{friendList.length}})
             </h5>
         </div>
         <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="search eves" ng-model="evesearch"/>
+            <input type="text" class="form-control" placeholder="search friends" ng-model="evesearch"/>
         </div>
         <div class="col-md-2 col-md-offset-4 pull-right custom-invite-eves-button">
-            <a href="#friends/invite" class="btn btn-primary"><span class="fa fa-plus"></span> invite eves</a>
+            <a href="#friends/invite" class="btn btn-primary"><span class="fa fa-plus"></span> invite people</a>
         </div>
     </div>
     <div class="col-sm-12 text-center" style="background: #e6e4e4; height: 400px;margin-top:30px;" ng-if="friendList.length == 0">
         <h4 style="margin-top: 150px; color: #444444">Don' have any friends yet?</h4>
         <a href="#friends/invite" class="btn btn-primary" style="font-size: 20px; border-radius: 5px; margin-top: 20px">
-            <span class="fa fa-plus"></span> Invite Eves Now
+            <span class="fa fa-plus"></span> Invite people Now
         </a>
     </div>
     <div class="col-md-12 friends-section custom-friends-section" ng-if="friendList.length > 0" style="padding-left: 0px;margin-top:10px;">
         <ul class="row" style="padding-left: 0px">
-            <li class="col-lg-3 col-md-3 col-sm-4 col-xs-6" style="padding-left: 0px; padding-right: 0px" ng-repeat="friend in friendList | filter:evesearch | orderBy:'firstname':true" ng-if="friend.id != currentUserId">
-                <a href="#profile/{{friend.friend_user_id}}">
+            <!-- <li class="col-lg-3 col-md-3 col-sm-4 col-xs-6" style="padding-left: 0px; padding-right: 0px" ng-repeat="friend in friendList | filter:evesearch | orderBy:'firstname':true" ng-if="friend.id != currentUserId">-->
+            <li class="col-lg-3 col-md-3 col-sm-4 col-xs-6" style="padding-left: 0px; padding-right: 0px" ng-repeat="friend in FilteredFriend = (friendList | filter:evesearch) | orderBy:'firstname':true" ng-if="friend.friend_user_id != currentUserId">
+               <a href="#profile/{{friend.friend_user_id}}">
                     <center>
                         <div class="profile-img-crop">
                             <img ng-src="{{service_url+'image/show/'+friend.profile.profile_image.large_image_url}}"
                                  class="img-thumbnail"/>
                         </div>
-                        <h5>{{friend.profile.firstname}} {{friend.profile.lastname}}</h5>
+                        <h5>{{friend.profile.firstname  | strLimit:12}}<!--  {{friend.profile.lastname | strLimit:6}} --></h5>
                     </center>
                 </a>
             </li>
+            <p style="text-align:center;" ng-hide="FilteredFriend.length">No friends found</p>
         </ul>
     </div>
 </div>
@@ -140,6 +142,7 @@
                 </div>
             </li>
         </ul>
+        <p style="text-align:center;" ng-if="NoResult">No members found</p>
         <div class="panel-footer">
             <div class="row">
                 <div class="col-md-12">
@@ -157,7 +160,7 @@
     <!-- Friend requests -->
     <div class="panel" style="background: #f7f7f7;">
         <div class="panel-heading">
-            <h5 style="color: #337ab7; font-weight: 600 ;margin-top: 5px; margin-bottom: 5px">Eve Requests ({{memberRequests.length}})</h5>
+            <h5 style="color: #337ab7; font-weight: 600 ;margin-top: 5px; margin-bottom: 5px">Member Requests ({{memberRequests.length}})</h5>
         </div>
         <ul class="list-group" ng-repeat="request in memberRequests | limitTo:10 | orderBy:'firstname':true">
             <li class="list-group-item col-sm-12">

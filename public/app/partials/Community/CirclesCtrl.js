@@ -15,6 +15,10 @@ evezownApp.controller('circles' ,function($scope, friendsService, PATHS,$http,$c
     $scope.selectedVisibility = null;
     $rootScope.showVisibility = "";
     $scope.currentVisibility = "";
+    $scope.isActive = ['', 'active', '', ''];
+
+    
+
     $scope.fetchFriends = function()
     {
         //PATHS.api_url +  'users/' + $cookieStore.get('userId') + '/circlefriends'

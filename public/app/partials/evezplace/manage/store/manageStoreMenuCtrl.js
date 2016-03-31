@@ -69,6 +69,16 @@ evezownApp.controller('ManageStoreMenuCtrl', function ($scope, $location, $route
             id: 10,
             name: 'Orders',
             link: 'store/' + $rootScope.currentStoreId + '/manage/orders'
+        },
+        {
+            id: 11,
+            name: 'Request for Quote',
+            link: 'store/' + $rootScope.currentStoreId + '/manage/rfq'
+        },
+        {
+            id: 12,
+            name: 'Request for Info',
+            link: 'store/' + $rootScope.currentStoreId + '/manage/rfi'
         }
     ];
 

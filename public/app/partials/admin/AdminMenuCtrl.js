@@ -16,7 +16,7 @@ evezownApp
             link : 'admin' 
         },{
             name: 'Users',
-            link : 'admin/users/1' 
+            link : 'admin/users/'+$scope.loggedInUserId
         },{
             name: 'Blogs',
             link : 'admin/blog' 
@@ -37,15 +37,15 @@ evezownApp
             link : 'admin/store' 
 
         },{
-            name: 'Opportunities',
+            name: 'Jobs',
             link : 'admin/opportunities' 
 
         },{
-            name: 'Woice',
+            name: 'Stream It',
             link : 'admin/woice' 
 
         },{
-            name: 'Woice-flag',
+            name: 'Sgtream It-flag',
             link : 'admin/woiceflag' 
 
         },{
@@ -55,6 +55,22 @@ evezownApp
         },{
             name: 'News, Articles, Interviews & Videos',
             link : 'admin/articles'
+
+        },{
+            name: 'News Letter',
+            link : 'admin/newsletter' 
+
+        },{
+            name: 'Marketplace Promotions',
+            link : 'admin/evezplace/promotion'
+
+        },{
+            name: 'Marketplace Recommendations',
+            link : 'admin/evezplace/recommendations'
+
+        },{
+            name: 'Marketplace Trending Items',
+            link : 'admin/evezplace/trending'
 
         });
 

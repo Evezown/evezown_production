@@ -5,7 +5,7 @@ evezownApp.directive('ngCrop', function() {
     return {
         restrict: 'EA',
         replace: true,
-        scope: { src:'=', selected:'&', ratio:'@', boxWidth: '@'},
+        scope: { src:'=', selected:'&', ratio:'@', boxWidth: '@', setSelect: '@'},
         link: function(scope,element, attr) {
             var myImg;
             var clear = function() {
@@ -31,8 +31,9 @@ evezownApp.directive('ngCrop', function() {
                         bgFade: true,
                         aspectRatio : scope.ratio,
                         boxWidth: scope.boxWidth,
-                        setSelect: [0,0,1500,1500],
-                        bgColor : 'black'
+                        setSelect: [40, 40, 50, 50],
+                        bgColor : 'black',
+                        selected : [40, 40, 69, 56, 29, 16]
                     });
                 }
             });

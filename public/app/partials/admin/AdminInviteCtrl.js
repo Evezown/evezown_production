@@ -9,11 +9,13 @@ evezownApp
         $http.get(PATHS.api_url + 'admin/' + $cookieStore.get('userId') +'/invites').
             success(function (data) {
                 $scope.invites = data.data;
-                $scope.paging = data.meta.pagination;
-                $scope.totalPages = new Array(Number($scope.paging.total_pages));
-                $scope.active = $scope.paging.current_page;
+                //$scope.paging = data.meta.pagination;
+               // $scope.totalPages = new Array(Number($scope.paging.total_pages));
+                //$scope.active = $scope.paging.current_page;
                 $scope.next = data.meta.next;
                 usSpinnerService.stop('spinner-1');
+                $scope.getInvites = [];
+                $scope.invitePagination = {};
             });
         $scope.AcceptInvite = function (item)
         {
@@ -77,6 +79,30 @@ evezownApp
                     $location.path("/admin");
                 });
         }
-    }
 
-);
+        $scope.pageChanged = function () {
+            console.log('Page changed to: ' + $scope.currentInvitePage);
+            $scope.GetInvitePagination ();
+        };
+
+        $scope.maxSize = 5;
+        $scope.currentInvitePage = 1;
+
+        $scope.GetInvitePagination = function () {
+            $http.get(PATHS.api_url + 'admin/'+$cookieStore.get('userId')+'/invites?page='+$scope.currentInvitePage).
+            success(function(data) {
+                    console.log(data);
+                    $scope.getInvites = data.data;
+                    usSpinnerService.stop('spinner-1');
+                    $scope.invitePagination = data.meta.pagination;
+                }).then(function () {
+
+                });
+        }
+        $scope.GetInvitePagination ();
+
+
+
+   
+
+ });

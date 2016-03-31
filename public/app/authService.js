@@ -8,72 +8,69 @@ evezownApp
         AuthService.login = function (credentials) {
             return $http
                 .post(PATHS.api_url + 'login', credentials)
-                .success(function(data)
-                {
+                .success(function (data) {
 
-                }).error(function (data)
-                {
+                }).error(function (data) {
                     return data;
                 })
-                .then(function (res)
-                {
-                        Session.create(res.data.data.api_key, res.data.data.id, res.data.data.firstname, res.data.data.lastname,
-                            res.data.data.role);
-                        return res.data.user;
+                .then(function (res) {
+                    $cookieStore.put('userToken', res.data.data.token);
+                    Session.create(
+                        res.data.data.api_key,
+                        res.data.data.id,
+                        res.data.data.firstname,
+                        res.data.data.lastname,
+                        res.data.data.role,
+                        res.data.data.role_id,
+                        res.data.data.token);
+                    return res.data.data;
                 });
         };
 
 
-        AuthService.getProfileImage = function (imagePath)
-        {
+        AuthService.getProfileImage = function (imagePath) {
             return $http({
                 url: imagePath,
                 method: 'GET'
             })
         }
 
-        AuthService.setImage = function (imagePath)
-        {
+        AuthService.setImage = function (imagePath) {
             return $http({
                 url: imagePath,
                 method: 'GET'
-            }).success(function(data){
-                if(data)
-                {
-                    imageName = PATHS.api_url +'image/show/'+ data + '/300/217';
+            }).success(function (data) {
+                if (data) {
+                    imageName = PATHS.api_url + 'image/show/' + data + '/300/217';
                 }
-                else
-                {
+                else {
                     imageName = null;
                 }
 
             });
         }
 
-        AuthService.getImage = function ()
-        {
+        AuthService.getImage = function () {
             return imageName;
 
         }
 
-        AuthService.setProfile = function (profileUrl)
-        {
+        AuthService.setProfile = function (profileUrl) {
             return $http({
                 url: profileUrl,
                 method: 'GET'
-            }).success(function(data){
+            }).success(function (data) {
                 profileData = data;
             });
         }
 
-        AuthService.getProfile = function ()
-        {
+        AuthService.getProfile = function () {
             return profileData;
         }
 
         AuthService.getUser = function () {
             var params = {
-                data: { api_key : $cookieStore.get('api_key') }
+                data: {api_key: $cookieStore.get('api_key')}
             }
 
             return $http
@@ -83,7 +80,9 @@ evezownApp
                         res.data.data.id,
                         res.data.data.firstname,
                         res.data.data.lastname,
-                        res.data.data.role);
+                        res.data.data.role,
+                        res.data.data.role_id,
+                        res.data.data.token);
                     return res.data.data;
                 });
         }
@@ -101,22 +100,19 @@ evezownApp
         };
 
 
-        AuthService.logout = function()
-        {
+        AuthService.logout = function () {
             Session.destroy();
         };
 
-        AuthService.isLoggedIn = function()
-        {
-            if(Session.get().firstname === null) {
+        AuthService.isLoggedIn = function () {
+            if (Session.get().firstname === null) {
                 AuthService.currentUser = Session.get().firstname + ', ' + Session.get().lastname;
             }
 
-            return !! Session.get().userId;
+            return !!Session.get().userId;
         };
 
-        AuthService.currentUser = function()
-        {
+        AuthService.currentUser = function () {
             return Session.get().firstname + ', ' + Session.get().lastname;
         }
 
@@ -127,24 +123,26 @@ evezownApp
     .service('Session', function ($cookieStore) {
 
         Session = {};
-        Session.create = function (apiKey, userId, firstname, lastname, email, userRole)
-        {
+        Session.create = function (apiKey, userId, firstname, lastname, email, userRole,userRoleId, token) {
             this.api_key = apiKey;
             this.userId = userId;
             this.firstname = firstname;
             this.lastname = lastname;
             this.userRole = userRole;
-            $cookieStore.put('userId',userId);
+            this.userRoleId = userRoleId;
+            this.token = token;
+            $cookieStore.put('userId', userId);
         };
         Session.destroy = function () {
             this.api_key = null;
             this.userId = null;
             this.userRole = null;
+            this.userRoleId = null;
             this.firstname = null;
             this.lastname = null;
+            this.token = null;
         };
-        Session.get = function()
-        {
+        Session.get = function () {
             return Session;
         };
 

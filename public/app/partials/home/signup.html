@@ -38,6 +38,7 @@
                                        class="form-control input-lg" placeholder="Confirm Password" tabindex="6" ng-model="master.cpassword" required>
                             </div>
                         </div>
+                        <ul id="strength" check-strength="master.password"></ul>
                     </div>
                     <div class="form-group">
                         <input type="code" name="code" id="code" class="form-control input-lg"
@@ -48,11 +49,13 @@
                             <input type="checkbox" name="t_and_c" id="t_and_c" value="1" ng-model="master.tandc"/>
                             <label for="t_and_c">
                                 By clicking <strong>Register</strong>, i agree to the <a
-                                    href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out
+                                    href="#terms" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out
                                 by this site, including our Cookie Use
                             </label>
                         </div>
                     </div>
+                    <input type="hidden" class="form-control input-lg"
+                     tabindex="8" ng-model="master.referrer_email">
                     <span us-spinner="{radius:6, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1" ></span>
                     <div class="row">
                         <div class="col-xs-12 col-md-8 col-md-offset-2" style="margin-top: 10px">

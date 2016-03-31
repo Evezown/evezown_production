@@ -2,7 +2,7 @@ evezownApp
 // inject the invite service into our controller
     .controller('profileCtrl', function ($scope, AuthService, ngDialog, profileService,
                                          $http, PATHS, FileUploader, $routeParams, $cookieStore,
-                                         ImageService, $rootScope) {
+                                         ImageService, $rootScope, $location) {
 
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.currentUserId = $routeParams.id;
@@ -14,6 +14,13 @@ evezownApp
             $scope.currentUserId = $scope.loggedInUserId;
         }
 
+        if ($location.path() == '/profile/'+ $scope.currentUserId) {
+            $scope.isActive = ['active', '', '', ''];
+        }
+        else
+        {
+            $scope.isActive = ['', 'active', '', ''];
+        }
         //$scope.imageTag = 0;
         //$scope.rightCoverImage = null;
         //$scope.leftCoverImage = null;
@@ -54,6 +61,17 @@ evezownApp
                 });
             });
         }
+
+        function getStoresByOwnerId() {
+            $http.get(PATHS.api_url + 'stores/owner/' + $scope.currentUserId + '/get').
+                success(function (data) {
+                    $scope.browseMyItems = data;
+                }).then(function () {
+
+                });
+        }
+
+        getStoresByOwnerId();
 
         //function fetchProfileImage(userId)
         //{
@@ -102,7 +120,7 @@ evezownApp
             $http.get(imagePath).
                 success(function (data, status, headers, config) {
                     if(data) {
-                        $scope.bottomCoverImage = PATHS.api_url + 'image/show/' + data + '/392/220';
+                        $scope.bottomCoverImage = PATHS.api_url + 'image/show/' + data + '/393/220';
                     }
                 })
                 .error(function (data) {
@@ -156,7 +174,7 @@ evezownApp
                     },
                     {
                         element: '#step5',
-                        intro: 'You can refer your eves to join evezown'
+                        intro: 'You can refer your friends to join evezown'
                     },
                     {
                         element: '#step6',
@@ -210,7 +228,7 @@ evezownApp
         }
 
         $scope.UploadCoverImage1 = function (files) {
-            alert('test');
+            //alert('test');
             $scope.imageTag = 1;
             files.uploader.uploadAll();
         }
@@ -541,6 +559,338 @@ evezownApp
         });
     });
 
+/*Profile picture crop*/
+evezownApp
+    .controller('ProfileImageCrop', function ($scope, AuthService, ngDialog, $location, $controller, $http, $cookieStore, PATHS, FileUploader, $rootScope, $routeParams) {
+
+        if ($routeParams.id != undefined) {
+            $scope.profileImage = "";
+            $scope.currentUserId = $routeParams.id;
+            AuthService.getProfileImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/profile_image/current').success(function(data) {
+            $scope.profileImage = PATHS.api_url + 'image/show/' + data +'/250/250';
+            });
+        }
+        else {
+            $scope.currentUserId = $scope.loggedInUserId;
+        }
+
+//left cover
+$scope.CropProfileLeft = function () {
+
+    var cropTitleImageDialog = ngDialog.open(
+        {
+            template: 'CropLeftImage',
+            scope: $scope,
+            className: 'ngdialog-theme-plain',
+            controller: $controller('LeftCoverCtrl', {
+                $scope: $scope
+            })
+        });
+
+    /*cropTitleImageDialog.closePromise.then(function (data) {
+        console.log('Crop Slide Image Response: ' + data);
+
+        if (data.value.status) {
+            $scope.addStores.slideImage = {};
+            $scope.addStores.slideImage.croppedImage = data.value.imageName;
+        }
+
+    });*/
+}
+
+//Bottom Cover
+$scope.CropProfileBottom = function () {
+
+    var cropTitleImageDialog = ngDialog.open(
+        {
+            template: 'CropBottomImage',
+            scope: $scope,
+            className: 'ngdialog-theme-plain',
+            controller: $controller('BottomCoverCtrl', {
+                $scope: $scope
+            })
+        });
+
+   /* cropTitleImageDialog.closePromise.then(function (data) {
+        console.log('Crop Slide Image Response: ' + data);
+
+        if (data.value.status) {
+            $scope.addStores.slideImage = {};
+            $scope.addStores.slideImage.croppedImage = data.value.imageName;
+        }
+
+    });*/
+}
+
+//Right Cover
+$scope.CropProfileRight = function () {
+
+    var cropTitleImageDialog = ngDialog.open(
+        {
+            template: 'CropRightImage',
+            scope: $scope,
+            className: 'ngdialog-theme-plain',
+            controller: $controller('RightCoverCtrl', {
+                $scope: $scope
+            })
+        });
+
+    /*cropTitleImageDialog.closePromise.then(function (data) {
+        console.log('Crop Slide Image Response: ' + data);
+
+        if (data.value.status) {
+            $scope.addStores.slideImage = {};
+            $scope.addStores.slideImage.croppedImage = data.value.imageName;
+        }
+
+    });*/
+}
+
+//Profile Cover image
+$scope.CropEvezsiteImage = function () {
+
+    var cropTitleImageDialog = ngDialog.open(
+        {
+            template: 'EvezsiteImage',
+            scope: $scope,
+            className: 'ngdialog-theme-plain',
+            controller: $controller('EvezsiteImageCtrl', {
+                $scope: $scope
+            })
+        });
+
+    /*cropTitleImageDialog.closePromise.then(function (data) {
+        console.log('Crop Slide Image Response: ' + data);
+
+        if (data.value.status) {
+            $scope.addStores.slideImage = {};
+            $scope.addStores.slideImage.croppedImage = data.value.imageName;
+        }
+
+    });*/
+}
+
+});
+
+evezownApp.controller('LeftCoverCtrl', function ($scope, StoreService,$http, PATHS,ImageService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 800 / 350;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 800 / 350;
+
+    $scope.LeftCoverImage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                $http.post(PATHS.api_url + 'users/left_cover_image/update'
+                , {
+                    data: {
+                        image_name: data.imageName,
+                        user_id: $scope.loggedInUserId
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                }).
+                success(function (data, status, headers, config) {
+                    ImageService.getImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/left_image/current').success(function (data) {
+                    $scope.leftCoverImage = PATHS.api_url + 'image/show/' + data;
+                    toastr.success("Left Cover Updated");
+                    ngDialog.close("", data);
+                    });
+                    });
+                    
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+
+});
+
+evezownApp.controller('BottomCoverCtrl', function ($scope, StoreService,$http, PATHS,ImageService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 383 / 220;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 800 / 350;
+
+    $scope.BottomCoverImage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                $http.post(PATHS.api_url + 'users/bottom_cover_image/update'
+                , {
+                    data: {
+                        image_name: data.imageName,
+                        user_id: $scope.loggedInUserId
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                }).
+                success(function (data, status, headers, config) {
+                    ImageService.getImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/bottom_image/current').success(function (data) {
+                    $scope.bottomCoverImage = PATHS.api_url + 'image/show/' + data;
+                    toastr.success("Bottom Cover Updated");
+                    ngDialog.close("", data);
+                    });
+                    });         
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+
+});
+
+evezownApp.controller('RightCoverCtrl', function ($scope, StoreService,$http, PATHS,ImageService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 1200 / 700;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 1200 / 700;
+
+    $scope.RightCoverImage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                $http.post(PATHS.api_url + 'users/right_cover_image/update'
+                , {
+                    data: {
+                        image_name: data.imageName,
+                        user_id: $scope.loggedInUserId
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                }).
+                success(function (data, status, headers, config) {
+                    ImageService.getImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/right_image/current').success(function (data) {
+                    $scope.rightCoverImage = PATHS.api_url + 'image/show/' + data + '/803/452';
+                    toastr.success("Right Cover Updated");
+                    ngDialog.close("", data);
+                    });
+                    });  
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+});
+
+evezownApp.controller('EvezsiteImageCtrl', function ($scope, AuthService, StoreService,$http, PATHS,ImageService,
+        usSpinnerService, ngDialog,profileService,$routeParams, $cookieStore,$rootScope) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 400 / 300;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 400 / 300;
+
+    $scope.UpdateEvezsiteImage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                $http.post(PATHS.api_url + 'users/profile_image/update'
+                , {
+                    data: {
+                        image_name: data.imageName,
+                        user_id: $scope.loggedInUserId
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                }).
+                success(function (data, status, headers, config) {
+                    var myDataPromise = AuthService.setImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/profile_image/current');
+                    myDataPromise.then(function (result) {  // this is only run after $http completes
+                    $rootScope.profileImage = AuthService.getImage();
+                    $scope.profileImage = AuthService.getImage();
+                    toastr.success("Profile Picture Updated");
+                    ngDialog.close("", data);
+                    });
+                    });
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+});
+/*Profile picture crop ends*/
+
+
 evezownApp.factory('ImageService', function ($http) {
     var image = null;
     return {
@@ -591,5 +941,3 @@ evezownApp.directive('duoStars', function () {
         }
     };
 });
-
-

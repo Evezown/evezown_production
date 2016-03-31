@@ -33,7 +33,19 @@
     <div class="ngdialog-buttons popuptemplate" ng-controller="LoginController">
         <h4>Forgot Password</h4>
         <input class="form-control" type="text" placeholder="Email"
-               id="email" ng-model="email" style="margin-bottom: 10px; height: 50px; font-size: 18px"/>
+               id="email" ng-model="email" style="margin-bottom: 10px; height: 40px; font-size: 16px"/>
         <button class="btn primary pull-right form-control" type="button" ng-click="ResetPassword()">Send</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="EmailConfirmation">
+    <div class="ngdialog-buttons popuptemplate">
+        <br>
+        <div class="text-center">
+            <span class="glyphicon glyphicon-ok-circle" style="color:green;font-size:60px;"></span>
+        </div>
+        <div class="text-center"><h4>Check Your EMail</h4></div>
+
+        <h5 style="font-weight:200"> You will receive an email from us with instructions for resetting your password. If you dont receive this email, please check your junk mail folder.</h5><br>
     </div>
 </script>

@@ -10,15 +10,38 @@ evezownApp
         $scope.owners.push({'title': '', 'name': 'Owner 1', 'id': ''});
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.currentStore = null;
+        $scope.billingName = null;
+        $scope.storeTitle = null; 
+        $scope.storeEmail  = null; 
         $scope.profileImage = "";
         $scope.collage1 = "";
         $scope.collage2 = "";
         $scope.collage3 = "";
 
+        $scope.filePath = PATHS.api_url + 'image/show/';
+
         $scope.addStores = {};
+        $scope.addCollage = {};
         $scope.linkPersonalProfileToStore = false;
         $scope.isProfileImageUploaded = false;
         $scope.isCollageImageUploaded = false;
+        $scope.addCollage.LeftCollageImage = {};
+        $scope.addCollage.RightCollageImage = {};
+        $scope.addCollage.BottomCollageImage = {};
+        $scope.addCollage.ProfileCollageImage = {};
+        $scope.addStores.slideImage = {};
+        $scope.addStores.slideImage1 = {};
+        $scope.addStores.slideImage2 = {};
+        $scope.addStores.slideImage3 = {};
+        $scope.addCollage.LeftCollageImage.croppedImage = "";
+        $scope.addCollage.RightCollageImage.croppedImage = "";
+        $scope.addCollage.BottomCollageImage.croppedImage = "";
+        $scope.addCollage.ProfileCollageImage.croppedImage = "";
+        $scope.addStores.slideImage.croppedImage = "";
+        $scope.addStores.slideImage1.croppedImage = "";
+        $scope.addStores.slideImage2.croppedImage = "";
+        $scope.addStores.slideImage3.croppedImage = "";
+
 
         $scope.contractFilename = "";
         $scope.priceList = "";
@@ -266,6 +289,11 @@ evezownApp
                         }).
                     success(function (data, status, headers, config) {
                         //toastr.success(data.message, 'Store');
+                        
+                        if ($scope.billingName == undefined || $scope.billingName == null) {
+                            $cookieStore.put('IsStep2', data.id);
+                        }
+                        
                         $location.path('/store/create/step3');
 
                     }).error(function (data) {
@@ -334,16 +362,48 @@ evezownApp
             if ($scope.currentStoreId == undefined) {
                 toastr.error('Please complete step1', 'Store');
             }
+            else if($cookieStore.get('IsStep2')== null){
+               toastr.error('Please complete step2 and save', 'Store');
+               $location.path('/store/create/step2');
+            }
             else {
+
+                $scope.collage1 = "";
+                $scope.collage2 = "";
+                $scope.collage3 = "";
+                $scope.profileImage = "";
+
+                if ($scope.addCollage.LeftCollageImage) {
+                    $scope.collage1 = $scope.addCollage.LeftCollageImage.croppedImage;
+                }
+                
+                if ($scope.addCollage.RightCollageImage) {
+                    $scope.collage2 = $scope.addCollage.RightCollageImage.croppedImage;
+                }
+                
+                if ($scope.addCollage.BottomCollageImage) {
+                    $scope.collage3 = $scope.addCollage.BottomCollageImage.croppedImage;
+                }
+                
+                if ($scope.addCollage.ProfileCollageImage) {
+                    $scope.profileImage = $scope.addCollage.ProfileCollageImage.croppedImage;
+                }
+                
 
                 if (!formData.storeTitle) {
                     toastr.error('Please enter store title', 'Store');
                 }
-                else if (!$scope.isCollageImageUploaded) {
-                    toastr.error('Please select one collage image', 'Store');
+                else if (!$scope.addCollage.LeftCollageImage.croppedImage) {
+                    toastr.error('Please add Left Collage image', 'Store');
                 }
-                else if (!$scope.isProfileImageUploaded) {
-                    toastr.error('Please select one profile image', 'Store');
+                else if (!$scope.addCollage.RightCollageImage.croppedImage) {
+                    toastr.error('Please add Right Collage image', 'Store');
+                }
+                else if (!$scope.addCollage.BottomCollageImage.croppedImage) {
+                    toastr.error('Please add Bottom Collage image', 'Store');
+                }
+                else if (!$scope.addCollage.ProfileCollageImage.croppedImage) {
+                    toastr.error('Please add Profile Collage image', 'Store');
                 }
                 else if (!$rootScope.selectedStoreListing) {
                     toastr.error('Please select listing type', 'Store');
@@ -381,6 +441,10 @@ evezownApp
                         }).
                     success(function (data, status, headers, config) {
                         //  toastr.success(data.message, 'Store');
+                        if ($scope.storeTitle == undefined || $scope.storeTitle == null) {
+                            $cookieStore.put('IsStep3', data.id);
+                        }
+
                         $scope.collage1 = "";
                         $scope.collage2 = "";
                         $scope.collage3 = "";
@@ -406,6 +470,27 @@ evezownApp
                     toastr.error('Please enter store title', 'Store');
                 }
                 else {
+
+                    $scope.collage1 = "";
+                    $scope.collage2 = "";
+                    $scope.collage3 = "";
+                    $scope.profileImage = "";
+
+                    if ($scope.addCollage.LeftCollageImage) {
+                        $scope.collage1 = $scope.addCollage.LeftCollageImage.croppedImage;
+                    }
+                    
+                    if ($scope.addCollage.RightCollageImage) {
+                        $scope.collage2 = $scope.addCollage.RightCollageImage.croppedImage;
+                    }
+                    
+                    if ($scope.addCollage.BottomCollageImage) {
+                        $scope.collage3 = $scope.addCollage.BottomCollageImage.croppedImage;
+                    }
+                    
+                    if ($scope.addCollage.ProfileCollageImage) {
+                        $scope.profileImage = $scope.addCollage.ProfileCollageImage.croppedImage;
+                    }
                     $http.post(PATHS.api_url + 'users/store/step3/' + $scope.loggedInUserId + '/add'
                         , {
                             data: {
@@ -453,7 +538,15 @@ evezownApp
         }
 
         $scope.SaveStoreStep4 = function (formData) {
-            if (!formData.storeEmail) {
+             if($cookieStore.get('IsStep2')== null){
+               toastr.error('Please complete step2 and save', 'Store');
+               $location.path('/store/create/step2');
+            }
+            else if($cookieStore.get('IsStep3')== null){
+               toastr.error('Please complete step3 and save', 'Store');
+               $location.path('/store/create/step3');
+            }
+            else if (!formData.storeEmail) {
                 toastr.error('Please enter your email id', 'Store');
             }
             else {
@@ -476,6 +569,9 @@ evezownApp
                     }).
                 success(function (data, status, headers, config) {
                     //toastr.success(data.message, 'Store');
+                    if ($scope.storeEmail == undefined || $scope.storeEmail == null) {
+                            $cookieStore.put('IsStep4', data.id);
+                        }
                     $location.path('/store/create/step5');
 
                 }).error(function (data) {
@@ -544,7 +640,22 @@ evezownApp
 
         $scope.SaveStoreStep5 = function (formData) {
 
-            $scope.classifiedImage1 = "";
+             if($cookieStore.get('IsStep2')== null){
+               toastr.error('Please complete step2 and save', 'Store');
+               $location.path('/store/create/step2');
+            }
+
+            else if($cookieStore.get('IsStep3')== null){
+               toastr.error('Please complete step3 and save', 'Store');
+               $location.path('/store/create/step3');
+            }
+             
+            else if($cookieStore.get('IsStep4')== null){
+               toastr.error('Please complete step4 and save', 'Store');
+               $location.path('/store/create/step4');
+            }
+
+           else{ $scope.classifiedImage1 = "";
             $scope.classifiedImage2 = "";
             $scope.classifiedImage3 = "";
             $scope.classifiedImage4 = "";
@@ -602,6 +713,7 @@ evezownApp
             }).then(function () {
 
             });
+            }
         }
 
         $scope.EditStoreStep5 = function (formData) {
@@ -670,9 +782,24 @@ evezownApp
         }
 
         $scope.SaveStoreStep6 = function (formData) {
-
-            if (!formData.free) {
-                toastr.error('Please Choose Recco -it subscription', 'Store');
+            
+            if($cookieStore.get('IsStep2')== null){
+               toastr.error('Please complete step2 and save', 'Store');
+               $location.path('/store/create/step2');
+            }
+            
+            else if($cookieStore.get('IsStep3')== null){
+               toastr.error('Please complete step3 and save', 'Store');
+               $location.path('/store/create/step3');
+            }
+             
+            else if($cookieStore.get('IsStep4')== null){
+               toastr.error('Please complete step4 and save', 'Store');
+               $location.path('/store/create/step4');
+            }
+ 
+            else if (!formData.free) {
+                toastr.error('Please Choose Stream -it subscription', 'Store');
             }
             else {
                 $http.post(PATHS.api_url + 'users/store/step6/' + $scope.loggedInUserId + '/add'
@@ -1133,6 +1260,94 @@ evezownApp
             });
         }
 
+        /* Collage image */
+        $scope.SelectLeftCollage = function () {
+            var cropTitleImageDialog = ngDialog.open(
+                {
+                    template: 'LeftCollage',
+                    scope: $scope,
+                    className: 'ngdialog-theme-plain',
+                    controller: $controller('cropLeftCollageCtrl', {
+                        $scope: $scope
+                    })
+                });
+
+            cropTitleImageDialog.closePromise.then(function (data) {
+                console.log('Crop Slide Image Response: ' + data);
+
+                if (data.value.status) {
+                    $scope.addCollage.LeftCollageImage = {};
+                    $scope.addCollage.LeftCollageImage.croppedImage = $scope.filePath + data.value.imageName;
+                }
+
+            });
+        }
+
+        $scope.SelectRightCollage = function () {
+            var cropTitleImageDialog = ngDialog.open(
+                {
+                    template: 'RightCollage',
+                    scope: $scope,
+                    className: 'ngdialog-theme-plain',
+                    controller: $controller('cropRightCollageCtrl', {
+                        $scope: $scope
+                    })
+                });
+
+            cropTitleImageDialog.closePromise.then(function (data) {
+                console.log('Crop Slide Image Response: ' + data);
+
+                if (data.value.status) {
+                    $scope.addCollage.RightCollageImage = {};
+                    $scope.addCollage.RightCollageImage.croppedImage = $scope.filePath + data.value.imageName;
+                }
+
+            });
+        }
+
+        $scope.SelectBottomCollage = function () {
+            var cropTitleImageDialog = ngDialog.open(
+                {
+                    template: 'BottomCollage',
+                    scope: $scope,
+                    className: 'ngdialog-theme-plain',
+                    controller: $controller('cropBottomCollageCtrl', {
+                        $scope: $scope
+                    })
+                });
+
+            cropTitleImageDialog.closePromise.then(function (data) {
+                console.log('Crop Slide Image Response: ' + data);
+
+                if (data.value.status) {
+                    $scope.addCollage.BottomCollageImage = {};
+                    $scope.addCollage.BottomCollageImage.croppedImage = $scope.filePath + data.value.imageName;
+                }
+
+            });
+        }
+
+        $scope.SelectProfileCollage = function () {
+            var cropTitleImageDialog = ngDialog.open(
+                {
+                    template: 'ProfileCollage',
+                    scope: $scope,
+                    className: 'ngdialog-theme-plain',
+                    controller: $controller('cropProfileCollageCtrl', {
+                        $scope: $scope
+                    })
+                });
+
+            cropTitleImageDialog.closePromise.then(function (data) {
+                console.log('Crop Slide Image Response: ' + data);
+
+                if (data.value.status) {
+                    $scope.addCollage.ProfileCollageImage = {};
+                    $scope.addCollage.ProfileCollageImage.croppedImage = $scope.filePath + data.value.imageName;
+                }
+
+            });
+        }
 
         /* Slide image */
 
@@ -1152,7 +1367,7 @@ evezownApp
 
                 if (data.value.status) {
                     $scope.addStores.slideImage = {};
-                    $scope.addStores.slideImage.croppedImage = data.value.imageName;
+                    $scope.addStores.slideImage.croppedImage = $scope.filePath + data.value.imageName;
                 }
 
             });
@@ -1174,7 +1389,7 @@ evezownApp
 
                 if (data.value.status) {
                     $scope.addStores.slideImage1 = {};
-                    $scope.addStores.slideImage1.croppedImage = data.value.imageName;
+                    $scope.addStores.slideImage1.croppedImage = $scope.filePath + data.value.imageName;
                 }
 
             });
@@ -1196,7 +1411,7 @@ evezownApp
 
                 if (data.value.status) {
                     $scope.addStores.slideImage2 = {};
-                    $scope.addStores.slideImage2.croppedImage = data.value.imageName;
+                    $scope.addStores.slideImage2.croppedImage = $scope.filePath + data.value.imageName;
                 }
 
             });
@@ -1218,7 +1433,7 @@ evezownApp
 
                 if (data.value.status) {
                     $scope.addStores.slideImage3 = {};
-                    $scope.addStores.slideImage3.croppedImage = data.value.imageName;
+                    $scope.addStores.slideImage3.croppedImage = $scope.filePath + data.value.imageName;
                 }
 
             });
@@ -1347,7 +1562,7 @@ evezownApp
                     $scope.currentStore = data;
                     if ($scope.currentStore.length > 0) {
 
-                        if (($location.path() == '/store/create/step1') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_info')) {
+                        if (($location.path() == '/store/create/step1') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_info') || ($location.path() == '/admin/store/' + $scope.currentStoreId + '/manage/admin_store_info')) {
                             $scope.formData.title = $scope.currentStore[0]['title'];
                             if ($scope.currentStore[0]['own_a_physical_store'] == '1') {
                                 $scope.formData.isPhysicalStore = true;
@@ -1375,7 +1590,7 @@ evezownApp
                                 counter++;
                             });
                         }
-                        else if (($location.path() == '/store/create/step2') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_selection')) {
+                        else if (($location.path() == '/store/create/step2') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_selection') || ($location.path() == '/admin/store/' + $scope.currentStoreId + '/manage/admin_store_selection')) {
                             $scope.formData.panNumber = $scope.currentStore[0]['business_info']['pan_number'];
                             $scope.formData.tinNumber = $scope.currentStore[0]['business_info']['tin_number'];
                             $scope.formData.vatNumber = $scope.currentStore[0]['business_info']['vat_number'];
@@ -1386,7 +1601,7 @@ evezownApp
                             $scope.formData.billingContactNumber = $scope.currentStore[0]['business_info']['billing_info_contact_number'];
                             $scope.GetSelectedStoreSubscription();
                         }
-                        else if (($location.path() == '/store/create/step3') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_front')) {
+                        else if (($location.path() == '/store/create/step3') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_front') || ($location.path() == '/admin/store/' + $scope.currentStoreId + '/manage/admin_store_front')) {
                             $scope.formData.storeTitle = $scope.currentStore[0]['store_front_info']['store_caption'];
                             $scope.formData.storeAboutUs = $scope.currentStore[0]['store_front_info']['store_about_us'];
                             $scope.formData.storeTargetAudience = $scope.currentStore[0]['store_front_info']['target_audience'];
@@ -1398,8 +1613,40 @@ evezownApp
                             $scope.GetCurrentStoreListing();
                             $scope.GetCurrentCategory();
                             $scope.GetCurrentTags();
+                            if($scope.currentStore[0]['collage_image1']['large_image_url'])
+                            {
+                                $scope.addCollage.LeftCollageImage.croppedImage = $scope.currentStore[0]['collage_image1']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addCollage.LeftCollageImage.croppedImage = null;
+                            }
+                            if($scope.currentStore[0]['collage_image2']['large_image_url'])
+                            {
+                                $scope.addCollage.RightCollageImage.croppedImage = $scope.currentStore[0]['collage_image2']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addCollage.RightCollageImage.croppedImage = null;
+                            }
+                            if($scope.currentStore[0]['collage_image3']['large_image_url'])
+                            {
+                                $scope.addCollage.BottomCollageImage.croppedImage = $scope.currentStore[0]['collage_image3']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addCollage.BottomCollageImage.croppedImage = null;
+                            }
+                            if($scope.currentStore[0]['profile_images']['large_image_url'])
+                            {
+                                $scope.addCollage.ProfileCollageImage.croppedImage = $scope.currentStore[0]['profile_images']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addCollage.ProfileCollageImage.croppedImage = null;
+                            }
                         }
-                        else if (($location.path() == '/store/create/step4') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_crm') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_front_footer')) {
+                        else if (($location.path() == '/store/create/step4') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_crm') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/store_front_footer') || ($location.path() == '/admin/store/' + $scope.currentStoreId + '/manage/admin_store_front_footer')) {
                             $scope.formData.storeEmail = $scope.currentStore[0]['store_front_info']['store_contact_email'];
                             $scope.formData.storePhone1 = $scope.currentStore[0]['store_front_info']['store_contact_phone1'];
                             $scope.formData.storePhone2 = $scope.currentStore[0]['store_front_info']['store_contact_phone2'];
@@ -1411,10 +1658,45 @@ evezownApp
                             $scope.formData.link2 = $scope.currentStore[0]['store_front_info']['store_mandatory_disclosure_link2'];
                             $scope.formData.link3 = $scope.currentStore[0]['store_front_info']['store_mandatory_disclosure_link3'];
                         }
-                        else if (($location.path() == '/store/create/step5') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/promotion')) {
+                        else if (($location.path() == '/store/create/step5') || ($location.path() == '/store/' + $scope.currentStoreId + '/manage/promotion') || ($location.path() == '/admin/store/' + $scope.currentStoreId + '/manage/admin_store_promotion')) {
                             $scope.formData.classifiedPrice = $scope.currentStore[0]['store_front_promotion']['promotion_price'];
                             $scope.formData.classifiedTagline = $scope.currentStore[0]['store_front_promotion']['promotion_tagline'];
                             $scope.formData.classifiedDescription = $scope.currentStore[0]['store_front_promotion']['promotion_description'];
+                            if($scope.currentStore[0]['store_front_promotion']['image']['image1'])
+                            {
+                                $scope.addStores.slideImage.croppedImage = $scope.currentStore[0]['store_front_promotion']['image']['image1']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addStores.slideImage.croppedImage = null;
+                            }
+
+                            if($scope.currentStore[0]['store_front_promotion']['image']['image2'])
+                            {
+                                $scope.addStores.slideImage1.croppedImage = $scope.currentStore[0]['store_front_promotion']['image']['image2']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addStores.slideImage1.croppedImage = null;
+                            }
+
+                            if($scope.currentStore[0]['store_front_promotion']['image']['image3'])
+                            {
+                                $scope.addStores.slideImage2.croppedImage = $scope.currentStore[0]['store_front_promotion']['image']['image3']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addStores.slideImage2.croppedImage = null;
+                            }
+
+                            if($scope.currentStore[0]['store_front_promotion']['image']['image4'])
+                            {
+                                $scope.addStores.slideImage3.croppedImage = $scope.currentStore[0]['store_front_promotion']['image']['image4']['large_image_url'];
+                            }
+                            else
+                            {
+                                $scope.addStores.slideImage3.croppedImage = null;
+                            }
                         }
 
                     }
@@ -1433,6 +1715,190 @@ evezownApp
 
     });
 
+/*collage image crop section starts*/
+evezownApp.controller('cropLeftCollageCtrl', function ($scope, StoreService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.setSelect = [0, 0, 1500, 1500];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 780 / 440;
+
+    $scope.slideImage.boxWidth = 500;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 780 / 440;
+
+    // Crop Title image
+    $scope.uploadLeftCollage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                usSpinnerService.stop('spinner-1');
+                toastr.success(data.message, 'Uploaded Left Collage');
+                ngDialog.close("", data);
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+
+});
+
+
+evezownApp.controller('cropRightCollageCtrl', function ($scope, StoreService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.setSelect = [0, 0, 1500, 1500];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 386 / 220;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 386 / 220;
+
+    // Crop Title image
+    $scope.uploadRightCollage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                usSpinnerService.stop('spinner-1');
+                toastr.success(data.message, 'Uploaded Right Collage');
+                ngDialog.close("", data);
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+
+});
+
+evezownApp.controller('cropBottomCollageCtrl', function ($scope, StoreService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.setSelect = [0, 0, 1500, 1500];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 386 / 220;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 386 / 220;
+
+    // Crop Title image
+    $scope.uploadBottomCollage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                usSpinnerService.stop('spinner-1');
+                toastr.success(data.message, 'Uploaded Bottom Collage');
+                ngDialog.close("", data);
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+
+});
+
+evezownApp.controller('cropProfileCollageCtrl', function ($scope, StoreService,
+                                                      usSpinnerService, ngDialog) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.setSelect = [0, 0, 1500, 1500];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 600 / 350;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 600 / 350;
+
+    // Crop Title image
+    $scope.uploadProfileCollage = function () {
+        usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                usSpinnerService.stop('spinner-1');
+                toastr.success(data.message, 'Uploaded Profile Collage');
+                ngDialog.close("", data);
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
+
+});
+/*collage image crop section ends*/
+
+/*Slide image crop section starts*/
 evezownApp.controller('cropSlideImageCtrl', function ($scope, StoreService,
                                                       usSpinnerService, ngDialog) {
     $scope.slideImage = {};

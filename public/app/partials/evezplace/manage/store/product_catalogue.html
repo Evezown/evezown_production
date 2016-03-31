@@ -1,5 +1,5 @@
 <ul class="breadcrumb create-store-breadcrumb" style="background: transparent">
-    <li><a href="#evezplace">Evezplace</a></li>
+    <li><a href="#evezplace">Marketplace</a></li>
     <li>Manage Store</li>
 </ul>
 
@@ -230,7 +230,7 @@
                         <div class="row" style="margin-top: 15px; margin-bottom: 20px">
                             <div class="form-group">
                                 <div class="col-sm-6">
-                                    <h5 style="font-weight: 600">Product/Service Images</h5>
+                                    <h5 style="font-weight: 600">Product/Service Images<b style="color: #e51385"> (Max Size :2MB)</b></h5>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="fileUpload btn btn-default btn-block">
@@ -566,9 +566,8 @@
 
         <div class="col-sm-12">
             <h5>Product line type</h5>
-            <select class="form-control" id="sub-product-line" id="productLine"
-                    ng-options="productLine as productLine.title for productLine in AllProductLines"
-                    ng-model="selectedProductLine" ng-change="SetProductLine(selectedProductLine)">
+            <select ng-model="currentProductLine.id" class="form-control"
+                    ng-options="productLine.id as productLine.title for productLine in AllProductLines">
             </select>
         </div>
         <button class="btn primary pull-right form-control" type="button" ng-click="SubmitProductEdit(currentProduct)">

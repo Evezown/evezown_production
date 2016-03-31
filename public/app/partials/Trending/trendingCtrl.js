@@ -37,7 +37,7 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
 
 
 
-    if ($location.path() == '/recco') {
+    if ($location.path() == '/streamit') {
         $scope.isActive = ['', '', 'active', '', ''];
     }
     else {
@@ -273,9 +273,11 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
                     visibility_id: $scope.selectedVisibility.id,
                     post_type_id: $scope.selectedType.id,
                     classification_id: $scope.selectedClassifieds.id,
+                    category_id: $scope.selectedOption.id,
+                    subcategory_id: $scope.selectedsubcategories.id,
                     price_range: $scope.price,
                     testimonial: $scope.recommendation,
-                    brand_id: $scope.selectedBrand.id,
+                    brand_id: $rootScope.selectedBrand.id,
                     location: $scope.location,
                     url_link: $scope.url_link,
                     images: $scope.imageNames
@@ -457,7 +459,7 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
     };
     uploader.onAfterAddingAll = function(addedFileItems)
     {
-        $scope.counter = addedFileItems.length;
+        //$scope.counter = addedFileItems.length;
         console.info('onAfterAddingAll', addedFileItems);
     };
     uploader.onBeforeUploadItem = function(item) {
@@ -471,39 +473,64 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
     };
     uploader.onSuccessItem = function(fileItem, response, status, headers)
     {
+        $scope.ImageCounter = fileItem.uploader.queue.length;
+
         if($scope.isUploadingBrand)
         {
-            $http.post(PATHS.api_url + 'brands/add'
-                , {
-                    data: {
-                        image_name: response.imageName,
-                        title: $scope.brandname,
-                        subCatId: $rootScope.currentSelectedSubCategoryId
-                    },
-                    headers: {'Content-Type': 'application/json'}
-                }).
-                success(function (data, status, headers, config)
-                {
-                    $scope.ReloadBrandOnAdd();
-                    $scope.brandname = '';
-                    $scope.isUploadingBrand = false;
-                    ngDialog.close();
-                    usSpinnerService.stop('spinner-1');
-                    toastr.success(data.message, 'Stream It');
-                }).error(function (data)
-                {
-                    $scope.isUploadingBrand = false;
-                    $scope.brandname = '';
-                    usSpinnerService.stop('spinner-1');
-                    toastr.error(data.error.message, 'Stream It');
-                });
+            var NewBrand = $scope.brandname;
+            var newbrand = NewBrand.toLowerCase();
+            $http.get(PATHS.api_url + 'brands/' + $scope.selectedsubcategories.id).
+                success(function (data) {
+                    $scope.brandCheck = data.data;
+                    $scope.BrandTest=false;
+                    angular.forEach($scope.brandCheck, function (value, key)
+                    {
+                        var BrandTitle = value.title;
+                        var brandtitle = BrandTitle.toLowerCase();
+                        if (brandtitle == newbrand) {
+                           $scope.BrandTest=true;
+                        }
+                    });
+                    if($scope.BrandTest){
+                        toastr.error('Brand Exists Already, Enter Brand Name in Search Box');
+                    }
+                    else{
+                          $http.post(PATHS.api_url + 'brands/add'
+                            , {
+                                data: {
+                                    image_name: response.imageName,
+                                    title: $scope.brandname,
+                                    subCatId: $rootScope.currentSelectedSubCategoryId
+                                },
+                                headers: {'Content-Type': 'application/json'}
+                            }).
+                            success(function (data, status, headers, config)
+                            {
+                                //$scope.ReloadBrandOnAdd();
+                                $scope.brandname = '';
+                                $scope.isUploadingBrand = false;
+                                ngDialog.close();
+                                usSpinnerService.stop('spinner-1');
+                                toastr.success(data.message, 'Enter Brand Name in Search Box');
+                            }).error(function (data)
+                            {
+                                $scope.isUploadingBrand = false;
+                                $scope.brandname = '';
+                                usSpinnerService.stop('spinner-1');
+                                toastr.error(data.error.message, 'Stream It');
+                            }).then(function(data)
+                            {
+                                $scope.LoadRecentAddedBrand(data.data.Brand_id);
+                            });
+                        }
+                }); 
         }
         else
         {
             $scope.imageNames.push(response.imageName);
-            $scope.counter--;
+            $scope.ImageCounter;
 
-            if($scope.counter == 0)
+            if($scope.ImageCounter == 1)
             {
                 if (!$scope.woice) {
                     toastr.error("Please enter Title", 'Stream It');
@@ -578,10 +605,10 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
                                 $rootScope.currentSelectedSubCategoryId = $scope.selectedsubcategories.id;
                                 $http.get(PATHS.api_url + 'brands/' + $scope.selectedsubcategories.id).
                                     success(function (data) {
-                                        $scope.brands = data.data;
-                                        if ($scope.brands.length > 0)
+                                        $rootScope.brands = data.data;
+                                        if ($rootScope.brands.length > 0)
                                         {
-                                            $scope.selectedBrand = $scope.brands[0];
+                                            $rootScope.selectedBrand = $rootScope.brands[0];
                                         }
                                     });
                             }
@@ -623,7 +650,7 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
                 $scope.currentPage = data.meta.pagination.current_page;
                 $scope.total = data.meta.pagination.total;
                 $scope.posts = $scope.posts.concat(data.data);
-                if ($location.path() == '/recco')
+                if ($location.path() == '/streamit')
                 {
                     var posts = $scope.posts;
                     var newPosts = [];
@@ -658,7 +685,7 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
         $http.get(PATHS.api_url + 'posttypes').
             success(function (data)
             {
-                if($location.path() == '/recco' || $location.path() == '/search/advanced')
+                if($location.path() == '/streamit' || $location.path() == '/search/advanced')
                 {
                     var postType = data;
                     var newTypes = [];
@@ -679,9 +706,9 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
                     $scope.posttypes = newTypes;
                     //$scope.isRecco = true;
                     $scope.buttonTitle = "Stream It";
-                    $scope.postTitle = "Create your Recco";
+                    $scope.postTitle = "Create your Stream It";
                     $scope.PageSubTitle = "Stream It";
-                    $scope.PageDescription = "Recommend or endorse a product or a service or both. It helps to create awareness and draw attention. Any member can recommend what or whom they believe in on account of direct experience with the product, service, person or place. This place is used for positive experiences as we have included ‘Be careful’ in Woice it section to voice negative experiences. It is in effect a good tool for word of mouth… spreading the word online.";
+                    $scope.PageDescription = "Promote, recommend or endorse a Stores or a Business service or both. It helps to create awareness and draw attention. Any member can recommend what or whom they believe in on account of direct experience with the product, service, person or place. This place is used for positive experiences as we have included ‘Be careful’ to voice negative experiences. It is in effect a good tool for word of mouth… spreading the word online.";
                 }
                 else
                 {
@@ -822,7 +849,7 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
     }
 
     //Loading brands based on subcategoryId
-    $scope.ReloadBrand = function () {
+    /*$scope.ReloadBrand = function () {
 
         $rootScope.currentSelectedSubCategoryId = $scope.selectedsubcategories.id;
         $http.get(PATHS.api_url + 'brands/' + $scope.selectedsubcategories.id).
@@ -833,10 +860,10 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
                 }
                 usSpinnerService.stop('spinner-1');
             });
-    }
+    }*/
 
     //Loading brands based on subcategoryId
-    $scope.ReloadBrandOnAdd = function ()
+    /*$scope.ReloadBrandOnAdd = function ()
     {
         $scope.brands  = null;
         $http.get(PATHS.api_url + 'brands/' + $rootScope.currentSelectedSubCategoryId).
@@ -854,6 +881,22 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
             });
 
        // $scope.ReloadBrandOnAdd();
+    }*/
+
+    //Load the Recent added brand and show it in the brand field
+    $scope.LoadRecentAddedBrand = function (BrandID)
+    {
+        $scope.RecentBrand  = BrandID - 1;
+        $http.get(PATHS.api_url + 'brands/' + $rootScope.currentSelectedSubCategoryId).
+            success(function (data)
+            {
+                $rootScope.brands = data.data;
+                if ($rootScope.brands.length > 0)
+                {
+                    $rootScope.selectedBrand = $rootScope.brands[$rootScope.brands.length - 1];
+                }
+                usSpinnerService.stop('spinner-1');
+            });
     }
 
     //Loading subcategories based on categoryId
@@ -1001,6 +1044,23 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
                 toastr.error(data.error.message, 'Stream It');
             });
     }
+    $scope.AddRewoiceForRecentActivity = function (post) {
+        // users/{user_id}/posts/{post_id}/rewoice
+        $http.post(PATHS.api_url + 'users/' + $scope.currentUserId + '/posts/' + post.id + '/rewoice'
+            , {
+                data: {},
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).
+            success(function (data, status, headers, config)
+            {
+                
+                $scope.GetMyPostByFilter($rootScope.currentItemId);
+                toastr.success(data.message, 'Stream It');
+
+            }).error(function (data) {
+                toastr.error(data.error.message, 'Stream It');
+            });
+    }
 
     $scope.UpdateLevels = function (stars, post) {
         $http.post(PATHS.api_url + 'posts/' + post.id + '/grades/create'
@@ -1027,20 +1087,16 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
             steps:[
                 {
                     element: '#step1',
-                    intro: "<b>&#10004;</b> Connect with your friends and other eves. Invite them to join Evezown <br><b>&#10004;</b> Segregate your eves into circles, name the circles and set the visibility(privacy setting)"
-                },
-                {
-                    element: '#step2',
-                    intro: "<b>&#10004;</b> Invite your evez to EvezOwn <br><b>&#10004;</b> Send invite code over email or through phone (SMS or What’sAPP)",
+                    intro: "<b>&#10004;</b> This is your website on Evezown. <br><b>&#10004;</b> You can create your profile in depth. Build community to connect with friends or any one you wish to connect <br><b>&#10004;</b> You can promote yourself or your business digitally within your circles privately or publicly using features such as Events, Blogs, Stream It."
                 },
                 {
                     element: '#step3',
-                    intro: '<b>&#10004;</b> Create your recco <br><b>&#10004;</b> Create a title and a short description <br><b>&#10004;</b> Choose what the recco is about <br><b>&#10004;</b> Choose the category and the sub category <br><b>&#10004;</b> Add a brand name or product name (optional) <br><b>&#10004;</b> Provide price range (optional)',
+                    intro: '<b>&#10004;</b> Promote, recommend or endorse a product or a service or both <br><b>&#10004;</b> Create a title and a short description <br><b>&#10004;</b> Choose what the Stream It is about <br><b>&#10004;</b> Choose the category and the sub category <br><b>&#10004;</b> Add a brand name or product name (optional) <br><b>&#10004;</b> Provide price range (optional)',
                     position: 'bottom'
                 },
                 {
                     element: '#step4',
-                    intro: "<b>&#10004;</b> Explore the two sections Evezplace and Wopportunity",
+                    intro: "<b>&#10004;</b> Explore the two sections Marketplace and Jobs",
                     position: 'bottom'
                 },
                 {
@@ -1071,13 +1127,57 @@ evezownApp.controller('trending', function ($scope, FileUploader, PATHS, usSpinn
         else
         {
             $scope.isUploadingBrand = true;
-            if(files.queue.length > 0)
+            if(files.queue.length > 0) //Brand with brandimage
             {
                 files.uploadAll();
             }
-            else
+            else //Brand with out image
             {
-                toastr.error('Please upload a logo', 'Stream It');
+                var NewBrand = $scope.brandname;
+                var newbrand = NewBrand.toLowerCase();
+                $http.get(PATHS.api_url + 'brands/' + $scope.selectedsubcategories.id).
+                success(function (data) {
+                    $scope.brandCheck = data.data;
+                    $scope.BrandTest=false;
+                    angular.forEach($scope.brandCheck, function (value, key)
+                    {
+                        var BrandTitle = value.title;
+                        var brandtitle = BrandTitle.toLowerCase();
+                        if (brandtitle == newbrand) {
+                           $scope.BrandTest=true;
+                        }
+                    });
+                    if($scope.BrandTest){
+                        toastr.error('Brand Exists Already, Enter Brand Name in Search Box');
+                    }
+                    else{
+                        $http.post(PATHS.api_url + 'brands/add'
+                        , {
+                            data: {
+                                //image_name: response.imageName,
+                                title: $scope.brandname,
+                                subCatId: $rootScope.currentSelectedSubCategoryId
+                            },
+                            headers: {'Content-Type': 'application/json'}
+                        }).
+                        success(function (data, status, headers, config)
+                        {
+                            //$scope.ReloadBrandOnAdd();
+                            $scope.brandname = '';
+                            ngDialog.close();
+                            usSpinnerService.stop('spinner-1');
+                            toastr.success(data.message, 'Enter Brand Name in Search Box');
+                        }).error(function (data)
+                        {
+                            $scope.brandname = '';
+                            usSpinnerService.stop('spinner-1');
+                            toastr.error(data.error.message, 'Stream It');
+                        }).then(function(data)
+                        {
+                            $scope.LoadRecentAddedBrand(data.data.Brand_id);
+                        });
+                    }
+                }); 
             }
         }
     }

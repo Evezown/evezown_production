@@ -10,15 +10,14 @@ evezownApp.filter('offset', function () {
 });
 
 evezownApp.controller('inviteFriendsCtrl', function ($scope, Facebook, $linkedIn,
-                                                     $cookieStore, $http, PATHS, $auth, AuthService) {
+                                                     $cookieStore, $http, PATHS, $auth, AuthService,$location) {
 
-    $scope.sectionTitle = "Invite Friends";
+    $scope.sectionTitle = "Invite People";
     $scope.loggedInUserId = $cookieStore.get('userId');
     $scope.email = $cookieStore.get('email');
     $scope.linkedinConnections = [];
     $scope.friendslist = [];
     $scope.loggedInUserEmail = null;
-
     $scope.emailList = "";
     $scope.gpAccessToken = "";
 
@@ -29,13 +28,17 @@ evezownApp.controller('inviteFriendsCtrl', function ($scope, Facebook, $linkedIn
 
     $scope.selected = 'GP';
 
+    if ($location.path() == '/friends/invite') {
+            $scope.isActive = ['', 'active', '', ''];
+        }
+
     function getLoggedInUser () {
         AuthService.getUser().then(function (data) {
             $scope.loggedInUserEmail = data.email;
             $scope.whatsAppDescription = "Hi, " +
 
                 "Have a look at Evezown.com. " +
-                "Evezown.com is a space for woman like you to interact and transact, voice opinion and showcase your" +
+                "Evezown.com is a space to interact and transact, voice opinion and showcase your" +
                 " unique identity, personality, talent and  business..." +
                 "everything that defines you. " +
 
@@ -63,12 +66,26 @@ evezownApp.controller('inviteFriendsCtrl', function ($scope, Facebook, $linkedIn
         return ret;
     };
 
+    $scope.getRole = function ($userId) {
+        $http.get(PATHS.api_url +  'users/' + $userId)
+            .success(function(data){
+                $scope.CheckRole = data.data.role;
+                if($scope.CheckRole == 'User')
+                {
+                    document.getElementById("ExcelPart").style.visibility="hidden"; 
+                }
+            })
+            .error(function(err){
+                console.log('Error retrieving user');
+            });
+    }
+
     $scope.getEmail = function ($userId) {
         $http.get(PATHS.api_url + 'users/' + $userId)
             .success(function (data) {
                 $scope.EmailID = data.data.email;
                 $scope.Content1 = "Have a look at Evezown.com";
-                $scope.Content2 = "Evezown.com is a space for woman like you to interact and transact, voice opinion and showcase your unique identity, personality, talent and  business…....everything that defines you.";
+                $scope.Content2 = "Evezown.com is a space to interact and transact, voice opinion and showcase your unique identity, personality, talent and  business…....everything that defines you.";
                 $scope.Content3 = "Please press create sign up invite for registration, You can give my email id " + $scope.EmailID + " as reference id. I have already registered as a member.";
                 $scope.Content4 = "Look forward to meeting you inside:";
             })
@@ -250,12 +267,7 @@ evezownApp.controller('inviteFriendsCtrl', function ($scope, Facebook, $linkedIn
         var message = "Hi <\"br>";
 
         message += "I would like to invite you to join www.evezown.com <\"br>";
-
-        message += "EvezOwn.com is a space for woman like you to voice opinion and showcase your unique identity, personality, talent, business… anything and everything that defines you.<\"br>";
-
-        message += "EvezOwn caters to each and every woman. On this “woman’s only website”, you can create independent circles, promote products and services or just share the information or message you choose to among your evez.<\"br>";
-
-        message += "Once you register, you can use the WOICE section to create your profile and use features like groups, events, listing, forums, blogs and circles for interacting with your group. You can open a store for your product or service in EvezPlace or simply search and find the career of your choice in WOpportunity, if you are a working professional.<\"br>";
+        message += "Once you register as a member, you can use the Mysite section to create your profile and use features like blogs, groups, events, ads & campaigns, discussion, for interacting with your friends and circle of friends who are also members on evezown. You can open a store for your product or business service in our MarketPlace or if you are a working professional, simply search and find the career of your choice in Jobs.<\"br>";
 
         message += "Click here to register http://evezown.com/#/requestinvite. (please put the actual link here)<\"br>";
         message += "Make EvezOwn.com your own place.<\"br>";
@@ -587,35 +599,112 @@ evezownApp.controller('inviteFriendsCtrl', function ($scope, Facebook, $linkedIn
         }
     };
 
-
+    //Send invite
     $scope.sendInvite = function (emailId) {
-        var emailformat = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
-        if (!emailformat.test(emailId)) {
-            toastr.error("Please enter a valid email", 'Build Community');
+
+        $scope.emails = emailId;
+        
+        if($scope.emails.length == 0)
+        {
+            toastr.error('Enter valid Email');
         }
-        else {
+        else
+        {
+        $scope.BulkMail = [];
+            angular.forEach($scope.emails, function (value, key) {
+                var newTag = value.text;
+                $scope.BulkMail.push(newTag);
+            });
+
+            if($scope.BulkMail.length > 0){
+                $http.post(PATHS.api_url + 'invite/email'
+                , {
+                    data: {
+                        referrer_id: $cookieStore.get('userId'),
+                        emailIds: $scope.BulkMail
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function(data){
+                    if(data.ExistUser.length > 0){
+                        angular.forEach(data.ExistUser, function (value, key) {
+                            var dataExist = value;
+                            toastr.info(dataExist, 'User Already Exist');
+                        });
+                    }
+                    if(data.NewUser == 1){
+                        toastr.success(data.message);   
+                    }
+                }).error(function (data) {
+                    toastr.error(data.error.message, 'Build Community');
+                });
+            }
+            $scope.emails = "";
+        }
+    }
+
+    /*Invite using Xls Upload starts*/
+    $scope.sendInviteExcel = function (emailId) {
+
+        $scope.GetEmails = [];
+        var array = [];
+        var Emails = emailId;
+        array = Emails.split(",");
+        var i;
+        for (i=0; i<array.length; i++)
+        {
+            var Newmail=array[i];
+            $scope.GetEmails.push(Newmail);
+            
+        }
+        if($scope.GetEmails.length > 0)
+        {
             $http.post(PATHS.api_url + 'invite/email'
                 , {
                     data: {
                         referrer_id: $cookieStore.get('userId'),
-                        emailIds: emailId
+                        emailIds: $scope.GetEmails
                     },
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).
-                success(function (data, status, headers, config) {
-                    $scope.emailaddressArea = "";
-                    toastr.success(data.message, 'Build Community');
-
+                }).success(function(data){
+                    if(data.ExistUser.length > 0){
+                        angular.forEach(data.ExistUser, function (value, key) {
+                            var dataExist = value;
+                            toastr.info(dataExist, 'User Already Exist');
+                        });
+                    }
+                    if(data.NewUser == 1){
+                        toastr.success(data.message);   
+                    }
                 }).error(function (data) {
                     toastr.error(data.error.message, 'Build Community');
                 });
         }
-
+            document.getElementById('out2').value = "";
     }
 
+    
+    if ($location.path() == '/friends/invite') {
+
+        document.getElementById("ExcelInvite").onclick = function(emails) {ExcelMailInvite(emails)};
+    }
+
+    function ExcelMailInvite(emails) {
+    var ExcelMails = document.getElementById('out2').value;
+    if(ExcelMails == "")
+    {
+        toastr.error('No contact info');
+    }
+    else
+    {
+        $scope.sendInviteExcel(ExcelMails);
+    }
+    }
+    /*Invite using Xls Upload ends*/
+    
     $scope.authenticate = function (provider) {
         $auth.authenticate(provider);
     }
+    $scope.getRole($scope.loggedInUserId);
     $scope.getEmail($scope.loggedInUserId);
     // Call start function on load.
     //  $scope.start();

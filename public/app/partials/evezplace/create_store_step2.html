@@ -8,7 +8,7 @@
 </div>
 
 <ul class="breadcrumb create-store-breadcrumb">
-    <li><a href="#evezplace">Evezplace</a></li>
+    <li><a href="#evezplace">MarketPlace</a></li>
     <li><a href="#whatdoiget">Create Store Info</a></li>
     <li>Create Store Front</li>
 </ul>
@@ -24,7 +24,7 @@
     <div class="row" style="margin-top: 10px; margin-bottom: 10px">
         <div class="form-group">
             <div class="col-md-offset-2 col-md-4">
-                <label for="storeType">What type of store would you like to select *</label>
+                <label for="storeType">What type of store would you like to select <b style="color:red;">*</b></label>
             </div>
             <div class="col-md-4">
                 <select class="form-control"  id="sub-visibilities-type" id="storeType"
@@ -86,7 +86,7 @@
     <div class="row" style="margin-top: 10px; margin-bottom: 10px">
         <div class="form-group">
             <div class="col-md-offset-2 col-md-4">
-                <label for="evezownContract">Contract with Evezown</label>
+                <label for="evezownContract">Contract with Evezown</br><span style="font-weight:normal;">(xml/Excel/Doc)</span></label>
             </div>
             <div class="fileUpload btn btn-primary col-md-2 col-md-offset-6" style="margin-left: 20px;">
                 <span><i class="fa fa-file"></i> Select Contract</span>
@@ -108,7 +108,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-4">
                 <label for="billingName">Give your billing Info (required even
-                    if you select a free store) *</label>
+                    if you select a free store) <b style="color:red;">*</b></label>
             </div>
             <div class="col-md-4">
                 <input type="text" placeholder="Name" class="form-control" id="billingName" name="billingName"
@@ -129,8 +129,8 @@
     <div class="row" style="margin-top: 10px; margin-bottom: 10px">
         <div class="form-group">
             <div class="col-md-offset-6 col-md-4">
-                <input type="text" placeholder="Contact Number" class="form-control" id="billingContactNumber"
-                       name="billingContactNumber" ng-model="formData.billingContactNumber" required>
+                <input type="text" onkeypress="return isNumberKey(event)" placeholder="Contact Number" class="form-control" id="billingContactNumber"
+                       name="billingContactNumber" ng-model="formData.billingContactNumber" required minlength="10" maxlength="12">
             </div>
         </div>
     </div>
@@ -142,4 +142,19 @@
     </div>
 
 </div>
+
+<SCRIPT language=Javascript>
+      
+      function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+         return true;
+
+      }
+
+   </SCRIPT>
+   
+
 

@@ -17,6 +17,15 @@ evezownApp.controller('ProductRfiCtrl', function ($scope, productId, usSpinnerSe
             .then(function (data) {
                 usSpinnerService.stop('spinner-1');
                 ngDialog.close("", data);
-            });
+            }).
+            success(function (data, status, headers, config)
+                {
+                    toastr.success(data.message, 'RFI');
+
+                }).error(function (data)
+                {
+                    toastr.error(data.error.message, 'RFI');
+
+                });
     }
 });

@@ -19,7 +19,7 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
     $scope.isProfile = false;
     $scope.selectedVisibility = null;
     $rootScope.showVisibility = "";
-
+    $scope.isActive = ['', 'active', '', ''];
 
     if($routeParams.id != undefined)
     {
@@ -350,7 +350,7 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
             url = $scope.service_url + 'users/groups/requests/owner/reject';
         }
 
-        alert(url);
+        //alert(url);
 
         $http.post(url
             , {
@@ -371,6 +371,7 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
             }).then(function()
             {
                 $scope.GetAllGroupRequests();
+                $scope.GetMyGroups();
             });
     }
 
@@ -510,6 +511,7 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
                 //$scope.GetAllGroups();
                 //$scope.GetMyGroups();
                 $scope.fetchFriends();
+                $scope.GetGroupById(groupId);
             });
     }
 
@@ -665,7 +667,7 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
             success(function (data, status, headers, config)
             {
                 ImageService.getImage(PATHS.api_url + 'users/groups/' + $routeParams.group_id + '/cover_image/current').success(function(data){
-                    $scope.coverImage = PATHS.api_url +'image/show/'+data;
+                    $rootScope.coverImage = PATHS.api_url +'image/show/'+data;
                 });
                 toastr.success(data.message, 'Events');
             }).error(function (data)
@@ -748,9 +750,9 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
     }
 
 
-    $scope.RemoveFriendFromGroup = function(memberId,groupId)
+    /*$scope.RemoveFriendFromGroup = function(memberId,groupId)
     {
-        //users/groups/member/remove'
+        
         $http.post(PATHS.api_url + 'users/groups/member/remove'
             , {
                 data: {
@@ -771,7 +773,7 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
             {
                 $scope.GetAllGroupActivities($routeParams.group_id);
             });
-    }
+    }*/
 
     $scope.openLightBox = function (images, index) {
         $scope.imagesitems = [];
@@ -784,9 +786,20 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
         Lightbox.baseURI = '';
         Lightbox.openModal($scope.imagesitems, index);
     }
+
+    //Get group cover image
     ImageService.getImage(PATHS.api_url + 'users/groups/' + $routeParams.group_id + '/cover_image/current').success(function(data){
-        $scope.coverImage = PATHS.api_url +'image/show/'+data;
+        
+        if(data == "NoCoverImage")
+        {
+            $rootScope.coverImage = null;
+        }
+        else
+        {
+            $rootScope.coverImage = PATHS.api_url +'image/show/'+data;
+        }
     });
+
     $scope.GetVisibility();
     //$scope.GetAllGroups();
     $scope.GetMyGroups();
@@ -794,5 +807,82 @@ evezownApp.controller('groups' ,function($scope, friendsService, PATHS,$http,$co
     $scope.GetAllGroupRequests();
 
 
+
+});
+
+/*Group Cover Image change*/
+evezownApp
+    .controller('GroupCoverImageChange', function ($scope, AuthService, ngDialog, $location, $controller, $http, $cookieStore, PATHS, FileUploader, $rootScope, $routeParams) {
+
+
+    $scope.ChangeGroupCover = function () {
+
+    var cropTitleImageDialog = ngDialog.open(
+        {
+            template: 'GroupCover',
+            scope: $scope,
+            className: 'ngdialog-theme-plain',
+            controller: $controller('GroupCoverCropCtrl', {
+                $scope: $scope
+            })
+        });
+    }
+});
+
+/*Group Cover Image crop*/
+evezownApp.controller('GroupCoverCropCtrl', function ($scope, StoreService,$http, PATHS,ImageService,
+                                                      usSpinnerService, ngDialog, $routeParams, $rootScope) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 800 / 250;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 800 / 250;
+
+    $scope.ChangeGroupCoverImage = function () {
+
+       usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                $http.post(PATHS.api_url + 'users/groups/image/update'
+                , {
+                    data: {
+                        image_name: data.imageName,
+                        group_id: $routeParams.group_id
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                }).
+                success(function (data, status, headers, config) {
+                    $rootScope.coverImage = "";
+                    ImageService.getImage(PATHS.api_url + 'users/groups/' + $routeParams.group_id + '/cover_image/current').success(function(data){
+                    $rootScope.coverImage = PATHS.api_url +'image/show/'+data;
+                    toastr.success("Group Cover Updated");
+                    ngDialog.close("", data);
+                    });
+                    });
+                    
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
 
 });

@@ -1,39 +1,21 @@
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round" role="alert" ng-controller="ApplicationCtrl">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-    </button>
-    <p style="text-align:justify">Good to see you, Go ahead create your own place, create your Evezsite, build your closed private community, use our single window to create stores, classifieds, promote your products and services through host of promotional features available on Evezown.</p>
-
-    <h1>{{PageSubTitle}}</h1>
-    <p style="text-align:justify">{{PageDescription}}</p>
-    <div class="carousel-inner"
-             ng-intro-options="IntroOptions" ng-intro-method="CallMe"
-             ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
-             ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
-             ng-intro-autostart="false">
-    <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();">Take a Tour</button>
-    </div>
-</div>
 <!-- Static navbar -->
 <nav class="navbar navbar-default" id="navContainer">
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="" id="step1"  data-toggle="tab" data-slide-to="0">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Mysite</a>
             </li>
-            <li ng-class="{ active: isActive('/community')}" id="step2"  data-toggle="tab" data-slide-to="1">
-                <a href="#community" class="{{isActive[1]}}">Build Community</a>
-            </li>
-            <li ng-class="{ active: isActive('/recco')}" id="step3"  data-toggle="tab" data-slide-to="2">
-                <a href="#recco" class="{{isActive[2]}}">Stream It</a></li>
+            <li ng-class="{ active: isActive('/streamit')}" id="step3"  data-toggle="tab" data-slide-to="2">
+                <a href="#streamit" class="{{isActive[2]}}">Stream It</a></li>
             <li ng-class="{ active: isActive('/explore')}" id="step4"  data-toggle="tab" data-slide-to="3">
                 <!-- Template which needs to be shown on click -->
                 <script type="text/ng-template" id="explore">
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                        
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -52,146 +34,194 @@
     </div>
 </nav>
 <!-- Static navbar Ends-->
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round" role="alert" ng-controller="ApplicationCtrl">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+   
+    <h1>{{PageSubTitle}}</h1>
+    <p style="text-align:justify">{{PageDescription}}</p>
+    <div class="carousel-inner"
+             ng-intro-options="IntroOptions" ng-intro-method="CallMe"
+             ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
+             ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
+             ng-intro-autostart="false">
+    <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();">Take a Tour</button>
+    </div>
+</div>
 
-<div ng-controller="trending">
+<div class="col-md-12" style="margin-top: 10px;">
+    <ul class="breadcrumb" style="background: transparent; padding-left: 0px" >
+        <li><a href="#home">Home</a> <span class="divider"></span></li>
+        <li><a href="#profile/{{userId}}">Mysite</a></li>
+        <li class="active">Stream It</li>
+    </ul>
+</div>
+
+<div class="streamit-page" ng-controller="trending">
+
+<!--Post Types Menubar starts-->
+<div class="container">
+<nav class="col-md-12 navbar navbar-default" id="navContainer1">
+    <div id="navbar2">
+        <ul class="nav navbar-nav">
+            <li style="width: 10%"><h4 >Recent: </h4></li>
+            <!--posttypes-->
+            <li style="text-align: center"><a style="margin-left: 0px" href ng-click="GetPostByFilter('')">All</a></li>
+
+            <li style="text-align: center"  ng-repeat="types in posttypes"><a style="margin-left: 0px" href ng-click="LoadPostsByFilter(types.id)">{{types.type}}</a></li>
+            
+            <li style="text-align: right">
+                <select name="selectEves" id="selectEves" class="form-control" ng-model="selectEves">
+                    <option value="all eves">All Members</option>
+                    <option value="my eves">My Friends</option>
+                </select>
+            </li>
+        </ul>
+
+        <input type="hidden" name="{{all}}" data-ng-model="all"/>
+        <input type="hidden" name="{{friends}}" ng-model="friends"/>
+        <input type="hidden" name="{{circles}}" ng-model="circles"/>
+        <input type="hidden" name="{{me}}" ng-model="me"/>
+    </div>
+</nav>
+</div>
+<!--Post types menu bar ends-->
+
+<div class="container">
     <form novalidate name="postForm">
-        <div class="form-group postingContainer">
+        <!-- <div class="form-group postingContainer"> -->
+            
             <!-- Posting area start -->
-            <div class="col-md-12" id="postingArea">
-                <!--Title-->
+            <!-- <div class="row zero-padding-left-right heading"> -->
+            <div class="col-md-12 grid no-padding">
+            <div class="col-md-6 grid-view" style="padding:5px;">
+            <div class="col-md-12" id="postingArea" style="border:solid 1px #ccc;border-radius:4px;">
+                <!--Posting area header-->
                 <div class="col-md-12 zero-padding-left-right trending-title">
-                    <div class="col-md-6 zero-padding-left-right trending-title">
-                        <h4 style="padding: 0px 0px 5px 2px">{{postTitle}}</h4>
+                    <div class="col-md-6 col-xs-6 no-padding">
+                        <div class="col-md-1 col-xs-2" style="padding: 9px 0px 0px 2px">
+                            <i class="fa fa-bullhorn" style="font-size:20px;color:#E50880;"></i>
+                        </div>
+                        <div class="col-md-5 col-xs-4 no-padding">
+                            <h5 style="padding: 0px 0px 0px 2px">Stream</h5>
+                        </div>
+                        
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-4 no-padding text-right">
                         <div ng-if="CheckRole == 'Admin'">
-                            <label for="priority"><h4>Priority:</h4></label>
+                            <label for="priority" style="padding:0px;"><h5>Priority:</h5></label>
                             <input type="checkbox" id="priority" name="priority"
-                            ng-model="priority"  ng-change="PriorityCheck(priority)" style="width: 16px; height: 16px">
+                            ng-model="priority"  ng-change="PriorityCheck(priority)" style="width: 12px; height: 12px;margin-top:4px;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 text-right" style="margin-top:10px;padding:0px;">
+                        <div class="post-camera">
+                            <span title="Upload Photo"><i class="fa fa-camera">
+                            <input type="file" class="upload" name="image" nv-file-select="" uploader="uploader" multiple/></i></span>
+
                         </div>
                     </div>
                 </div>
 
-                <!--Length-->
+                <!--title-->
                 <div class="col-md-12 zero-padding-left-right trending-title">
-                    <input type="text" class="form-control" placeholder="Post title" style="height: 45px; font-size: 16px" data-ng-model="woice" maxlength="255" novalidate/>
-                    <span class="pull-right">{{255 - woice.length}}</span>
+                    <input type="text" class="form-control" placeholder="Post title" data-ng-model="woice" maxlength="255" novalidate/>
+                    <!-- <span class="pull-right">{{255 - woice.length}}</span> -->
                 </div>
 
+                
+                <div class="col-md-12" style="padding:0px;">
                 <!--Description-->
-                <div class="col-md-12 zero-padding-left-right trending-whats-recommendation" style="margin-bottom:20px;">
-                    <textarea class="form-control" rows="4" placeholder="Enter your description" maxlength="800" data-ng-model="description" novalidate/>
-                    <span class="pull-right">{{800 - description.length}}</span>
+                <div class="col-md-6 zero-padding-left-right trending-whats-recommendation" style="margin-bottom:2px;padding-bottom:5px;">
+                    <textarea class="form-control" rows="7" placeholder="Enter your description" maxlength="800" data-ng-model="description" novalidate/>
+                    <!-- <span class="pull-right">{{800 - description.length}}</span> -->
                 </div>
-
-                <!--Recco fields starts-->
-                <div class="Recco_fields">
-                    <!--Whats the post-->
-                    <div class="col-md-2 zero-padding-left-right text-right">
-                            <label for="post-type">What's the post about?</label>
-                    </div>
-                    <div class="col-md-10 no-padding category-details">
-                        <select class=" form-control" id="post-type" ng-options="type as type.type for type in posttypes" data-ng-model="selectedType" ng-change="ReloadView()">
-                        </select>
-                    </div>
-
-                    <div class="col-md-12 no-padding category-details">
-                        <!--Classification-->
-                        <div class="col-md-2 zero-padding-left-right text-right">
-                            <label for="post-type">Classification</label>
-                        </div>
-                        <div class="col-md-2" style="padding:0px;">
-                            <select class=" form-control" ng-options="type as type.type for type in classifieds_types" data-ng-model="selectedClassifieds">
-                            </select>
-                        </div>
-
-                        <!--Category-->
-                        <div class="col-md-2 zero-padding-left-right text-right">
-                            <label for="category-type">choose category?</label>
-                        </div>
-                        <span us-spinner="{radius:6, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1"
+                <!--Category-->
+                <div class="col-md-6" style="padding-right:0px">
+                    <span us-spinner="{radius:4, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1"
                           spinner-start-active="true">
                         </span>
-                        <div class="col-md-2 zero-padding-left-right" style="padding:0px;">
+                        <div class="col-md-12 zero-padding-left-right" style="padding:0px 0px 5px 0px">
                             <select class="form-control" id="category-type" ng-options="category as category.category_name for category in categories" ng-change="GetSubCategories()" data-ng-model="selectedOption">
                             </select>
                         </div>
-
-                        <!--Sub Category-->
-                        <div class="col-md-2 zero-padding-left-right text-right">
-                            <label for="sub-category-type">choose sub category?
-                            </label>
-                        </div>
-                        <div class="col-md-2 zero-padding-left-right" style="padding:0px;">
+                </div>
+                <!--Sub Category-->
+                <div class="col-md-6" style="padding-right:0px">
+                    <div class="col-md-12 zero-padding-left-right" style="padding:0px 0px 5px 0px">
                             <select class="form-control" id="sub-category-type" ng-options="subcategory as subcategory.subcategory_name for subcategory in subcategories" ng-change="ReloadBrand()" data-ng-model="selectedsubcategories">
                             </select>
                         </div>
-                    </div>
+                </div>
+                <!--Price-->
+                <div class="col-md-6" style="padding:0px 0px 5px 16px;">
+                    <input class="form-control" type="text" placeholder="Price eg: 1500 - 2500" id="price-range" ng-model="price"/>
+                </div>
+                <div class="col-md-6" style="padding:0px 0px 5px 16px;">
+                    <google-places location=location></google-places>
+                </div>
+                </div>
 
-                    <div class="col-sm-12 no-padding brand-details">
-                        <!--Brand-->
-                        <div class="col-sm-2  text-right">
-                            <label>search or <a ng-click="addBrand()" style="color: #e50880; font-weight: 600; cursor: pointer;">add </a>brand? (optional)</label>
-                        </div>
-                        <div class="col-sm-2" style="padding:0px;">
-                            <input class="form-control" type="text" placeholder="Search brands"
+                <!--Label fields starts-->
+                <div class="col-md-12" style="padding:0px;font-size:14px;">
+                    <div class="col-md-2" style="padding:0px;">
+                            <label for="post-type" style="font-weight:normal;">PostType</label>
+                    </div>
+                    <div class="col-md-4 no-padding category-details">
+                        <select class=" form-control" id="post-type" ng-options="type as type.type for type in posttypes" data-ng-model="selectedType" ng-change="ReloadView()" style="font-size:14px;">
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-center" style="padding:0px;">
+                            <label for="post-type" style="font-weight:normal;">Classify</label>
+                    </div>
+                    <div class="col-md-4 no-padding category-details">
+                        <select class=" form-control" ng-options="type as type.type for type in classifieds_types" data-ng-model="selectedClassifieds" style="font-size:14px;">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="padding:0px;font-size:14px;">
+                    <div class="col-md-2" style="padding:0px;">
+                           <label style="font-weight:normal;"><a ng-click="addBrand()" style="color: #e50880; font-weight: 600; cursor: pointer;">Add </a>brand</label>
+                    </div>
+                    <div class="col-md-4 no-padding category-details">
+                       <input class="form-control" type="text" placeholder="Search brands"
                             ng-model="selectedBrand"
                             typeahead="brand as brand.title for brand in brands | filter:$viewValue | limitTo:10"
                             typeahead-min-length='1'
-                            typeahead-on-select='onSelectPart($item, $model, $label)'
-                            typeahead-template-url="brandSearchTemplate.html">
-                        </div>
+                            typeahead-on-select='onSelectPart($item, $model, $label)'style="font-size:14px;">
+                    </div>
+                    <div class="col-md-2 text-center" style="padding:0px;">
+                            <label for="Visibility" style="font-weight:normal;">Visibility</label>
+                    </div>
+                    <div class="col-md-4 no-padding category-details">
+                       <select class="form-control" id="sub-visibility-type"
+                        ng-options="visibility as visibility.type for visibility in visibilties" ng-model="selectedVisibility" ng-init="selectedVisibility = GetVisibilityOfWoice(post.visibility_id,visibilties)"
+                        ng-change="UpdateWoiceVisibility(post,selectedVisibility)" default-option="choose visibility" style="font-size:14px;">
+                        </select>
+                    </div>   
+                </div>
+                <div class="Recco_fields">
 
-                        <!--Price Range-->
-                        <div class="col-sm-2  text-right">
-                            <label for="price-range">price range in &#8377; (optional)</label>
-                        </div>
-                        <div class="col-sm-2" style="padding:0px;">
-                            <input class="form-control" type="text" placeholder="eg: 1500 - 2500" id="price-range" ng-model="price"/>
-                        </div>
-
-                        <!--Location-->
-                        <div class="col-sm-2  text-right">
-                            <label for="price-range">Location (optional)</label>
-                        </div>
-                        <div class="col-sm-2" style="padding:0px;">
-                            <google-places location=location></google-places>
-                        </div>
-
+                    <div class="col-sm-12 no-padding">
                         <!--Recommendation-->
-                        <div class="col-sm-12 zero-padding-left-right trending-description" style="margin-top:10px;margin-bottom:0px;" ng-show="mustHideOnWarning">
+                        <div class="col-sm-12 zero-padding-left-right trending-description" style="margin-top:10px;margin-bottom:5px;" ng-show="mustHideOnWarning">
                             <textarea class="form-control" rows="4" placeholder="Add more text (optional)" maxlength="800" ng-model="recommendation"/>
-                            <span class="pull-right">{{800 - recommendation.length}}</span>
+                            <!-- <span class="pull-right">{{800 - recommendation.length}}</span> -->
                         </div>
                     </div>
                 </div>
-                <!--Recco fields Ends-->
-
-                <!-- Image upload-->
-                <div class="row zero-padding-left-right heading">
-                    <div class="col-sm-2" style="margin-top:10px;">
-                        <div class="fileUpload btn btn-primary">
-                            <span><i class="fa fa-camera"></i> Select photos</span>
-                            <input type="file" class="upload" name="image" nv-file-select="" uploader="uploader" multiple/>
-                        </div>
+                <div class="col-md-12" style="padding:0px;font-size:14px;">
+                    <div class="col-md-2" style="padding:0px;">
+                        <label for="website" style="font-weight:normal;">Website</label>
                     </div>
-                    <div class="col-md-1 zero-padding-left-right text-right" style="margin-top:10px;">
-                        <label for="website"><i class="fa fa-link fa-reco-link"></i></label>
+                    <div class="col-md-6 no-padding category-details">
+                       <input class="form-control" type="text" placeholder="eg: www.mywebsite.com" ng-model="url_link" style="font-size:14px;"/>
                     </div>
-                    <div class="col-md-4 zero-padding-left-right" style="margin-top:10px;">
-                        <input class="form-control" type="text" placeholder="eg: www.mywebsite.com" ng-model="url_link"/>
-                    </div>
-                    <div class="col-md-1 zero-padding-left-right text-right" style="margin-top:10px;">
-                        <label for="Visibility">Visibility:</label>
-                    </div>
-                    <div class="col-md-2 zero-padding-left-right" style="margin-top:10px;">
-                        <select class="form-control" id="sub-visibility-type"
-                        ng-options="visibility as visibility.type for visibility in visibilties" ng-model="selectedVisibility" ng-init="selectedVisibility = GetVisibilityOfWoice(post.visibility_id,visibilties)"
-                        ng-change="UpdateWoiceVisibility(post,selectedVisibility)" default-option="choose visibility">
-                        </select>
-                    </div>
-                    <div class="col-sm-2 pull-left">
-                        <button class="btn btn-primary btn-block custom-streamIt" id="btn-woiceit" ng-click="CreatePost(uploader,posts)" ng-disabled="uploader.isUploading"  style="margin-top:10px;">Stream It
+                    <div class="col-md-4" style="padding-right:0px;">
+                        <button class="btn btn-primary btn-block" id="btn-woiceit" ng-click="CreatePost(uploader,posts)" ng-disabled="uploader.isUploading">Stream It
                         </button>
                         <div class="streamit-spinner-style">
                             <span us-spinner="{radius:6, width:2, length: 2,color: '#ffffff'}" spinner-key="spinner-2"
@@ -201,110 +231,62 @@
                     </div>
                 </div>
 
-                <!-- Image upload queue section start -->
-                <div class="col-sm-12" style="margin-bottom: 10px; margin-top: 10px; padding-left: 0px" ng-if="uploader.queue.length > 0">
-                    <div class="col-sm-12" style="padding-left: 0px; padding-right: 0px">
-                        <div class="col-sm-10 progress">
+                <div class="col-md-12" style="margin-bottom: 10px; margin-top: 10px; padding:0px" ng-if="uploader.queue.length > 0">
+                    <div class="col-md-12 col-xs-12" style="padding-left: 0px; padding-right: 0px">
+                        <div class="col-md-11 col-xs-11 progress" style="height:7px;margin-bottom:0px;">
                             <div class="progress-bar" role="progressbar" id="upload-progress-bar"
                                 ng-style="{ 'width': uploader.progress + '%' }">
                             </div>
                         </div>
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-warning btn-sm" ng-click="uploader.cancelAll()"
-                            ng-disabled="!uploader.isUploading">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-                            </button>
-                        </div>
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-danger btn-sm" ng-click="uploader.clearQueue()"
-                            ng-disabled="!uploader.queue.length">
-                            <span class="glyphicon glyphicon-trash"></span> Remove all
+                        
+                        <div class="col-md-1 col-xs-1 no-padding text-right" style="margin-top:-10px;padding-left:12px;">
+                            <button type="button" class="custom-delete-button" ng-click="uploader.clearQueue()"
+                            ng-disabled="!uploader.queue.length" style="padding:0px 2px 0px 0px;font-size:10px;">
+                            <span class="glyphicon glyphicon-trash" title="Remove All"></span>
                             </button>
                         </div>
                     </div>
-                    <div class="col-sm-3" ng-repeat="item in uploader.queue">
-                        <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 500 }"></div>
+                    <div class="col-md-12 no-padding">
+                    <div class="col-md-1 no-padding post-img-wrap"  ng-repeat="item in uploader.queue">
+                        <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100, width:100 }"></div>
                         <div class="text-center">
                             <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
                             <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()"
-                                        ng-disabled="!item.isUploading">
-                                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                                </button>
-                            </div>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                                    <span class="glyphicon glyphicon-trash"></span> Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>   
+                        <span class="close" ng-click="item.remove()">&times;</span>
+                    </div>
+                    </div>
                 </div>
-                <!-- Image upload queue section end -->
+            </div>
             </div>
             <!-- Posting area Ends-->
-
             <!-- Content area starts -->
-            <nav class="col-md-12 navbar navbar-default" id="navContainer1">
-                <div id="navbar2">
-                    <ul class="nav navbar-nav">
-                        <li style="width: 10%"><h4 >Recent: </h4></li>
-                        <!--posttypes-->
-                        <li style="text-align: center"><a style="margin-left: 0px" href ng-click="GetPostByFilter('')">All</a></li>
-
-                        <li style="text-align: center"  ng-repeat="types in posttypes"><a style="margin-left: 0px" href ng-click="LoadPostsByFilter(types.id)">{{types.type}}</a></li>
-                        
-                        <li style="text-align: right">
-                            <select name="selectEves" id="selectEves" class="form-control" ng-model="selectEves">
-                                <option value="all eves">all eves</option>
-                                <option value="my eves">my eves</option>
-                            </select>
-                        </li>
-                    </ul>
-
-                    <input type="hidden" name="{{all}}" data-ng-model="all"/>
-                    <input type="hidden" name="{{friends}}" ng-model="friends"/>
-                    <input type="hidden" name="{{circles}}" ng-model="circles"/>
-                    <input type="hidden" name="{{me}}" ng-model="me"/>
-                </div>
-            </nav>
-
             <!-- show Posts -->
-            <div class="col-md-12 trending-section" ng-repeat="post in posts">
+            <div class="col-md-6 grid-view" style="padding:5px;" ng-repeat="post in posts">
+            <div class="col-md-12 trending-section" style="border:solid 1px #ccc;border-radius:4px;">
                 <div class="col-md-12 zero-padding-left-right" >
                     <!-- username-->
-                    <div class="col-md-1">
+                    <div class="col-md-2 col-xs-2">
                         <img ng-src="{{imagePath+'image/show/'+post.user.profile_image.large_image_url}}" alt="" class="img-thumbnail"/>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <h5>{{post.user.firstname}}&nbsp;{{post.user.lastname}}
                             <small> says...</small>
                         </h5>
                     </div>
 
                     <!--visibility-->
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <select class="form-control" ng-hide="currentUserId != post.user.id" id="sub-visibilities-type"
                                 ng-options="visibility as visibility.type for visibility in visibilties"
                                 ng-model="selectedVisibility" ng-init="selectedVisibility = GetVisibilityOfWoice(post.visibility_id,visibilties)" ng-change="UpdateWoiceVisibility(post,selectedVisibility)">
                         </select>
                     </div>
 
-                    <!--priority-->
-                    <div class="col-md-2 col-md-offset-3">
-                        <div ng-if="CheckRole == 'Admin' && loggedInUserId == post.user.id">
-                        <label for="priority"><h4>Priority:</h4></label>
-                            <input type="checkbox" id="priority" name="priority"
-                            value="{{post.priority}}" ng-checked="post.priority == 1" ng-click="PriorityReupdate(post.priority,post.id)" >
-                        </div>
-                    </div>
+                    
 
                     <!--Times ago-->
-                    <div class="times-ago custom-trending-timesago col-md-2  text-right">
+                    <div class="times-ago custom-trending-timesago col-md-4 text-right">
                         <!-- Template which needs to be shown on hover-->
                         <script type="text/ng-template" id="menu">
                             <div class="triangle"></div>
@@ -331,24 +313,58 @@
                     </div>
                 </div>
 
+                <!--priority starts (for admin only)-->
+                <div class="col-md-12 zero-padding-left-right" >
+                    <!--priority-->
+                    <div class="col-md-4">
+                        <div ng-if="CheckRole == 'Admin' && loggedInUserId == post.user.id">
+                        <label for="priority"><h4>Priority:</h4></label>
+                            <input type="checkbox" id="priority" name="priority"
+                            value="{{post.priority}}" ng-checked="post.priority == 1" ng-click="PriorityReupdate(post.priority,post.id)" >
+                        </div>
+                    </div>
+                </div>
+                <!--priority ends-->
+
                 <!-- Post title -->
                 <div class="col-md-12" ng-if="post.title != ''">
                     <h4 ng-show="!editing"
                         style="color: #4cb1ca; font-weight: 100; font-size: 1.2em">{{post.title}} <span
                             ng-hide="currentUserId != post.user.id" ng-click="editing=true" class="fa fa-edit pull-right" style="cursor:pointer;"></span></h4>
                     <div ng-show="editing" style="margin-top: 5px">
-                        <input type="text" ng-model="post.title" placeholder="Title" class="col-md-10"
+                        <input type="text" ng-model="post.title" placeholder="Title" class="col-md-8"
                                style="height: 30px" maxlength="255" ng-required/>
-                        <button class="btn btn-default btn-sm col-md-1" ng-click="editing = false">Cancel</button>
-                        <button class="btn btn-primary btn-sm col-md-1" ng-click="editing = false;UpdateWoice(post)" type="submit">Save</button>
+                        <button class="btn btn-default btn-sm col-md-2" ng-click="editing = false">Cancel</button>
+                        <button class="btn btn-primary btn-sm col-md-2" ng-click="editing = false;UpdateWoice(post)" type="submit">Save</button>
                     </div>
                 </div>
 
                 <!-- Images-->
-                <div ng-if="post.images.length > 0" class="col-sm-12 spec center-block reco-image-gallery">
-                    <div class="col-lg-3 col-sm-6 " ng-repeat="image in post.images | limitTo:4">
-                        <a ng-click="openLightBox(post.images,$index)" class="thumbnail">
+               <div ng-if="post.images.length > 0" class="col-sm-12 col-xs-12 spec center-block reco-image-gallery">
+                    <div class="col-lg-3 col-sm-6 col-xs-3 no-padding" ng-repeat="image in post.images | slice:0:1">
+                        <a  href ng-click="openLightBox(post.images,$index)" class="thumbnail">
                             <img ng-src="{{imagePath+'image/show/'+image.large_image_url}}"
+                                 alt="125x125">
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-3 no-padding" ng-repeat="image in post.images | slice:1:2">
+                        <a  href ng-click="openLightBox(post.images,$index + 1)" class="thumbnail">
+                            <img ng-src="{{imagePath+'image/show/'+image.large_image_url}}"
+                                 alt="125x125">
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-3 no-padding" ng-repeat="image in post.images | slice:2:3">
+                        <a href ng-click="openLightBox(post.images,$index + 2)" class="thumbnail">
+                            <img ng-src="{{imagePath+'image/show/'+image.large_image_url}}"
+                                 alt="125x125">
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-xs-3 no-padding" ng-repeat="image in post.images | slice:3:4">
+                        <a href ng-click="openLightBox(post.images,$index + 3)" class="thumbnail">
+                            <img ng-if="post.images.length > 4" ng-src="{{imagePath+'image/show/'+image.large_image_url}}"
+                                 alt="125x125" style="opacity:0.7">
+                            <i class="custom-text-over-image" ng-if="post.images.length > 4">+{{post.images.length - 4}}</i>
+                            <img  ng-if="post.images.length <= 4"ng-src="{{imagePath+'image/show/'+image.large_image_url}}"
                                  alt="125x125">
                         </a>
                     </div>
@@ -358,22 +374,21 @@
                 <!--Both Brand and location / show this div-->
                 <div class="col-md-12 zero-padding-left-right reco-brand-section" ng-if="post.location != null && post.brand.id != 1">
                     <div class="col-md-4">
-                        <img ng-src="{{imagePath+'image/show/'+ post.brand.image_name + '/24/24'}}"
-                             alt=""
-                             class="img-thumbnail"/>
+                        <img ng-src="{{imagePath+'image/show/'+ post.brand.image_name + '/24/24'}}" alt=""
+                        class="img-thumbnail" ng-if='post.brand.image_name != ""'/>
                         <span style="color:#eb9c38">{{post.brand.title}}</span>
                     </div>
-                    <div class="col-md-6 col-md-offset-2 text-right">
+                    <div class="col-md-8 text-right">
                         <p>
-                            Location: <b>{{post.location.locality}} , {{post.location.city}},
-                            {{post.location.state}}</b>
+                            <i class="fa fa-map-marker" style="font-size:25px;color:#4CB1CA"></i><i>{{post.location.locality}} , {{post.location.city}},
+                            {{post.location.state}}</i>
                         </p>
                     </div>
                 </div>
 
                 <!-- Location only / show this div-->
                 <div class="col-md-12 zero-padding-left-right reco-brand-section" ng-if="post.brand.id == 1 && post.location != null">
-                    <div class="col-md-6 col-md-offset-6 text-right">
+                    <div class="col-md-8 col-md-offset-4 text-right">
                         <p>
                             Location: <b>{{post.location.locality}} , {{post.location.city}},
                             {{post.location.state}}</b>
@@ -384,9 +399,8 @@
                 <!-- Brand only / show this div-->
                 <div class="col-md-12 zero-padding-left-right reco-brand-section" ng-if="post.brand.id != 1 && post.brand != null && post.location == null">
                     <div class="col-md-4">
-                        <img ng-src="{{imagePath+'image/show/'+ post.brand.image_name + '/24/24'}}"
-                             alt=""
-                             class="img-thumbnail"/>
+                        <img ng-src="{{imagePath+'image/show/'+ post.brand.image_name + '/24/24'}}" alt=""
+                        class="img-thumbnail" ng-if='post.brand.image_name != ""'/>
                         <span style="color:#eb9c38">{{post.brand.title}}</span>
                     </div>
                 </div>
@@ -395,41 +409,47 @@
                 <!-- Post description -->
                 <div class="col-md-12 zero-padding-left-right" ng-if="post.description != ''" style="text-align:justify;">
                     <div  class="col-md-12">
-                        <p ng-hide="editing">{{post.description}} <span ng-hide="currentUserId != post.user.id"
-                                ng-click="editing=true" class="fa fa-edit pull-right" style="cursor:pointer;"></span></p>
+                        <!--read more is a custom directive, refer readmore.js in index.html and readmore in app.js-->
+                        <span ng-hide="currentUserId != post.user.id || editing" ng-click="editing=true" class="fa fa-edit pull-right" style="cursor:pointer;"></span>
+
+                        <p ng-hide="editing" read-more ng-model="post.description" words="true" length="25"></p>
+                            
                         <div ng-show="editing" style="margin-top: 5px; margin-bottom: 5px">
                             <textarea rows="2" ng-model="post.description" placeholder="Description" ng-required
-                                      class="col-md-10" maxlength="800"/>
-                            <button class="btn btn-default btn-sm col-md-1" ng-click="editing = false">Cancel</button>
-                            <button class="btn btn-primary btn-sm col-md-1" type="submit" ng-click="UpdateWoice(post)">Save</button>
+                                      class="col-md-8" maxlength="800"/>
+                            <button class="btn btn-default btn-sm col-md-2" ng-click="editing = false">Cancel</button>
+                            <button class="btn btn-primary btn-sm col-md-2" type="submit" ng-click="UpdateWoice(post)">Save</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Price range-->
                 <div class="col-md-12 zero-padding-left-right reco-brand-section">
-                    <div class="col-md-12" ng-if="post.price_range != ''">
+                    <div class="col-md-12" ng-if="post.price_range != null && post.price_range != ''">
                         <p ng-show="!editing">
                             Price: &#8377; <b>{{post.price_range}}</b>
                             <span ng-hide="currentUserId != post.user.id" ng-click="editing=true" class="fa fa-edit pull-right" style="cursor:pointer;"></span>
                         </p>  
                     <div ng-show="editing">
-                        <textarea rows="2" ng-model="post.price_range" ng-required class="col-md-10" />
-                        <button class="btn btn-default btn-sm col-md-1" ng-click="editing = false">Cancel</button>
-                        <button class="btn btn-primary btn-sm col-md-1" type="submit" ng-click="UpdateWoice(post)">Save</button>
+                        <textarea rows="2" ng-model="post.price_range" ng-required class="col-md-8" />
+                        <button class="btn btn-default btn-sm col-md-2" ng-click="editing = false">Cancel</button>
+                        <button class="btn btn-primary btn-sm col-md-2" type="submit" ng-click="UpdateWoice(post)">Save</button>
                     </div>
                     </div>
                 </div>
 
                 <!-- Testimonial-->
-                <div  class="col-md-12 reco-testimonial" ng-if="post.testimonial != ''" style="text-align:justify;">
-                    <i ng-show="!editing">&#34; {{post.testimonial}} &#34; <span ng-hide="currentUserId != post.user.id" ng-click="editing=true"
-                         class="fa fa-edit pull-right" style="cursor:pointer;"></span></i>
+                <div  class="col-md-12 reco-testimonial" ng-if="post.testimonial != null && post.testimonial != ''" style="text-align:justify;">
+                    <!--read more is a custom directive, refer readmore.js in index.html and readmore in app.js-->
+                    <span ng-hide="currentUserId != post.user.id || editing" ng-click="editing=true" class="fa fa-edit pull-right" style="cursor:pointer;"></span>
+
+                    <i ng-show="!editing" read-more ng-model="post.testimonial" words="true" length="25"></i>
+
                     <div ng-show="editing">
                         <textarea rows="2" ng-model="post.testimonial" placeholder="Testimonial" ng-required
-                               class="col-md-10" maxlength="800"/>
-                        <button class="btn btn-default btn-sm col-md-1" ng-click="editing = false">Cancel</button>
-                        <button class="btn btn-primary btn-sm col-md-1" type="submit" ng-click="UpdateWoice(post)">Save</button>
+                               class="col-md-8" maxlength="800"/>
+                        <button class="btn btn-default btn-sm col-md-2" ng-click="editing = false">Cancel</button>
+                        <button class="btn btn-primary btn-sm col-md-2" type="submit" ng-click="UpdateWoice(post)">Save</button>
                     </div>
                 </div>
 
@@ -442,9 +462,9 @@
                 </div>
 
                 <!-- Comment,Restream,Grade,Tags -->
-                <div class="col-md-12 no-right-pad">
+                <div class="col-md-12 no-padding" style="background-color:#CFCFCE;">
                     <!--Comment-->
-                    <div class="col-md-2 commentStyle">
+                    <div class="col-md-3 commentStyle no-padding">
                         <span class="glyphicon glyphicon-comment"></span>
                         <span style="font-size: 12px;">{{post.commentsCount}} 
                             <a href ng-click="LoadComments(post)">Comments</a>
@@ -452,11 +472,11 @@
                     </div>
 
                     <!--Grade-->
-                    <div class="col-md-2 col-md-offset-2 rating-back">
+                    <div class="col-md-3 rating-back no-padding">
                         <div class="ratingStyle text-center" ng-app="Duo">
                             <bold style="font-size: 12px">Grade It :</bold>
                             <span duo-stars value="{{GetLevelsByUserId(post)}}" max="4" ng-click="UpdateLevels(stars,post)" data-ng-model="stars"></span>
-                            <p>
+                            <p style="margin-bottom:0px;">
                                 <small style="font-size: 12px" ng-if="post.avgGrade == ''">Average: 0 &nbsp;&nbsp;&nbsp;&nbsp; Total:{{post.grades.length}}</small>
 
                                 <small style="font-size: 12px" ng-if="post.avgGrade > 0">Average: {{post.avgGrade}}
@@ -467,7 +487,7 @@
                     </div>
 
                     <!--Restream count-->
-                    <div class="col-md-2 col-md-offset-2 rewoiceStyle">
+                    <div class="col-md-3 rewoiceStyle">
                         <span class="fa fa-share-square"></span>
                         <span style="font-size: 12px;">{{post.rewoicesCount}} 
                             <a href ng-click="AddRewoice(post)">Restream</a>
@@ -475,30 +495,34 @@
                     </div>
 
                     <!-- Post tags -->
-                    <div ng-if="post.post_type_id == 1" class="col-md-2 reco-tag">
+                    <div ng-if="post.post_type_id == 1" class="col-md-3 reco-tag">
                         <bold style="font-size: 12px">Share / Ask</bold>
                     </div>
-                    <div ng-if="post.post_type_id == 2" class="col-md-2 generic-tag">
+                    <div ng-if="post.post_type_id == 2" class="col-md-3 generic-tag">
                         <bold style="font-size: 12px">I Recommend</bold>
                     </div>
-                    <div ng-if="post.post_type_id == 3" class="col-md-2 finds-tag">
+                    <div ng-if="post.post_type_id == 3" class="col-md-3 finds-tag">
                         <bold style="font-size: 12px">My Find</bold>
                     </div>
-                    <div ng-if="post.post_type_id == 4" class="col-md-2 caution-tag">
+                    <div ng-if="post.post_type_id == 4" class="col-md-3 caution-tag">
                         <bold style="font-size: 12px">Be Cautious</bold>
                     </div>
                 </div>
             </div>
+            </div>
+            </div>
             <!-- show Posts -->
 
             <!--Loadmore-->
+            <!-- <div class="col-md-12" infinite-scroll="loadMore()" infinite-scroll-distance="2"> -->
             <div class="col-md-12">
                 <button class="btn btn-primary btn-block" href ng-class="nextPageDisabledClass()"
                         ng-click="loadMore()">Load More
                 </button>
             </div>
-        </div>
+        <!-- </div> -->
     </form>
+</div>
 </div>
 
 <script type="text/ng-template" id="templateId">

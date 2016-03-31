@@ -19,6 +19,8 @@ evezownApp
 
         $scope.favorites = {};
 
+        $scope.isActive = ['', 'active', '', ''];
+
         if($routeParams.id)
         {
             $scope.favorites.userId = $routeParams.id;
@@ -37,15 +39,19 @@ evezownApp
         $scope.participationProfile.userId = $routeParams.id;
         $scope.other.userId = $routeParams.id;
 
+
         function fetchPersonalInfo(userID) {
             usSpinnerService.spin('spinner-1');
             ProfileDetailsService.getPersonalInfo(userID).then(function(data){
 
                 usSpinnerService.stop('spinner-1');
-
+                
+                $scope.profile.profileUserId = data.user_id;
                 $scope.profile.firstname = data.firstname;
                 $scope.profile.lastname = data.lastname;
-                $scope.profile.phone = data.phone;
+                $scope.profile.phone1 = data.phone;
+                var PhoneNumber = parseInt($scope.profile.phone1);
+                $scope.profile.phone = PhoneNumber;
                 $scope.profile.email = data.email;
                 $scope.profile.streetAddress = data.streetAddress;
                 $scope.profile.city = data.city;
@@ -141,7 +147,8 @@ evezownApp
                 }
                 if(data.phone1)
                 {
-                    $scope.referenceProfile.reference_phone1 = data.phone1;
+                    var PhoneNumber1 = parseInt(data.phone1);
+                    $scope.referenceProfile.reference_phone1 = PhoneNumber1;
                 }
                 if(data.name2)
                 {
@@ -153,7 +160,8 @@ evezownApp
                 }
                 if(data.phone2)
                 {
-                    $scope.referenceProfile.reference_phone2 = data.phone2;
+                    var PhoneNumber2 = parseInt(data.phone2);
+                    $scope.referenceProfile.reference_phone2 = PhoneNumber2;
                 }
                 if(data.name3)
                 {
@@ -165,7 +173,8 @@ evezownApp
                 }
                 if(data.phone3)
                 {
-                    $scope.referenceProfile.reference_phone3 = data.phone3;
+                    var PhoneNumber3 = parseInt(data.phone3);
+                    $scope.referenceProfile.reference_phone3 = PhoneNumber3;
                 }
                 $scope.referenceProfile.userId = data.id;
             });
@@ -327,6 +336,58 @@ evezownApp
                 toastr.success(data.message, 'Feedback');
                 //$location.path('profile/feedback');
             });
+        }
+        
+        $scope.changePassword = function (credentials)
+        {
+            var UserID = $routeParams.id;
+            var CurrentPass = $scope.current_password;
+            var NewPass = $scope.new_password;
+            var ConfirmPass = $scope.confirm_password;
+            
+            var Check1 = /^(?=.*\d)[A-Za-z0-9\W_]{7,20}$/; /*Atleast one digit*/
+            var Check2 = /^(?=.*[A-Z])[A-Za-z0-9\W_]{7,20}$/; /*Atleast one Uppercase*/
+            var Check3 = /^(?=.*[\W_])[A-Za-z0-9\W_]{7,20}$/; /*Atleast one Special character*/
+            var Check4 = /^(?=.*\d)[0-9]{7,20}$/; /*Only Numbers*/
+            var Check5 = /^(?=.*[\W_])[\W_]{7,20}$/; /*Only Special Characters*/
+            
+            if (CurrentPass == undefined || NewPass == undefined || ConfirmPass == undefined)
+            {
+                toastr.error('All fields are mandatory');
+            }
+            
+            else if((Check1.test(NewPass) || Check2.test(NewPass) || Check3.test(NewPass)) && (!Check4.test(NewPass) && !Check5.test(NewPass)))
+            {
+                if(NewPass == ConfirmPass)
+                {
+                    $http.post(PATHS.api_url + 'change_password/user'
+                    , {
+                        data: {
+                            Userid: UserID,
+                            current_password: CurrentPass,
+                            new_password: NewPass,
+                            confirm_password: ConfirmPass
+                        },
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).success(function(data){
+                        toastr.success(data);
+                        $scope.current_password = "";
+                        $scope.new_password = "";
+                        $scope.confirm_password = "";
+                    }).error(function (data) {
+                        toastr.error(data.error.message);
+                    });
+                }
+                else
+                {
+                    toastr.error("Password change failed. New passwords do not match");
+                }
+            }
+            else
+            {
+                toastr.error('New password too weak');   
+            }
+            
         }
 
         fetchPersonalInfo($routeParams.id);

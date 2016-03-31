@@ -1,32 +1,20 @@
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
-     role="alert" ng-controller="ApplicationCtrl">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-    </button>
-    <h1>Build Community</h1>
-
-    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Evez, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to WoiceIt, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
-    </p>
-</div>
-<!-- Static navbar -->
 <!-- Static navbar -->
 <nav class="navbar navbar-default" id="navContainer">
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}" >Mysite</a>
             </li>
-            <li ng-class="{ active: isActive('/community')}"><a href="#community" >Build Community</a>
+            <li><a href="#myalbums/{{userId}}" class="active">Albums</a>
             </li>
-            <li ng-class="{ active: isActive('/recco')}"><a href="#recco">Stream It</a></li>
             <li ng-class="{ active: isActive('/explore')}">
                 <!-- Template which needs to be shown on click -->
                 <script type="text/ng-template" id="explore">
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -46,10 +34,22 @@
     </div>
     <!--/.nav-collapse -->
 </nav>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
+     role="alert" ng-controller="ApplicationCtrl">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    <h1>Build Community</h1>
+
+    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Connect, Advertise, Circles, Invite People, Invite history. These features are linked to Stream It, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
+    </p>
+</div>
+<!-- Static navbar -->
+
 
 <ul class="breadcrumb">
     <li><a href="#home">Home</a></li>
-    <li><a href="#albums">Gallery</a></li>
+    <li><a href="#myalbums/{{userId}}">Gallery</a></li>
 </ul>
 <div ng-controller="albums" class="custom-album-details">
     <div class="col-md-12 circle-section custom-album-header" style="padding-right: 0px; padding-left: 0px">

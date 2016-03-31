@@ -1,32 +1,19 @@
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
-     role="alert" ng-controller="ApplicationCtrl">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-    </button>
-    <h1>Build Community</h1>
-
-    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Evez, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to WoiceIt, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
-    </p>
-</div>
 <!-- Static navbar -->
 <nav class="navbar navbar-default" id="navContainer">
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}">Mysite</a>
             </li>
-            <li ng-class="{ active: isActive('/community')}"><a href="#community" >Build Community</a>
-            </li>
-           
-            <li ng-class="{ active: isActive('/recco')}"><a href="#recco">Stream It</a></li>
+            <li><a class="{{isActive[1]}}" href="#circles">Circles</a></li>
             <li ng-class="{ active: isActive('/explore')}">
                 <!-- Template which needs to be shown on click -->
                 <script type="text/ng-template" id="explore">
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -45,31 +32,42 @@
         </ul>
     </div>
 </nav>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
+     role="alert" ng-controller="ApplicationCtrl">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    <h1>Build Community</h1>
+
+    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Connect, Advertise, Circles, Invite People, Invite history. These features are linked to Stream It, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
+    </p>
+</div>
+
+<div class="col-md-12" style="margin-top: 10px;">
+    <ul class="breadcrumb" style="background: transparent; padding-left: 0px" >
+        <li><a href="#home">Home</a> <span class="divider"></span></li>
+        <li><a href="#profile/{{userId}}">Mysite</a></li>
+        <li class="active">Build Community</li>
+    </ul>
+</div>
+
 <div class="col-md-2 user-menu-btns">
     <div class="btn-group-vertical square" id="responsive">
         <a href="#community" class="btn btn-default">
-            <p>Eves</p>
+            <p>Connect</p>
+        </a>
+        <a href="#advertise" class="btn btn-default btn-block">
+            <p>Advertise</p>
         </a>
         <a href="#circles" class="btn btn-default btn-block  active">
             <p>Circles</p>
         </a>
-        <a href="#albums" class="btn btn-default">
-            <p>Gallery</p>
+        <a href="#friends/invite" class="btn btn-default">
+            <p>Invite People</p>
         </a>
-        <a href="#groups" class="btn btn-default">
-            <p>Groups</p>
+        <a href="#invitehistory" class="btn btn-default">
+            <p>Invite History</p>
         </a>
-        <a href="#events" class="btn btn-default">
-            <p>Events</p>
-        </a>
-        <a href="#blogs" class="btn btn-default">
-            <p>Blogs</p>
-        </a>
-        <a href="#forums" class="btn btn-default">
-            <p>Discussion</p>
-        </a>
-        
-        
     </div>
 </div>
 <div class="col-md-10 user-menu user-pad" ng-controller="circles">
@@ -88,16 +86,19 @@
                 Circles ({{myCircles.length}})
             </h4>
         </div>
+        
         <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="search circles" ng-model="circlesearch"/>
-        </div>
+            <input type="text" class="form-control" placeholder="search circles" ng-model="circlesearch" />
+
+        
+    </div>
         <div class="col-md-2 col-md-offset-4 pull-right custom-create-circle-button">
             <a href class="btn btn-primary"  ng-click="CreateCircle()"><span class="fa fa-plus"></span> Create Circle</a>
         </div>
     </div>
     <div class="col-md-12 circle-section" style="padding-right: 0px; padding-left: 0px;margin-top:40px;">
         <ul class="row circle-grid">
-            <li ng-repeat="circle in myCircles | filter:circlesearch | orderBy:'title':true">
+            <li ng-repeat="circle in FilteredCircle = (myCircles | filter:circlesearch) | orderBy:'title':true">
                 <a href="#circle/details/{{circle.id}}">
                     <div class="circle-item circle-back-img">
                         <div class="circle-text">
@@ -110,6 +111,7 @@
                     </div>
                 </a>
             </li>
+            <li ng-hide= "FilteredCircle.length">No circles found</li>
         </ul>
     </div>
 </div>

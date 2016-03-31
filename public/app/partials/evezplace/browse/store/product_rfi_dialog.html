@@ -2,10 +2,13 @@
     <h4 style="color: #692668; margin-bottom: 10px">Product Enquiry Form</h4>
     <input class="form-control" type="text" placeholder="Name"
            id="name" ng-model="rfiData.name" style="margin-bottom: 10px;"/>
-    <input class="form-control" type="text" placeholder="Mobile Number"
+    <input class="form-control" type="text" onkeypress="return isNumberKey(event)" placeholder="Mobile Number"
            id="mobile" ng-model="rfiData.mobileNumber" style="margin-bottom: 10px;"/>
-    <input class="form-control" type="text" placeholder="Email Id"
+
+    <input class="form-control" type="email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" placeholder="Email Id"
            id="email" ng-model="rfiData.email" style="margin-bottom: 10px;"/>
+
+
     <input type="text"
            id="city"
            class="form-control"
@@ -131,3 +134,18 @@
 
     <button class="btn btn-primary pull-right form-control" type="button" ng-click="saveProductRfiDetails()">Send</button>
 </div>
+
+<!--phone number-->
+<SCRIPT language=Javascript>
+     
+      function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+         return true;
+
+      }
+     
+   </SCRIPT>
+   

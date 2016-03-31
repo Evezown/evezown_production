@@ -1,113 +1,75 @@
 <!-- Main component for a primary marketing message or call to action -->
-
-<div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="30000">
+<div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="30000" style="background-color:#FFFFFF">
 
     <!-- Wrapper for slides -->
-    <div class="jumbotron home-jumbotron shadow"
-         ng-show="caption" id="no-border-round" ng-controller="HomeController" style="padding:10px 30px 10px 40px">
+    <div class="jumbotron home-jumbotron"
+         ng-show="caption" id="no-border-round" ng-controller="HomeController" style="padding:10px 30px 10px 40px;background-color:#FFFFFF;border: 1px solid #CFCFCE;margin-bottom:4px;">
         <div class="carousel-inner"
              ng-intro-options="IntroOptions" ng-intro-method="CallMe"
              ng-intro-oncomplete="CompletedEvent" ng-intro-onexit="ExitEvent"
              ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
              ng-intro-autostart="false">
-            <div class="item active" id="home_item" >
+             
+            <!-- To be shown if not logged in -->
+            <div class="col-md-12" ng-hide="loggedIn" style="padding:0px;">
 
-                <!-- To be shown if not logged in -->
-                <div class="col-md-12" ng-hide="loggedIn" style="padding:0px;">
-
-                    <h1 style="font-size:22px;margin-bottom:10px;margin-top:10px;">Evezown</h1>
-                    <p style="text-align: justify;font-size:15px;"><a href="#recco" style="text-decoration:none;">Evezown</a> is a unique commerce and community platform for women. If you are an entrepreneur, service professional or an organisation/association, Evezown offers a unique web presence combined with interaction and transaction features and a host of Ecom and digital promotional tools.</p>
-                    <p style="text-align: justify;font-size:15px;"><a href="#evezplace" style="text-decoration:none;">EvezPlace</a> Products and Services market place has  five categories - Health, Wellness & Fitness, Food & Nutrition, Beauty & Fashion, Education, Care & Parenting, and Lifestyle. It provides you the ideal platform to sell or buy, to build and promote your brand within your community and digitally on the web.</p>
-                    <p style="text-align: justify;font-size:15px;"><a href="#wopportunity" style="text-decoration:none;">Wopportunity</a> assists you to resource talent for your organisation. You can  find opportunities to earn and further your career too. Evezown membership</a> is currently open to all women.</p>
-
-                    <p style="text-align: justify;font-size:15px;">Explore <a href="#home" style="text-decoration:none;">Evezown.com.</a> Make it your own place! For more visit <a href="#evezownfaq" style="text-decoration:none;"> EvezOwn FAQs</a></p>
-
-                    <div class="request-invite">
-                        <div class="col-md-4 zero-left-padding">
-                            <!-- <p id="eye-buy"><i>Explore Evezown.com. Make it your own place!</i></p> -->
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();" style="margin-top:10px;">Take a Tour</button>
-                        </div>
-                        <div class="col-md-4" ng-hide="loggedIn">
-                            <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button" style="margin-top:10px;">Create Signup Invite &raquo;</a>
-                        </div>
-                        <div class="col-md-4" ng-if="loggedIn">
-                            <a class="btn btn-lg btn-primary pull-right" href="#community" role="button">Build
-                                Community &raquo;</a>
-                        </div>
-                    </div>
+                <div class="col-md-4" >
+                <a href="#profile/{{userId}}" style="text-decoration:none;"><h1 style="font-size:22px;margin-bottom:10px;margin-top:10px;background-color:#FFFFFF;" id="step1" data-target="#step1" data-toggle="tab" data-slide-to="0">Mysite</h1></a>
+                <p style="text-align: justify;word-break: break-all;font-size:15px;">
+                    <img src="img/mysite.jpg" class="description-img" width="150" height="90" style="border: 2px solid #FFFFFF;"/>
+                    <a href="#home" style="text-decoration:none;">Evezown</a> is a unique commerce and community platform. If you are an entrepreneur, Business professional or an organisation/association, Evezown offers a unique web presence combined with interaction and transaction features and a host of Ecom and digital promotional tools.</p>
                 </div>
 
-                <div class="col-md-12" ng-if="loggedIn">
-                    <h1>Evezown</h1>
-                    <p style="text-align:justify;">Good to see you, Go ahead create your own place, create your Evezsite, build your closed private community, use our single window to create stores, classifieds, promote your products and services through host of promotional features available on Evezown.</p>
-
-                    <div class="request-invite">
-                        <div class="col-md-8 zero-left-padding">
-                            <p id="eye-buy"><a href="#profile/{{userId}}" style="text-decoration:none;"><i>Complete your profile now.</i></a></p>
-                        </div>
-                        <div class="col-md-4" ng-hide="loggedIn">
-                            <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button">Create Signup Invite &raquo;</a>
-                        </div>
-                        <div class="col-md-4" ng-show="loggedIn" style="margin-top: 40px">
-                            <a class="btn btn-lg btn-primary pull-right" href="#profile/{{userId}}" role="button">Complete
-                                your profile</a>
-                        </div>
-                    </div>
+                <div class="col-md-4" >
+                <a href="#evezplace" style="text-decoration:none;"><h1 style="font-size:22px;margin-bottom:10px;margin-top:10px;background-color:#FFFFFF" id="step2" data-target="#step2" data-toggle="tab" data-slide-to="1">MarketPlace</h1></a>
+                <p style="text-align: justify;word-break: break-all;font-size:15px;">
+                    <img src="img/market_place.jpg" class="description-img" width="150" height="80" style="border: 2px solid #FFFFFF;"/>
+                    Shopping is an art for discerning! If you have an eye for it, you will love MarketPlace!
+                        This is a place for all things exclusive,  unique, you can always find something that  reflects your personal touch and taste.
+                         If you know what want, search, filter or just browse through stores at leisure, explore, experience and then choose.</p>
                 </div>
-                <!-- To be shown if user is logged in -->
 
-            </div>
-            <!-- End Item -->
-            <div class="item">
-                <h1>Evezsite</h1>
-                <p style="text-align: justify;">This is your website on Evezown and captures the essence of your business and personality. You can create your profile in-depth, build community to  connect with friends, colleagues, customers, partners, employees or other women you wish to connect with. You can promote yourself or your business digitally within your circles privately or publicly using features  such as events, blogs, recco, forums and groups.</p>
+                <div class="col-md-4" >
+                <a href="#wopportunity" style="text-decoration:none;"><h1 style="font-size:22px;margin-bottom:10px;margin-top:10px;background-color:#FFFFFF" id="step3" data-target="#step3" data-toggle="tab" data-slide-to="2">Jobs</h1></a>
+                <p style="text-align: justify;word-break: break-all;font-size:15px;">
+                    <img src="img/jobs.jpg" class="description-img" width="150" height="90" style="border: 2px solid #FFFFFF;"/>
+                    This is resourcing platform. If you are in business, you can use it for hiring talent. As a working professional you can use this platform to find an job opportunity of your choice. Customized categorization helps you identify suitable job opportunity.</p>
+                </div>
 
-                <p style="text-align: justify;">For more visit <a href="" style="text-decoration:none;">Evezsite FAQs</a>.</p>
-
-                <div class="request-invite">
-
-                    <div class="col-md-4 col-md-offset-8" ng-hide="loggedIn">
-                        <a  class="btn btn-lg btn-primary pull-right" href="#login" role="button">Login to Continue
-                            &raquo;</a>
+                <div class="col-md-12">
+                    <div class="col-md-8 zero-left-padding">
+                        <!-- <p id="eye-buy"><i>Explore Evezown.com. Make it your own place!</i></p> -->
                     </div>
-
+                    <div class="col-md-2">
+                        <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();" style="margin-top:10px;">Take a Tour</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button" style="margin-top:10px;"> Signup &raquo;</a>
+                    </div>
                 </div>
             </div>
-            <!-- End Item -->
-            <div class="item">
-                <h1><a href="#evezplace" style="text-decoration:none;">EvezPlace</a></h1>
 
-                <p style="text-align: justify;">This is an Ecommerce marketplace for showcasing women centric products and services on our five key categories. If you are already in business or intend to start one, you can create your store and/or classifieds. Anyone can access and buy on this platform but only a woman can own a store. <a href="#evezplace" style="text-decoration:none;">EvezPlace</a> also enables you to promote your business in your private and public circles. Evezplace is open to all buyers</p>
-
-                <!-- <p>For more visit EvezPlace FAQs. <a href="#evezownfaq" style="text-decoration:none;">Click here</a></p> -->
+            <div class="col-md-12" ng-if="loggedIn">
+                <h1>Evezown</h1>
+                <p style="text-align:justify;word-break: break-all;">Good to see you, Go ahead create your own place, create your site, build your closed private community, use our single window to create stores, Ads & Campaigns, promote your stores and business through host of promotional features we offer.</p>
 
                 <div class="request-invite">
-                    <div class="col-md-4 col-md-offset-8" ng-hide="loggedIn">
+                    <div class="col-md-8 zero-left-padding">
+                        <p id="eye-buy"><a href="#profile/{{userId}}/personalinfo" style="text-decoration:none;"><i>Complete your profile now.</i></a></p>
+                    </div>
+                    <div class="col-md-4" ng-hide="loggedIn">
                         <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button">Create Signup Invite &raquo;</a>
                     </div>
-                </div>
-            </div>
-            <!-- End Item -->
-            <div class="item">
-                <h1><a href="#wopportunity" style="text-decoration:none;">W'Opportunity</a></h1>
-
-                <p style="text-align: justify;">This is resourcing platform. If you are in business, you can use it for hiring talent. As a working professional you can use this platform to find an opportunity of your choice. Customized categorization helps you identify suitable opportunity.</p>
-
-                <!-- <p>For more visit W’Opportunity FAQs. <a href="#evezownfaq" style="text-decoration:none;">Click here</a></p> -->
-
-                <div class="request-invite">
-                    <div class="col-md-4 col-md-offset-8" ng-hide="loggedIn">
-                        <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button">Create Signup Invite &raquo;</a>
+                    <div class="col-md-4" ng-show="loggedIn" style="margin-top: 40px">
+                        <a class="btn btn-lg btn-primary pull-right" href="#profile/{{userId}}/personalinfo" role="button">Complete
+                            your profile</a>
                     </div>
                 </div>
             </div>
-            <!-- End Item -->
         </div>
     </div>
     <!-- End Carousel Inner -->
-    <div class="middle-navbar custom-middle-navbar" ng-controller="ApplicationCtrl">
+    <!-- <div class="middle-navbar custom-middle-navbar" ng-controller="ApplicationCtrl">
         <div class="btn-group btn-group-justified zero-left-padding" role="group" aria-label="Justified button group">
             <ul class="nav nav-pills nav-justified">
                 <li id="step1" data-target="#myCarousel" data-toggle="tab" data-slide-to="0" class="active">
@@ -115,29 +77,15 @@
                        role="button">
                         <h4>Evezown</h4>
 
-                        <p>own your place</p>
+                        <p>Own your place</p>
                     </a>
-                    <a ng-show="loggedIn" href="#profile/{{userId}}" data-target="#myCarousel"
+                    <a ng-show="loggedIn" href="#streamit" data-target="#myCarousel"
                        class="active btn btn-link nounderline" role="button">
-                        <h4>Evezsite</h4>
+                        <h4>Evezown</h4>
 
-                        <p>Manage Evezsite</p>
+                        <p>Own your place</p>
                     </a>
                 </li>
-                <!-- <li id="step2" data-target="#myCarousel" data-toggle="tab" data-slide-to="1">
-                    <a ng-hide="loggedIn" data-target="#myCarousel" class="btn btn-link nounderline"
-                       role="button">
-                        <h3 >Woice</h3>
-
-                        <p>connect and share</p>
-                    </a>
-                    <a ng-show="loggedIn" href="#trending" data-target="#myCarousel"
-                       class="active btn btn-link nounderline" role="button">
-                        <h3>Woice</h3>
-
-                        <p>connect and share</p>
-                    </a>
-                </li> -->
                 <li id="step2" data-target="#myCarousel" data-slide-to="1">
                     <a href="#evezplace" data-target="#myCarousel" data-toggle="tab" class="btn btn-link" role="button">
                         <h4>EvezPlace</h4>
@@ -148,15 +96,15 @@
                 <li id="step3" data-target="#myCarousel" data-slide-to="2">
                     <a href="#wopportunity" data-target="#myCarousel" data-toggle="tab" class="btn btn-link"
                        role="button">
-                        <h4>W'opportunity</h4>
+                        <h4>Jobs</h4>
 
-                        <p>careers and listing</p>
+                        <p>careers and Ads & Campaigns</p>
                     </a>
                 </li>
 
             </ul>
         </div>
-    </div>
+    </div> -->
 </div>
 <!-- End Carousel -->
 <div class="col-md-12" ng-include src='"partials/home/homeproductmenu.html"' ng-controller="HomeProductMenuController"></div>

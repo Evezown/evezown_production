@@ -21,7 +21,7 @@
 <div class="row" ng-controller="StoreFrontController">
     <ul class="breadcrumb" style="background: transparent; padding-left: 0px">
         <li><a href="#home">Home</a> <span class="divider"></span></li>
-        <li><a href="#evezplace">Evezplace</a> <span class="divider"></span></li>
+        <li><a href="#evezplace">Marketplace</a> <span class="divider"></span></li>
         <li><a href="#store/browse">Browse Stores</a></li>
         <li class="active">{{storefront.title}}</li>
     </ul>
@@ -54,13 +54,15 @@
     </div>
 
     <div class="row">
-        <div ng-include src='"partials/recco_woice_comment_partial.html"'></div>
+        <div class="col-sm-12">
+            <div ng-include src='"partials/recco_woice_comment_partial.html"'></div>
+        </div>
     </div>
 
     <div class="row">
         <div class="col-sm-12" style="background: #fafafa; padding: 0px">
             <div class="col-sm-6" style="padding: 10px 5px 10px 0px">
-                <a href="" class="btn btn-primary btn-lg btn-block"><span class="fa fa-list"></span> Price List at a
+                <a href ng-click="openPriceList()" class="btn btn-primary btn-lg btn-block"><span class="fa fa-list"></span> Price List at a
                     Glance</a>
             </div>
             <div class="col-sm-6" style="padding: 10px 0px 10px 5px">
@@ -83,25 +85,28 @@
                         <h5>{{productLine.title}} </h5>
                     </div>
                     <div class="col-sm-3" style="padding-right: 0px">
-                        <a href="#store/products" class="btn btn-link pull-right">Show All <span
+                        <a href="#store/productline/{{productLine.id}}" class="btn btn-link pull-right">Show All <span
                                 class="fa fa-angle-right fa-2x pull-right"></span></a>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3" ng-repeat="product in productLine.products">
-                        <div class="living_box">
-                            <a href="#store/products/{{product.id}}">
-                                <img ng-src="{{imageUrl + product.product_sk_u[0].product_images[0].image.large_image_url + '/600/600'}}"
-                                     style="width: 100%;"
-                                     class="img-responsive center-block"
-                                     alt="{{product.title}}">
-                            </a>
-                        </div>
-                        <div class="col-sm-12 text-center" style="margin: 10px 0px; font-weight: 600">
-                            <h4 style="color: #333333">{{product.title}}</h4>
-
-                            <p style="color: #777777">&#8377; {{product.product_sk_u[0].price}}</p>
-                        </div>
+                    <div class="col-sm-12">
+                        <slick infinite="true" slides-to-show="4" slides-to-scroll="1" autoplay="true">
+                            <div class="col-md-3" ng-repeat="product in productLine.products">
+                                <div class="living_box">
+                                    <a href="#store/products/{{product.id}}">
+                                        <img ng-src="{{imageUrl + product.product_sk_u[0].product_images[0].image.large_image_url +
+                                                    '/600/600'}}" style="width: 100%;"
+                                                    class="img-responsive center-block"
+                                                    alt="{{product.title}}">
+                                    </a>
+                                </div>
+                                <div class="col-sm-12 text-center" style="margin: 10px 0px; font-weight: 600">
+                                    <h4 style="color: #333333">{{product.title}}</h4>
+                                    <p style="color: #777777">&#8377; {{product.product_sk_u[0].price}}</p>
+                                </div>
+                            </div>
+                        </slick>
                     </div>
                 </div>
             </div>
@@ -159,6 +164,18 @@
         </div>
     </div>
 </div>
+<div class="col-sm-9" ng-controller="StoreFrontController">
+    <div ng-include src='"store/' + $rootScope.currentStoreId + '/manage/store_crm"'></div>
+
+            <div class="col-sm-6">
+                <h4 style="text-transform: uppercase"><b>Additional/Mandatory Disclosures/Info</b></h4>
+
+               <p> <a href="{{storefront.DisclosureLink.Link1}}" target="_blank"> {{storefront.DisclosureLink.Link1}}</a></p>
+               <P> <a href="{{storefront.DisclosureLink.Link2}}" target="_blank">{{storefront.DisclosureLink.Link2}}</a></p>
+               <p> <a href="{{storefront.DisclosureLink.Link3}}" target="_blank"> {{storefront.DisclosureLink.Link3}}</a></p>
+                
+            </div>
+        </div>
 
 <div class="row store-front feedback-section">
     <div class="col-sm-12 aboutus">

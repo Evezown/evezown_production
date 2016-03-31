@@ -26,15 +26,15 @@
                         <tr ng-repeat="shoppingCartItem in shoppingCartStore.products" class="text-center">
 
                             <td class="col-sm-2 col-md-2 col-lg-2" data-title="'Product'">
-                                <a href="#store/products/{{shoppingCartItem.id}}">
+                                <a href="#store/products/{{shoppingCartItem.product_id}}">
                                     <img
-                                        ng-src="{{shoppingCartItem.image}}"
+                                        ng-src="{{imageUrl}}image/show/{{shoppingCartItem.image.image.large_image_url}}/175"
                                         class="img-responsive img-thumbnail"
                                         alt="{{shoppingCartItem.title}}"/>
                                 </a>
                             </td>
                             <td class="col-sm-2 col-md-2 col-lg-2" data-title="''">
-                                <a style="text-decoration: none" href="#store/products/{{shoppingCartItem.id}}">
+                                <a style="text-decoration: none" href="#store/products/{{shoppingCartItem.product_id}}">
                                     <span style="font-weight: 600; color: #692668;">{{shoppingCartItem.title}}</span>
                                 </a>
                             </td>
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="col-sm-12" style="margin-top: 40px; margin-bottom: 20px">
-                    <a href="#store/order/place" class="btn btn-primary btn-block btn-lg">Place Order</a>
+                    <a ng-click="placeOrder()" class="btn btn-primary btn-block btn-lg">Place Order</a>
                 </div>
 
                 <div class="col-sm-12">

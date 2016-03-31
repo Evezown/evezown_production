@@ -5,7 +5,7 @@
     </button>
     <h1>Build Community</h1>
 
-    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Evez, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to WoiceIt, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
+    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Connect, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to Stream It, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
     </p>
 </div>
 <!-- Static navbar -->
@@ -14,20 +14,18 @@
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Mysite</a>
             </li>
             <li ng-class="{ active: isActive('/community')}"><a href="#community" >Build Community</a>
             </li>
-           
-            <li ng-class="{ active: isActive('/recco')}"><a href="#recco">Stream It</a></li>
             <li ng-class="{ active: isActive('/explore')}">
                 <!-- Template which needs to be shown on click -->
                 <script type="text/ng-template" id="explore">
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -49,7 +47,7 @@
 <div class="col-md-2 user-menu-btns">
     <div class="btn-group-vertical square" id="responsive">
         <a href="#community" class="btn btn-default">
-            <p>Eves</p>
+            <p>Connect</p>
         </a>
         <a href="#circles" class="btn btn-default">
             <p>Circles</p>
@@ -102,7 +100,7 @@
                     <a class="box" href="#eventdetails/{{event.id}}">
                         <div class="img" ng-if="event.event_image == null"><img
                                 alt="{{event.title}}"
-                                src="http://bkmash2014.s3.amazonaws.com/2014/02/06/16/53/40/512/AbernathyPhoto__MG_0038_2013_07_22.jpg">
+                                src="img/event.png">
                         </div>
                         <div class="img" ng-if="event.event_image != null"><img
                                 alt="{{event.title}}"

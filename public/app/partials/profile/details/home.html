@@ -1,23 +1,53 @@
-<div class="container" >
+<!-- Static navbar -->
+<nav class="navbar navbar-default" id="navContainer">
+    <div id="navbar1">
+        <ul class="nav navbar-nav">
+            <li id="step1"  data-toggle="tab" data-slide-to="0">
+                <a href="#profile/{{userId}}" class="{{isActive[0]}}" ng-class="{ active: isActive('/profile')}">Mysite</a>
+            </li>
+            <li id="step10"  data-toggle="tab" data-slide-to="9">
+                <a href="#profile/{{userId}}/personalinfo" class="{{isActive[1]}}">Manage Mysite</a>
+            </li>
+            <li id="step11"  data-toggle="tab" data-slide-to="10" ng-class="{ active: isActive('/explore')}">
+                <!-- Template which needs to be shown on click -->
+                <script type="text/ng-template" id="explore">
+                    <div class="triangle"></div>
+                    <div class="ns-popover-tooltip">
+                        <ul>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
+                        </ul>
+                    </div>
+                </script>
+
+                <a ns-popover
+                   ns-popover-template="explore"
+                   ns-popover-trigger="click"
+                   ns-popover-theme="ns-popover-list-theme">
+                    Explore
+                </a>
+            </li>
+            <li id="step12"  data-toggle="tab" data-slide-to="11" ng-class="{ active: isActive('/search/advanced')}"><a href="#search/advanced"
+                                                                      id="search">Search&nbsp;<span
+                    class="fa fa-search" id="searchIcon"></span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="col-md-12">
 <div class="row user-menu-container square">
 <div class="col-md-12 user-details" ng-controller="profileCtrl">
     <div class="row coralbg white">
         <div class="col-md-3 top-margin">
-            <div class="user-image biothumb">
-                <img ng-src="{{profileImage}}" src="http://placehold.it/300x450"
+            <div class="user-image biothumb" ng-controller="ProfileImageCrop">
+                <img ng-src="{{profileImage}}" src="http://placehold.it/300x200"
                      class="img-responsive thumbnail" />
                 <div class="overlay fileUpload" ng-if="userId == loggedInUserId">
                     <ul class="list-unstyled text-center">
-                        <li><a href>Update Evezsite Image</a></li>
-                        <input type="file" class="upload" name="image" nv-file-select uploader="uploader"/>
-                        <div ng-if="uploader.queue.length > 0">
-                            <!-- Image upload queue section start -->
-                            <div class="progress" style="">
-                                <div class="progress-bar" role="progressbar" id="upload-progress-bar"
-                                     ng-style="{ 'width': uploader.progress + '%' }"></div>
-                            </div>
-                            <!-- Image upload queue section end -->
-                        </div>
+                        <li><a href ng-click="CropEvezsiteImage()" id="CropEvezsiteImage">Update Mysite
+                            Image</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -28,17 +58,17 @@
                 <!--name-->
                 <h3 style="text-transform: capitalize;">{{ firstname }} {{ lastname }}</h3>
                 <!--Location-->
-                <div ng-if="city != '' || country !=''">
+                <div ng-hide="city == '' || country =='' || city == null || country == null">
                     <h4 style="text-transform: capitalize;"><i class="fa fa-location-arrow"></i>&nbsp;{{locationDetails}}</h4>
                 </div>
 
                 <!--Profession starts-->
                 <!--job and company-->
-                <div ng-if="designation != '' && organization !=''">
-                    <h4 style="text-transform: capitalize;" ng-if="designation != '' && organization !=''"><i class="fa fa-briefcase"></i> {{designation}}&nbsp;&nbsp;{{connectingtext}}&nbsp;&nbsp;{{organization}}</h4>
+                <div ng-hide="designation == '' || organization =='' || designation == null || organization == null">
+                    <h4 style="text-transform: capitalize;">
+                        <i class="fa fa-briefcase"></i> {{designation}}&nbsp;&nbsp;{{connectingtext}}&nbsp;&nbsp;{{organization}}
+                    </h4>
                 </div>
-                <!--job only-->
-                <h4 style="text-transform: capitalize;" ng-if="designation != '' && organization ==''"><i class="fa fa-briefcase"></i> {{designation}}</h4>
                 <!--Profession ends-->
             </div>
             <div class="row">
@@ -46,7 +76,7 @@
                     <a href="#" ng-controller="community">
                         <div class="col-md-2 col-xs-2 well text-center" id="user-profile">
                             <h3>{{friendList.length}}</h3>
-                            <h4>Eves</h4>
+                            <h4>Connects</h4>
                         </div>
                     </a>
 
@@ -64,7 +94,7 @@
                     </div>
                     <div class="col-md-2 col-xs-2 well text-center" id="user-profile" ng-controller="albums">
                         <h3>{{myAlbums.length}}</h3>
-                        <h4>Albums</h4>
+                        <h4>Gallery</h4>
                     </div>
                     <div class="col-md-2 col-xs-2 well text-center" id="user-more">
                         <h3><i class="fa fa-circle"></i>
@@ -106,6 +136,9 @@
         <a id="step2"  data-toggle="tab" data-slide-to="1" href="#profile/{{userId}}/enhance" class="btn btn-block btn-default">
             <p>Enhance Profile Page</p>
         </a>
+         <a href="#profile/{{userId}}/change_password" class="btn btn-default">
+            <p>Change Password</p>
+        </a>
         <a id="step3"  data-toggle="tab" data-slide-to="2" href="#profile/{{userId}}/myonline" class="btn btn-default">
             <p>My Online Presence </p>
         </a>
@@ -116,7 +149,7 @@
             <p>My Reference info </p>
         </a>
         <a id="step6"  data-toggle="tab" data-slide-to="5" href="#profile/{{userId}}/participation" class="btn btn-default">
-            <p>My Participation in </br>EvezPlace </p>
+            <p>My Participation in </br>MarketPlace </p>
         </a>
         <a id="step7"  data-toggle="tab" data-slide-to="6" href="#profile/{{userId}}/other" class="btn btn-default">
             <p>Other EvezOwn services </p>
@@ -151,13 +184,12 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6">
                     <div class="form-group">
-                        <input type="text" name="phonenumber" id="phonenumber" class="form-control input-lg"
-                               placeholder="Phone Number" tabindex="3" ng-model="profile.phone">
+                        <input type="number" name="phonenumber" id="phonenumber" class="form-control input-lg" placeholder="Please enter 10 digits Phone Number" tabindex="3" ng-model="profile.phone">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-6">
                     <input type="email" name="email" id="email" class="form-control input-lg"
-                           placeholder="Email Address" tabindex="4" ng-model="profile.email" required>
+                           placeholder="Email Address" tabindex="4" ng-model="profile.email" required readonly>
                 </div>
             </div>
             <div class="row">
@@ -188,8 +220,8 @@
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-6">
                     <div class="form-group">
-                        <input type="text" name="zip" id="zip" class="form-control input-lg"
-                               placeholder="Pincode" tabindex="9" ng-model="profile.zip">
+                        <input type="number" name="zip" id="zip" class="form-control input-lg"
+                               placeholder="Please enter 6 digits Pincode" tabindex="9" ng-model="profile.zip">
                     </div>
                 </div>
             </div>
@@ -252,7 +284,7 @@
                             <option value="govt">Govt official</option>
                             <option value="service">Service Professional</option>
                             <option value="entrepreneur">Entrepreneur</option>
-                            <option value="business">Business woman</option>
+                            <option value="business">Business People</option>
                             <option value="business">Student</option>
                             <option value="other">other</option>
                         </select>
@@ -300,3 +332,43 @@
 </div>
 </div>
 </div>
+
+<!--Profile cover Image-->
+<script type="text/ng-template" id="EvezsiteImage">
+    <div class="ngdialog-buttons popuptemplate">
+        <b>Crop Profile Image</b>
+        <br/>
+
+        <form>
+            <div class="fileUpload btn btn-primary btn-block">
+                <span><i class="fa fa-camera"></i> Select Profile image</span>
+
+                <input type="file"
+                       class="upload"
+                       ng-file-select="onFileSelect($files)"
+                       ng-model="slideImage.src">
+            </div>
+            <b>Preview:</b>
+            <br/>
+            <i ng-hide="slideImage.src">No body image chosen</i>
+
+            <ng-crop data-src="slideImage.src"
+                     ratio={{slideImage.cropConfig.aspectRatio}}
+                     box-width={{slideImage.boxWidth}}
+                     selected='slideImage.selected(cords)'>
+            </ng-crop>
+            <br/>
+            <a ng-click="UpdateEvezsiteImage()" class="btn btn-primary pull-right">Upload</a>
+            <br/>
+        </form>
+    </div>
+</script>
+
+<script>
+function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+</script>

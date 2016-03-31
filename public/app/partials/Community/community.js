@@ -49,6 +49,7 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
 
     $scope.fetchMembers = function(searchkey)
     {
+        $scope.NoResult = true;
         $http.post($scope.service_url + 'users/members/search'
             , {
                 data: {
@@ -60,7 +61,11 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
             success(function (data, status, headers, config)
             {
                 $scope.members = data.data;
-                
+
+                if($scope.members.length > 0)
+                {
+                    $scope.NoResult = false;
+                }
 
             }).error(function (data)
             {
@@ -74,17 +79,18 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
             , {
                 data: {
                     user_id: $cookieStore.get('userId'),
-                    friend_user_id: member.id
+                    friend_user_id: member.user_id
+                    //friend_user_id: member.id
                 },
                 headers: {'Content-Type': 'application/json'}
             }).
             success(function (data, status, headers, config)
             {
-                toastr.success(data.message, 'Community');
+                toastr.success(data.message, 'Community success');
 
             }).error(function (data)
             {
-                toastr.error(data.error.message, 'Community');
+                toastr.error(data.error.message, 'Community failure');
             });
     }
     $scope.GetMemberRequest = function()
@@ -158,33 +164,33 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
             steps:[
                 {
                     element: '#step1',
-                    intro: "<b>&#10004;</b>Invite your evez to EvezOwn <br><b>&#10004;</b> Send invite code over email or through phone (SMS or What’sAPP)"
+                    intro: "<b>&#10004;</b>Invite your friends to EvezOwn <br><b>&#10004;</b> Send invite code over email or through phone (SMS or What’sAPP)"
                 },
                 {
                     element: '#step2',
-                    intro: "<b>&#10004;</b>Connect with your friends and other eves. Invite them to join Evezown <br><b>&#10004;</b> Segregate your eves into circles, name the circles and set the visibility(privacy setting)",
+                    intro: "<b>&#10004;</b>Connect with your friends and other people. Invite them to join Evezown <br><b>&#10004;</b> Segregate your friends into circles, name the circles and set the visibility(privacy setting)",
                 },
                 {
                     element: '#step3',
-                    intro: '<b>&#10004;</b>Invite your evez to EvezOwn <br><b>&#10004;</b> Send invite code over email or through phone (SMS or What’sAPP)',
+                    intro: '<b>&#10004;</b>Invite your friends to EvezOwn <br><b>&#10004;</b> Send invite code over email or through phone (SMS or What’sAPP)',
                     position: 'bottom'
                 },
                 {
                     element: '#step4',
-                    intro: "<b>&#10004;</b>You can see your member friends in your Eve-community <br><b>&#10004;</b> Segregate them in circles, name the circles and set visibility (privacy setting) for each circle",
+                    intro: "<b>&#10004;</b>You can see your member friends in your community <br><b>&#10004;</b> Segregate them in circles, name the circles and set visibility (privacy setting) for each circle",
                     position: 'bottom'
                 },
                 {
                     element: '#step5',
-                    intro: '<b>&#10004;</b>Use the gallery to post your pictures <br><b>&#10004;</b> Post privately to personal circles or for all eves <br><b>&#10004;</b> Visibility can be set'
+                    intro: '<b>&#10004;</b>Use the gallery to post your pictures <br><b>&#10004;</b> Post privately to personal circles or for all friends <br><b>&#10004;</b> Visibility can be set'
                 },
                 {
                     element: '#step6',
-                    intro: '<b>&#10004;</b> Groups can be built around interests, hobbies, topics, offline activities <br><b>&#10004;</b> You can update, add activities and keep the groups dynamic and active <br><b>&#10004;</b> Woice it and stream your updates to your group members <br><b>&#10004;</b> Groups are private or closed only'
+                    intro: '<b>&#10004;</b> Groups can be built around interests, hobbies, topics, offline activities <br><b>&#10004;</b> You can update, add activities and keep the groups dynamic and active <br><b>&#10004;</b> Stream it and stream your updates to your group members <br><b>&#10004;</b> Groups are private or closed only'
                 },
                 {
                     element: '#step7',
-                    intro: '<b>&#10004;</b> Name your event, mention the day, date and time <br><b>&#10004;</b> Add description <br><b>&#10004;</b> Specify date of closure of the event <br><b>&#10004;</b> Add images, if any <br><b>&#10004;</b> Invite other evez'
+                    intro: '<b>&#10004;</b> Name your event, mention the day, date and time <br><b>&#10004;</b> Add description <br><b>&#10004;</b> Specify date of closure of the event <br><b>&#10004;</b> Add images, if any <br><b>&#10004;</b> Invite other friends'
                 },
                 {
                     element: '#step8',
@@ -196,11 +202,11 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
                 },
                 {
                     element: '#step10',
-                    intro: '<b>&#10004;</b> Create your recco <br><b>&#10004;</b> Create a title and a short description <br><b>&#10004;</b> Choose what the recco is about <br><b>&#10004;</b> Choose the category and the sub category <br><b>&#10004;</b> Add a brand name or product name (optional) <br><b>&#10004;</b> Provide price range (optional)'
+                    intro: '<b>&#10004;</b> Create your Stream It <br><b>&#10004;</b> Create a title and a short description <br><b>&#10004;</b> Choose what the strean it is about <br><b>&#10004;</b> Choose the category and the sub category <br><b>&#10004;</b> Add a brand name or product name (optional) <br><b>&#10004;</b> Provide price range (optional)'
                 },
                 {
                     element: '#step11',
-                    intro: '<b>&#10004;</b> Explore the two sections Evezplace and Wopportunity'
+                    intro: '<b>&#10004;</b> Explore the two sections Marketplace and Jobs'
                 },
                 {
                     element: '#step12',

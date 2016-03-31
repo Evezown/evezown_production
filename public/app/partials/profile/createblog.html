@@ -80,7 +80,7 @@
                              class="img-responsive thumbnail" />
                         <div class="overlay fileUpload" ng-if="userId == loggedInUserId">
                             <ul class="list-unstyled text-center">
-                                <li><a href>Update Evezsite Image</a></li>
+                                <li><a href>Update mysite Image</a></li>
                                 <input type="file" class="upload" name="image" nv-file-select uploader="uploader"/>
                                 <div ng-if="uploader.queue.length > 0">
                                     <!-- Image upload queue section start -->
@@ -99,23 +99,24 @@
                 <div class="col-md-9 no-pad">
                     <div class="user-pad-profile">
                         <!--name-->
-                        <h4 style="text-transform: capitalize;">{{ firstname }} {{ lastname }}</h4>
+                        <h3 style="text-transform: capitalize;">{{ firstname }} {{ lastname }}</h3>
                         <!--Location-->
-                        <h4 style="text-transform: capitalize;"><i class="fa fa-location-arrow"></i>&nbsp;{{locationDetails}}</h4>
-
-                        <!--Profession starts-->
+                        <div ng-hide="city == '' || country =='' || city == null || country == null">
+                            <h4 style="text-transform: capitalize;"><i class="fa fa-location-arrow"></i>&nbsp;{{locationDetails}}</h4>
+                        </div>
                         <!--job and company-->
-                        <h4 style="text-transform: capitalize;" ng-if="designation != '' && organization !=''"><i class="fa fa-briefcase"></i> {{designation}}&nbsp;&nbsp;{{connectingtext}}&nbsp;&nbsp;{{organization}}</h4>
-                        <!--job only-->
-                        <h4 style="text-transform: capitalize;" ng-if="designation != '' && organization ==''"><i class="fa fa-briefcase"></i> {{designation}}</h4>
-                        <!--Profession ends-->
+                        <div ng-hide="designation == '' || organization =='' || designation == null || organization == null">
+                            <h4 style="text-transform: capitalize;">
+                                <i class="fa fa-briefcase"></i> {{designation}}&nbsp;&nbsp;{{connectingtext}}&nbsp;&nbsp;{{organization}}
+                            </h4>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <a href="#" ng-controller="community">
                                 <div class="col-md-2 well text-center" id="user-profile">
                                     <h3>{{friendList.length}}</h3>
-                                    <h4>Eves</h4>
+                                    <h4>Connects</h4>
                                 </div>
                             </a>
 
@@ -133,7 +134,7 @@
                             </div>
                             <div class="col-md-2 well text-center" id="user-profile" ng-controller="albums">
                                 <h3>{{myAlbums.length}}</h3>
-                                <h4>Albums</h4>
+                                <h4>Gallery</h4>
                             </div>
                             <div class="col-md-2  well text-center" id="user-more">
                                 <h3><i class="fa fa-circle"></i>
@@ -215,7 +216,7 @@
     <text-angular ng-model="htmlVariable"></text-angular>
     <div class="col-md-2 pull-right" style="padding-top: 10px; padding-bottom: 10px;">
         <button class="btn btn-primary btn-block" id="btn-publish"
-                ng-click="SaveBlog(true)">Woice It</button>
+                ng-click="SaveBlog(true)">Stream It</button>
     </div>
     <div class="col-md-2 pull-right" style="padding-top: 10px; padding-bottom: 10px;">
         <button class="btn btn-primary btn-block" id="btn-Save"

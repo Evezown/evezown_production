@@ -2,91 +2,22 @@
 
 <ul class="breadcrumb" style="background: transparent; padding-left: 0px; margin-top: 10px;">
     <li><a href="#home">Home</a> <span class="divider"></span></li>
-    <li><a href="#evezplace">Evezplace</a> <span class="divider"></span></li>
-    <li><a href="#classifieds/browse">Browse Classifieds</a></li>
+    <li><a href="#evezplace">Marketplace</a> <span class="divider"></span></li>
+    <li><a href="#classifieds/browse">Browse Ads & Campaigns</a></li>
     <li class="active">{{classifiedDetails.title}}</li>
 </ul>
 
-<div class="row" ng-controller="ClassifiedDetailsCtrl" style="margin-top: 10px; background-color: #f2f2f2">
-    <div class="col-sm-6">
-        <flex-slider flex-slide="image in classifiedDetails.classified_images"
-                     style="margin-top: 10px; padding: 20px 0px">
-            <li>
-                <img ng-src="{{image}}">
-            </li>
-        </flex-slider>
+<div ng-if="classifiedDetails.layout_type == 1" ng-include src='"views/classifieds/create/layout1_partial.html"'></div>
 
-        <div ng-include src='"partials/recco_woice_comment_partial.html"'></div>
+<div ng-if="classifiedDetails.layout_type == 2" ng-include src='"views/classifieds/create/layout2_partial.html"'></div>
 
-    </div>
+<div ng-if="classifiedDetails.layout_type == 3" ng-include src='"views/classifieds/create/layout3_partial.html"'></div>
 
-    <div class="col-sm-6">
-        <div class="row classified-details" style="padding: 20px">
-            <h3 style="font-weight: 600">{{classifiedDetails.title}}</h3>
-
-            <h2 style="margin: 30px 0px">{{classifiedDetails.deal_description}}</h2>
-
-            <h4 style="margin-top: 20px">Description</h4>
-            <hr style="border-color: #ab2faa"/>
-            <p>{{classifiedDetails.description}}</p>
-
-            <h4 style="color: #692668; margin-top: 20px">Share using</h4>
-            <hr style="border-color: #ab2faa"/>
-
-            <social-share
-                    sharelink="shareUrl()"
-                    sharemedia="classifiedDetails.classifiedDetails.classified_images[0]"
-                    whatsapp="classifiedDetails.is_watsapp_share"
-                    facebook="classifiedDetails.is_facebook_share"
-                    twitter="classifiedDetails.is_twitter_share"
-                    linkedin="classifiedDetails.is_linkedin_share"
-                    gmail="classifiedDetails.is_gmail_share"
-                    googleplus="classifiedDetails.is_googleplus_share"
-                    email="classifiedDetails.contact.email"
-                    title="classifiedDetails.title">
-            </social-share>
-
-
-            <h4 style="color: #692668; margin-top: 20px">Contact details</h4>
-            <hr style="border-color: #ab2faa"/>
-
-            <div class="contact-details">
-                <p>Phone: <span>{{classifiedDetails.contact.phone}}</span></p>
-
-                <p>Email: <span>{{classifiedDetails.contact.email}}</span></p>
-
-                <p>Contact Person: <span>{{classifiedDetails.contact.name}}</span></p>
-            </div>
-
-            <h4 style="color: #692668; margin-top: 20px">Location</h4>
-            <hr style="border-color: #ab2faa"/>
-
-            <div class="contact-details">
-                <p>Street Address: <span>{{classifiedDetails.location.street_address}}</span></p>
-
-                <p>City: <span>{{classifiedDetails.location.city}}, {{classifiedDetails.location.state}}</span></p>
-
-                <p>pincode: <span>{{classifiedDetails.location.pincode}}</span></p>
-            </div>
-
-            <div class="row" style="margin-top: 30px">
-                <div class="col-sm-12">
-                    <a class="btn btn-primary btn-block btn-lg" ng-click="ClassifiedRfiDialog(classifiedDetails.id)">Enquiry/Request for
-                        Information (RFI)</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-</div>
-
-<div ng-include src='"partials/video_interview_partial.html"'></div>
+<div ng-if="classifiedDetails.layout_type == 4" ng-include src='"views/classifieds/create/layout4_partial.html"'></div>
 
 <script type="text/ng-template" id="rfiClassifiedTemplateId">
     <div class="ngdialog-buttons popuptemplate">
-        <h4 style="color: #692668; margin-bottom: 10px;">Classified Enquiry Form</h4>
+        <h4 style="color: #692668; margin-bottom: 10px;">Ads & Campaigns Enquiry Form</h4>
         <input class="form-control" type="text" placeholder="Name"
                id="name" ng-model="formData.name" style="margin-bottom: 10px;"/>
         <input class="form-control" type="text" placeholder="Mobile Number"

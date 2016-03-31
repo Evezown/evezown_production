@@ -3,7 +3,7 @@
  */
 evezownApp
     .controller('BrowseStoreCtrl', function ($scope, $rootScope, $http, PATHS, $cookieStore,
-                                             $routeParams) {
+                                             $routeParams, EvezplaceHomeService, StoreService) {
         $scope.browseItems = [];
         $scope.browseMyItems = [];
         $scope.storePagination = {};
@@ -11,6 +11,13 @@ evezownApp
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.currentUserId = $routeParams.id;
         $scope.currentSubCategoryId = -1;
+
+        $scope.isAdvancedSearch = false;
+
+        $scope.searchStorePopover = {
+            templateUrl: 'views/templates/store-search-popover.tpl.html',
+            content: 'Search based on:'
+        };
 
         $scope.pageChanged = function () {
             console.log('Page changed to: ' + $scope.currentStorePage);
@@ -66,8 +73,73 @@ evezownApp
                 });
         }
 
-        $scope.GetProductsByOwnerId();
+        $scope.storeSearchParams = {};
 
+        $scope.storeTypes = [{
+            Index: 0,
+            Title: 'Stores'
+        }, {
+            Index: 1,
+            Title: 'Business'
+        }, {
+            Index: 2,
+            Title: 'Stores + Business'
+        }];
+
+        $scope.getSearchCategories = function ($storeType) {
+
+            if ($storeType == 0) {
+                $scope.currentSection = 3;
+            }
+            else if ($storeType == 1) {
+                $scope.currentSection = 4;
+            }
+            else if ($storeType == 3) {
+                $scope.currentSection = 5;
+            }
+            else if ($storeType == 2) {
+                $scope.currentSection = 6;
+            }
+
+            EvezplaceHomeService.getCategories($scope.currentSection)
+                .then(function (data) {
+                    $scope.categories = data;
+                });
+        }
+
+        $scope.getSearchSubCategories = function (categoryId) {
+
+            EvezplaceHomeService.getSubcategories(categoryId)
+                .then(function (data) {
+                    $scope.storeSearchParams.subCategories = data;
+                });
+        }
+
+        $scope.getSearchCategories();
+
+        function clearSearchParams () {
+            $scope.storeSearchParams = {};
+        }
+
+        $scope.clearSearchParams = function() {
+            clearSearchParams();
+        }
+
+        $scope.closeSearch = function() {
+            $scope.isAdvancedSearch = !$scope.isAdvancedSearch;
+            clearSearchParams();
+        }
+
+        $scope.searchStores = function() {
+
+            StoreService.searchStores($scope.storeSearchParams)
+                .then(function (data) {
+                    $scope.browseItems = data.data;
+                    $scope.browseMetaData = data.meta;
+                    $scope.isAdvancedSearch = !$scope.isAdvancedSearch;
+                    clearSearchParams();
+                });
+        }
     });
 
 

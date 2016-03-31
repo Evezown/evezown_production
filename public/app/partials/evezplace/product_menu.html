@@ -1,14 +1,16 @@
 <div class="row">
     <div id="product-menu">
         <ul class="nav nav-pills nav-justified">
-            <li role="presentation" ng-repeat="navLink in productNavLinks" ng-class="navClass('{{navLink.Title}}')"><a
-                    href='#/{{navLink.Title}}'>{{navLink.LinkText}}</a></li>
+            <li role="presentation" ng-repeat="navLink in productNavLinks"
+                ng-click="selectMenu($index)" ng-class="navClass($index)">
+                <a style="background-color:#F6B77F;margin-right:2px;border-radius:0px;"    >{{navLink.LinkText}}
+                </a>
+            </li>
         </ul>
     </div>
 </div>
 <div class="row">
-
-    <div id="categories-menu" ng-controller="ProductMenuController">
+    <div id="categories-menu">
         <ul class="nav nav-pills nav-justified">
             <li role="presentation" class="dropdown mega-dropdown" ng-repeat="category in categories | limitTo: 4">
                 <a class="dropdown-toggle" data-toggle="dropdown">{{ category.category_name }}</a>

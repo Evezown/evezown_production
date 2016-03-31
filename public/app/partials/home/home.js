@@ -4,9 +4,9 @@
 'use strict';
 
 evezownApp
-    .controller('LoginController', function ($scope, $rootScope, $cookieStore ,$location, AUTH_EVENTS, AuthService,ngDialog,usSpinnerService) {
-
-            $scope.title = "Login to Evezown";
+    .controller('LoginController', function ($scope, $rootScope, $cookieStore, $location, $http, PATHS, AUTH_EVENTS,AuthService, ngDialog, usSpinnerService) {
+      
+        $scope.title = "Login to Evezown";
 
 
         $scope.credentials =
@@ -16,52 +16,74 @@ evezownApp
             remember: ''
         };
 
-        if($cookieStore.get('remember'))
-        {
+        if ($cookieStore.get('remember')) {
             $scope.credentials.email = $cookieStore.get('user');
             $scope.credentials.password = $cookieStore.get('pass');
             $scope.credentials.remember = $cookieStore.get('remember');
         }
 
-        $scope.forgot = function()
-        {
-            ngDialog.open({ template: 'templateId' });
+        $scope.forgot = function () {
+            ngDialog.open({template: 'templateId'});
         }
 
         $scope.ResetPassword = function()
         {
             if($scope.email)
             {
-                toastr.success('Login', 'a mail has been sent to your registered email id');
-                ngDialog.close();
+                $http.post(PATHS.api_url + 'forgotPassword/email'
+                , {
+                    data: {
+                        emailid: $scope.email,
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function(data){
+                    ngDialog.close();
+                    ngDialog.open({ template: 'EmailConfirmation' });
+                    //toastr.success(data);
+                }).error(function (data) {
+                    ngDialog.close();
+                    toastr.error(data.error.message);
+                });
             }
             else
             {
-                toastr.error('Please enter an email id.', 'Login');
+                toastr.error('Please enter your email id.', 'Login');
             }
         }
 
-        $scope.login = function (credentials)
-        {
+        $scope.login = function (credentials) {
             usSpinnerService.spin('spinner-1');
-            if(credentials.remember)
-            {
+            if (credentials.remember) {
                 $cookieStore.put('user', credentials.email);
                 $cookieStore.put('pass', credentials.password);
                 $cookieStore.put('remember', credentials.remember);
             }
-            else
-            {
+            else {
                 $cookieStore.remove('user');
                 $cookieStore.remove('pass');
                 $cookieStore.remove('remember');
             }
             AuthService.login(credentials).then(function (user)
             {
+                if(user.deleted == 1)
+                {
+                    toastr.error("Invalid User");
+                    usSpinnerService.stop('spinner-1');
+                    Session.destroy();
+                }
+                else if(user.blocked == 1)
+                {
+                    toastr.error('Your account has been blocked, please contact the administrator');
+                    usSpinnerService.stop('spinner-1');
+                    Session.destroy();
+                }
+                else
+                {
                     $cookieStore.put('api_key', Session.api_key);
                     $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                     toastr.success('Login', 'You have logged in successfully');
-                    $location.path('/recco');
+                    $location.path('/profile/'+ $cookieStore.get('userId'));
+                }
             }, function (res)
             {
                 usSpinnerService.stop('spinner-1');
@@ -70,13 +92,13 @@ evezownApp
                 $location.path('/login');
             });
         };
-});
+    });
 
 evezownApp
     .controller('SignupController', function ($scope, $rootScope, $location, AUTH_EVENTS, AuthService, $routeParams) {
         $scope.model = {
-            title : "Sign up with Evezown",
-            inviteCode : $routeParams.code
+            title: "Sign up with Evezown",
+            inviteCode: $routeParams.code
         };
 
         $scope.signupDetails = {
@@ -105,11 +127,11 @@ evezownApp
     });
 
 evezownApp
-    .controller('HomeController', function($rootScope, $scope,  AuthService, $cookieStore, ArticleService){
+    .controller('HomeController', function ($rootScope, $scope, AuthService, $cookieStore, ArticleService) {
         $scope.caption = true;
         $scope.carouselTitle = "Evezown";
 
-      //  $rootScope.isLoggedIn = AuthService.isLoggedIn();
+        //  $rootScope.isLoggedIn = AuthService.isLoggedIn();
         $scope.CompletedEvent = function (scope) {
             console.log("Completed Event called");
         };
@@ -135,16 +157,16 @@ evezownApp
         };
 
         $scope.IntroOptions = {
-            steps:[
+            steps: [
                 {
                     element: '#step1',
                     intro: "Welcome to Evezown, If you don't have an account please request for an invite to sign up"
                 },
                 {
                     element: '#step2',
-                    intro: 'This is an Ecommerce marketplace for showcasing women centric products and services on our ' +
+                    intro: 'This is an Ecommerce marketplace for showcasing products and business services on our ' +
                     'five key categories. If you are already in business or intend to start one, you can create your ' +
-                    'store and/or classifieds.',
+                    'store, Ads & Campaigns.',
                     position: 'bottom'
                 },
                 {
@@ -159,7 +181,7 @@ evezownApp
             ],
             showStepNumbers: false,
             exitOnOverlayClick: true,
-            exitOnEsc:true,
+            exitOnEsc: true,
             nextLabel: '<strong>NEXT!</strong>',
             prevLabel: '<span style="color:green">Previous</span>',
             skipLabel: 'Exit',
@@ -177,16 +199,16 @@ evezownApp.controller('HomeProductMenuController', function ($rootScope, $scope,
     $rootScope.categories = [];
     $scope.productNavLinks = [{
         Title: 'Product',
-        LinkText: 'Product'
+        LinkText: 'Stores'
     }, {
         Title: 'Services',
-        LinkText: 'Services'
+        LinkText: 'Business'
     }, {
         Title: 'Product + Services',
-        LinkText: 'Product + Services'
+        LinkText: 'Store/Business'
     }, {
-        Title: 'Classifieds',
-        LinkText: 'Classifieds'
+        Title: 'Ads & Campaigns',
+        LinkText: 'Ads & Campaigns'
     }];
 
     $scope.navClass = function (page) {
@@ -195,32 +217,65 @@ evezownApp.controller('HomeProductMenuController', function ($rootScope, $scope,
         return page === currentRoute ? 'active' : '';
     };
 
-    $scope.GetIndex = function(index){
-        if (index === 0) {$scope.currentSection = 3;}
-        if (index === 1) {$scope.currentSection = 4;}
-        if (index === 2) {$scope.currentSection = 6;}
-        if (index === 3) {$scope.currentSection = 5;}
+    $scope.GetIndex = function (index) {
+        if (index === 0) {
+            $scope.currentSection = 3;
+        }
+        if (index === 1) {
+            $scope.currentSection = 4;
+        }
+        if (index === 2) {
+            $scope.currentSection = 6;
+        }
+        if (index === 3) {
+            $scope.currentSection = 5;
+        }
         $scope.currentIndex = index;
         EvezplaceHomeService.getCategories($scope.currentSection)
             .then(function (data) {
                 $rootScope.categories = data;
-        });
+            });
     }
     $scope.GetIndex($scope.initialLoadIndex);
 });
 
 
-
 evezownApp
-    .controller('ArticlesNewsInterviewsCtrl', function($scope, ArticleService) {
+    .controller('ArticlesNewsInterviewsCtrl', function ($scope, ArticleService, BlogService, EventService, ForumService, PATHS) {
 
         $scope.isShowMoreVideos = false;
+
+        $scope.imagePath = PATHS.api_url + 'image/show/';
 
         // Fetch all news items
         function fetchHomeNews() {
             ArticleService.getHomeNews().then(function (data) {
 
                 $scope.news = data;
+            });
+        }
+
+        // Fetch all blogs items
+        function fetchRelatedBlogs() {
+            BlogService.getTrendingBlogs(3).then(function (data) {
+
+                $scope.relatedBlogs = data;
+            });
+        }
+
+        // Fetch all news items
+        function fetchRelatedEvents() {
+            EventService.getTrendingEvents(3).then(function (data) {
+
+                $scope.relatedEvents = data;
+            });
+        }
+
+        // Fetch all news items
+        function fetchRelatedForums() {
+            ForumService.getTrendingForums(3).then(function (data) {
+
+                $scope.relatedForums = data;
             });
         }
 
@@ -241,14 +296,13 @@ evezownApp
 
         function fetchVideos() {
 
-            if($scope.isShowMoreVideos == false)
-            {
+            if ($scope.isShowMoreVideos == false) {
                 ArticleService.getTopVideos().then(function (data) {
 
                     $scope.videos = data;
                 });
             }
-            else{
+            else {
                 ArticleService.getMoreVideos().then(function (data) {
 
                     $scope.videos = data;
@@ -257,7 +311,7 @@ evezownApp
         }
 
         // Show more video click toggle
-        $scope.showMoreVideos = function() {
+        $scope.showMoreVideos = function () {
             // Set the toggle value of bool on click. (if true, set to false and vice-versa)
             $scope.isShowMoreVideos = !$scope.isShowMoreVideos;
 
@@ -265,6 +319,12 @@ evezownApp
         }
 
         fetchHomeNews();
+        
+        fetchRelatedBlogs();
+
+        fetchRelatedEvents();
+
+        fetchRelatedForums();
 
         fetchHomeArticles();
 

@@ -9,24 +9,33 @@ evezownApp
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.currentUserId = $routeParams.id;
 
-        if($scope.loggedInUserId == $routeParams.id)
-        {
-            $scope.profileMenuItems.push({name: 'Manage Evezsite',
-            link : 'profile/' + $scope.loggedInUserId + '/personalinfo'});
-        }
-
         $scope.profileMenuItems.push({
             name: 'Recent Activity',
             link : 'profile/' + $routeParams.id
-        },{
+          });
+       
+        if($scope.loggedInUserId == $routeParams.id)
+        {
+            $scope.profileMenuItems.push({name: 'Manage Mysite',
+            link : 'profile/' + $scope.loggedInUserId + '/personalinfo'},
+            {
+            name: 'Build Community',
+            link : 'community'
+            },{
+            name: 'Stream It',
+            link : 'streamit'
+            });
+        }
+
+        $scope.profileMenuItems.push({
             name: 'Stores',
             link : 'mystores/' + $routeParams.id
         },{
+            name: 'Ads & Campaigns',
+            link : 'mylisting/' + $routeParams.id
+        },{
             name: 'Blogs',
             link : 'myblogs/' + $routeParams.id
-        },{
-            name: 'Classifieds',
-            link : 'mylisting/' + $routeParams.id
         },{
             name: 'Events',
             link : 'myevents/' + $routeParams.id

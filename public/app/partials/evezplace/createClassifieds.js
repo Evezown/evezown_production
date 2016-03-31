@@ -4,7 +4,8 @@
 
 evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $location, EvezplaceHomeService,
                                                          ngFabForm, ClassifiedsService, usSpinnerService,
-                                                         $controller, $cookieStore, $sce, ngDialog, $filter,$http) {
+                                                         $controller, $cookieStore, $sce, ngDialog,
+                                                         $filter,$http, StoreService) {
     $scope.title = 'Create Classified/Listing';
     $scope.description = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus at aut consectetur cum ' +
         'earum fugiat natus odit vel, vero voluptas? Accusantium assumenda commodi eaque, error libero ' +
@@ -13,6 +14,8 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
     $scope.loggedInUserId = $cookieStore.get('userId');
 
     $scope.addClassified = {};
+
+    $scope.imageUrlPath = PATHS.api_url + 'image/show/';
 
     // Set defatult classified to new classified (value = 3)
     $scope.addClassified.classified_for = 3;
@@ -92,32 +95,34 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
                 loadClassifiedTags(data.tags);
 
                 // For step 2
-                $scope.addClassified.layoutType = data.layout_type;
+               
+                if(data.layout_type !=null)
+                { $scope.addClassified.layoutType = data.layout_type; }
                 $scope.addClassified.classifiedTitle = data.title;
                 $scope.addClassified.classifiedDesc = data.description;
 
                 $scope.addClassified.titleImage = {};
-                $scope.addClassified.titleImage.croppedImage = data.images[0].title_image_name;
+                $scope.addClassified.titleImage.croppedImage = (data.images[0] == undefined)?"":data.images[0].title_image_name;
                 $scope.addClassified.bodyImage1 = {};
-                $scope.addClassified.bodyImage1.croppedImage = data.images[0].body_image1_name;
+                $scope.addClassified.bodyImage1.croppedImage = (data.images[0] == undefined)?"":data.images[0].body_image1_name;
                 $scope.addClassified.bodyImage2 = {};
-                $scope.addClassified.bodyImage2.croppedImage = data.images[0].body_image2_name;
+                $scope.addClassified.bodyImage2.croppedImage = (data.images[0] == undefined)?"":data.images[0].body_image2_name;
                 $scope.addClassified.bodyImage3 = {};
-                $scope.addClassified.bodyImage3.croppedImage = data.images[0].body_image3_name;
+                $scope.addClassified.bodyImage3.croppedImage = (data.images[0] == undefined)?"":data.images[0].body_image3_name;
                 $scope.addClassified.bodyImage4 = {};
-                $scope.addClassified.bodyImage4.croppedImage = data.images[0].body_image4_name;
+                $scope.addClassified.bodyImage4.croppedImage = (data.images[0] == undefined)?"":data.images[0].body_image4_name;
 
-                $scope.addClassified.dealDescription = data.deal_description;
+                $scope.addClassified.dealDescription = (data.deal_description == null)?"":data.deal_description;
 
                 $scope.addClassified.contactDetails = {};
-                $scope.addClassified.contactDetails.phoneNum = data.contact.phone;
-                $scope.addClassified.contactDetails.email = data.contact.email;
-                $scope.addClassified.contactDetails.name = data.contact.name;
+                $scope.addClassified.contactDetails.phoneNum = (data.contact == null)?"":data.contact.phone;
+                $scope.addClassified.contactDetails.email = (data.contact == null)?"":data.contact.email;
+                $scope.addClassified.contactDetails.name = (data.contact == null)?"":data.contact.name;
 
                 $scope.addClassified.storeLocation = {};
-                $scope.addClassified.storeLocation.streetAddress = data.location.street_address;
-                $scope.addClassified.storeLocation.cityState = data.location.city + ', ' + data.location.state;
-                $scope.addClassified.storeLocation.pincode = data.location.pincode;
+                $scope.addClassified.storeLocation.streetAddress = (data.location == null)?"":data.location.street_address;
+                $scope.addClassified.storeLocation.cityState = (data.location == null)?"":data.location.city + ', ' + data.location.state;
+                $scope.addClassified.storeLocation.pincode = (data.location == null)?"":data.location.pincode;
 
                 // For step 3
                 $scope.addClassified.step3 = {};
@@ -146,6 +151,15 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
             });
     }
 
+    function getUserStores(userId) {
+        StoreService.getUserStores(userId).
+            then(function (data) {
+                $scope.userStores = data;
+            });
+    }
+
+    getUserStores();
+
     $scope.loadTags = function(query) {
         return $http.get(PATHS.api_url + 'tags/' + query);
     };
@@ -171,7 +185,7 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
         usSpinnerService.spin('spinner-1');
         ClassifiedsService.removeTag(tag.id).then(function (data) {
             usSpinnerService.stop('spinner-1');
-            toastr.success(data.message, 'Create Classifieds');
+            toastr.success(data.message, 'Create Ads & Campaigns');
         });
     };
 
@@ -188,22 +202,53 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
         ClassifiedsService.saveClassifiedsStep1($scope.addClassified, $scope.loggedInUserId).then(function (data) {
             if ($scope.addClassified.id == 0) {
                 $cookieStore.put('createClassifiedId', data.id);
+                $cookieStore.put('PublishClassifiedId', data.id);
             }
 
             usSpinnerService.stop('spinner-1');
-            toastr.success(data.message, 'Create Classifieds');
+            toastr.success(data.message, 'Create Ads & Campaigns');
             $location.path('classifieds/create/step2');
         });
     }
 
     /* Save create classified step 2 */
     $scope.saveClassifiedsStep2 = function () {
+
+        var Email = $scope.addClassified.contactDetails.email;
+        var CheckEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(!CheckEmail.test(Email))
+        {
+            toastr.error("please enter a valid Email")
+        }
+
+        else if(!$scope.addClassified.titleImage.croppedImage)
+        {
+            toastr.error('Please upload a title image')
+        }
+        else if(!$scope.addClassified.bodyImage1.croppedImage)
+        {
+            toastr.error('Please upload slide image 1')
+        }
+        else if(!$scope.addClassified.bodyImage2.croppedImage)
+        {
+            toastr.error('Please upload slide image 2')
+        }
+        else if(!$scope.addClassified.bodyImage3.croppedImage)
+        {
+            toastr.error('Please upload slide image 3')
+        }
+        else if(!$scope.addClassified.bodyImage4.croppedImage)
+        {
+            toastr.error('Please upload slide image 4')
+        }
+        else{
         usSpinnerService.spin('spinner-1');
         ClassifiedsService.saveClassifiedsStep2($scope.addClassified, $scope.loggedInUserId).then(function (data) {
             usSpinnerService.stop('spinner-1');
-            toastr.success(data.message, 'Create Classifieds');
+            toastr.success(data.message, 'Create Ads & Campaigns');
             $location.path('classifieds/create/step3');
         });
+        }
     }
 
     /* Save create classified step 2 */
@@ -211,7 +256,8 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
         usSpinnerService.spin('spinner-1');
         ClassifiedsService.saveClassifiedsStep3($scope.addClassified.step3, $scope.loggedInUserId).then(function (data) {
             usSpinnerService.stop('spinner-1');
-            toastr.success(data.message, 'Create Classifieds');
+            toastr.success(data.message, 'Create Ads & Campaigns');
+            $cookieStore.remove('createClassifiedId');
             $location.path('classifieds/create/success');
 
         });
@@ -228,9 +274,12 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
         return $sce.trustAsResourceUrl(src);
     }
 
+    $scope.selection = [10, 10, 20, 20, 100, 80];
+
     /* Title image */
 
     $scope.CropTitleImage = function () {
+    
         var cropTitleImageDialog = ngDialog.open(
             {
                 template: 'cropTitleImageDialogId',
@@ -246,7 +295,7 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
 
             if (data.value.status) {
                 $scope.addClassified.titleImage = {};
-                $scope.addClassified.titleImage.croppedImage = data.value.imagePath;
+                $scope.addClassified.titleImage.croppedImage = data.value.imageName;
             }
 
         });
@@ -347,7 +396,7 @@ evezownApp.controller('CreateClassifiedsCtrl', function ($scope, PATHS, $locatio
                 className: 'ngdialog-theme-plain',
                 controller: $controller('imagePreviewController', {
                     $scope: $scope,
-                    imagePath: imagePath
+                    imagePath: $scope.imageUrlPath+imagePath
                 })
             });
     };
@@ -357,11 +406,12 @@ evezownApp.controller('cropTitleImageCtrl', function ($scope, ClassifiedsService
                                                       usSpinnerService, ngDialog) {
     $scope.titleImage = {};
     // Must be [x, y, x2, y2, w, h]
-    $scope.titleImage.coords = [100, 100, 200, 200, 100, 100];
+
+    
 
     $scope.titleImage.selected = function (coords) {
         console.log("selected", coords);
-        $scope.titleImage.coords = coords;
+        $scope.selection = coords;
     };
 
     // You can add a thumbnail if you want
@@ -382,7 +432,7 @@ evezownApp.controller('cropTitleImageCtrl', function ($scope, ClassifiedsService
 
         ClassifiedsService.uploadTitleImage(
             getBase64Image($scope.titleImage.src),
-            $scope.titleImage.coords)
+            $scope.selection)
             .then(function (data) {
                 usSpinnerService.stop('spinner-1');
                 toastr.success(data.message, 'Upload Title Image');
@@ -403,11 +453,12 @@ evezownApp.controller('cropBodyImageCtrl', function ($scope, ImageUploadService,
                                                      usSpinnerService, ngDialog) {
     $scope.bodyImage = {};
     // Must be [x, y, x2, y2, w, h]
-    $scope.bodyImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.selection = [10, 10, 20, 20, 100, 80];
 
     $scope.bodyImage.selected = function (coords) {
         console.log("selected", coords);
-        $scope.bodyImage.coords = coords;
+        $scope.selection = coords;
     };
 
     // You can add a thumbnail if you want
@@ -426,9 +477,11 @@ evezownApp.controller('cropBodyImageCtrl', function ($scope, ImageUploadService,
 
         usSpinnerService.spin('spinner-1');
 
+
+
         ImageUploadService.cropImage(
             $scope.bodyImage.src,
-            $scope.bodyImage.coords)
+            $scope.selection)
             .then(function (data) {
                 usSpinnerService.stop('spinner-1');
                 toastr.success(data.message, 'Upload Body Image');
@@ -444,38 +497,33 @@ evezownApp.controller('imagePreviewController', function ($scope,
 });
 
 
-evezownApp.controller('createClassifiedsSuccessCtrl', function ($scope,
-                                                                ngDialog, $cookieStore, $controller) {
-    $scope.addClassified.id = $cookieStore.get('createClassifiedId') == undefined
-        ? 0 : $cookieStore.get('createClassifiedId');
-
+evezownApp.controller('ClassifiedsSuccessCtrl', function ($scope,
+                                                                ngDialog, $cookieStore, $controller, $location) {
+    $scope.addClassified.id = $cookieStore.get('PublishClassifiedId') == undefined
+        ? 0 : $cookieStore.get('PublishClassifiedId');
+    
     $scope.publishClassified = function() {
         var finishClassifiedDialog = ngDialog.open(
             {
                 template: 'finishClassifiedDialogId',
                 scope: $scope,
                 className: 'ngdialog-theme-default',
-                controller: $controller('finishClassifiedCtrl', {
+                controller: $controller('finishCreateClassifiedCtrl', {
                     $scope: $scope
                 })
             });
 
         finishClassifiedDialog.closePromise.then(function (data) {
             console.log('Classified Finish: ' + data);
-            toastr.success(data.message, 'Create Classified');
-            // Clear the currently created classified id from cookie once classified is published.
-            if ($scope.addClassified.id > 0 && data.value.status) {
-                $cookieStore.remove('createClassifiedId');
-                $location.path('/');
-            }
+            $location.path('classifieds/browse');
         });
     }
 });
 
-evezownApp.controller('finishClassifiedCtrl', function ($scope, ngDialog, $cookieStore,
+evezownApp.controller('finishCreateClassifiedCtrl', function ($scope, ngDialog, $cookieStore,
                                                         usSpinnerService, ClassifiedsService) {
-    $scope.classifiedId = $cookieStore.get('createClassifiedId') == undefined
-        ? 0 : $cookieStore.get('createClassifiedId');
+    $scope.classifiedId = $cookieStore.get('PublishClassifiedId') == undefined
+        ? 0 : $cookieStore.get('PublishClassifiedId');
 
     console.log($scope.classifiedId);
 

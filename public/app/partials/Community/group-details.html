@@ -1,32 +1,20 @@
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
-     role="alert" ng-controller="ApplicationCtrl">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-    </button>
-    <h1>Build Community</h1>
-
-    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Evez, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to WoiceIt, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
-    </p>
-</div>
 <!-- Static navbar -->
 <nav class="navbar navbar-default" id="navContainer">
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}" >Mysite</a>
             </li>
-            <li ng-class="{ active: isActive('/community')}"><a href="#community" >Build Community</a>
+            <li><a class="{{isActive[1]}}" href="#mygroups/{{currentUserId}}" >Groups</a>
             </li>
-
-            <li ng-class="{ active: isActive('/recco')}"><a href="#recco">Stream It</a></li>
             <li ng-class="{ active: isActive('/explore')}">
                 <!-- Template which needs to be shown on click -->
                 <script type="text/ng-template" id="explore">
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -45,11 +33,21 @@
         </ul>
     </div>
 </nav>
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
+     role="alert" ng-controller="ApplicationCtrl">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    <h1>Build Community</h1>
+
+    <p style="text-align:justify">Build community helps you replicate your existing, offline community online. You can use features like Connect, Circles, Groups, Events, Blogs and Discussions to interact with your community and grow it. These features are linked to Stream It, the streaming channel for promotion and propagation. This helps you spread the word better among your community about your activities.
+    </p>
+</div>
+
 
 <ul class="breadcrumb">
     <li><a href="#home">Home</a></li>
-    <li ng-if="isProfile == false"><a href="#groups">Groups</a></li>
-    <li ng-if="isProfile == true"><a href="#mygroups/{{currentUserId}}">Groups</a></li>
+    <li><a href="#mygroups/{{currentUserId}}">Groups</a></li>
 </ul>
 <div ng-controller="groups" class="custom-group-section">
 <div class="col-md-12" style="padding: 0px; margin-bottom: 20px">
@@ -67,25 +65,16 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9" style="padding: 0px">
-
-        <div class="overlay fileUpload" ng-if="selectedGroup.owner_id == currentUserId">
-            <ul class="list-unstyled text-center">
-                <li><a href>Change Cover</a></li>
-                <input type="file" class="upload" name="coverimage" nv-file-select uploader="uploader1"/>
-
-                <div ng-if="uploader1.queue.length > 0">
-                    <!-- Image upload queue section start -->
-                    <div class="progress" style="">
-                        <div class="progress-bar" role="progressbar" id="upload-cover1-bar"
-                             ng-style="{ 'width': uploader1.progress + '%' }"></div>
-                    </div>
-                    <!-- Image upload queue section end -->
-                </div>
-            </ul>
+    <div class="col-md-9" style="padding: 0px;background: #FFFFFF">
+        <div class="col-md-9" style="width: 100%; padding: 2px">
+        <div ng-if="selectedGroup.owner_id == currentUserId">
+            <div class="pull-left" ng-controller="GroupCoverImageChange">
+                <a href class="btn btn-primary" ng-click="ChangeGroupCover();" id="ChangeGroupCover" style="background-color:#e50880;color:#ffffff;position:absolute;opacity:0.6">Change Cover</a>
+            </div>
         </div>
-        <img ng-src="{{coverImage}}" alt=""
-             class="img-responsive"/>
+        <img  ng-src="{{coverImage}}" ng-if="coverImage != null" alt="" class="img-responsive"/>
+        <img src="img/community-groups-header.jpg" ng-if="coverImage == null" alt="" class="img-responsive"/>
+        </div>
     </div>
 </div>
 
@@ -174,7 +163,7 @@
         </div>
         <div class="col-md-12 zero-padding-left-right reco-brand-section">
             <div class="col-md-4 col-md-offset-8 text-right" ng-if="activities.links.length > 0">
-                <span class="fa fa-link"></span><a href="{{activities.links[0].url_link}}"><b style="color: #4cb1ca;">
+                <span class="fa fa-link"></span><a href="http://{{activities.links[0].url_link}}"><b style="color: #4cb1ca;">
                 {{activities.links[0].url_link}}</b></a>
             </div>
         </div>
@@ -358,5 +347,36 @@
             </select>
         </div>
         <button class="btn primary pull-right form-control" type="button" ng-click="UpdateGroup(selectedGroup)">Add</button>
+    </div>
+</script>
+
+<!--Change/crop Group Cover Image-->
+<script type="text/ng-template" id="GroupCover">
+    <div class="ngdialog-buttons popuptemplate">
+        <b>Crop Cover Image</b>
+        <br/>
+
+        <form>
+            <div class="fileUpload btn btn-primary btn-block">
+                <span><i class="fa fa-camera"></i> Select Group Cover</span>
+
+                <input type="file"
+                       class="upload"
+                       ng-file-select="onFileSelect($files)"
+                       ng-model="slideImage.src">
+            </div>
+            <b>Preview:</b>
+            <br/>
+            <i ng-hide="slideImage.src">No body image chosen</i>
+
+            <ng-crop data-src="slideImage.src"
+                     ratio={{slideImage.cropConfig.aspectRatio}}
+                     box-width={{slideImage.boxWidth}}
+                     selected='slideImage.selected(cords)'>
+            </ng-crop>
+            <br/>
+            <a ng-click="ChangeGroupCoverImage()" class="btn btn-primary pull-right">Upload</a>
+            <br/>
+        </form>
     </div>
 </script>

@@ -15,31 +15,33 @@
 
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="libs/toastr/toastr.css" />
+    <link rel="stylesheet" href="libs/angular-bootstrap-colorpicker/css/colorpicker.css" />
     <link rel="stylesheet" href="libs/angular-loading-bar/build/loading-bar.css" />
     <link rel="stylesheet" href="libs/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" />
+    <link rel="stylesheet" href="libs/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+    <link rel="stylesheet" href="libs/flexslider/flexslider.css" />
+    <link rel="stylesheet" href="libs/angular-google-places-autocomplete/src/autocomplete.css" />
+    <link rel="stylesheet" href="libs/angular-google-places-autocomplete/dist/autocomplete.min.css" />
+    <link rel="stylesheet" href="libs/intro.js/introjs.css" />
+    <link rel="stylesheet" href="libs/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="libs/slick-carousel/slick/slick-theme.css" />
+    <link rel="stylesheet" href="libs/sweetalert/lib/sweet-alert.css" />
+    <link rel="stylesheet" href="libs/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link rel="stylesheet" href="libs/bootstrap-css-only/css/bootstrap.css" />
     <link rel="stylesheet" href="libs/bootstrap-lightbox/docs/assets/css/bootstrap-lightbox.css" />
     <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="libs/bootstrap-social/bootstrap-social.css" />
+    <link rel="stylesheet" href="libs/Jcrop/css/Jcrop.css" />
+    <link rel="stylesheet" href="libs/ng-table/dist/ng-table.min.css" />
+    <link rel="stylesheet" href="libs/ng-tags-input/ng-tags-input.min.css" />
     <link rel="stylesheet" href="libs/ngDialog/css/ngDialog.css" />
     <link rel="stylesheet" href="libs/ngDialog/css/ngDialog-theme-default.css" />
-    <link rel="stylesheet" href="libs/sweetalert/lib/sweet-alert.css" />
-    <link rel="stylesheet" href="libs/bootstrap-css-only/css/bootstrap.css" />
     <link rel="stylesheet" href="libs/textAngular/src/textAngular.css" />
-    <link rel="stylesheet" href="libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css" />
-    <link rel="stylesheet" href="libs/angular-google-places-autocomplete/src/autocomplete.css" />
-    <link rel="stylesheet" href="libs/angular-google-places-autocomplete/dist/autocomplete.min.css" />
-    <link rel="stylesheet" href="libs/ng-tags-input/ng-tags-input.min.css" />
-    <link rel="stylesheet" href="libs/flexslider/flexslider.css" />
-    <link rel="stylesheet" href="libs/ng-table/dist/ng-table.min.css" />
-    <link rel="stylesheet" href="libs/angular-bootstrap-colorpicker/css/colorpicker.css" />
-    <link rel="stylesheet" href="libs/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-    <link rel="stylesheet" href="libs/intro.js/introjs.css" />
-    <link rel="stylesheet" href="libs/bootstrap-daterangepicker/daterangepicker-bs3.css" />
-    <link rel="stylesheet" href="libs/Jcrop/css/Jcrop.css" />
+    <link rel="stylesheet" href="libs/toastr/toastr.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
+    <link rel="stylesheet" href="libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">
     <link rel="stylesheet" href="libs/ngDialog/css/ngDialog-theme-plain.css" />
     <link rel="stylesheet" href="build.css"/>
     <link rel="stylesheet" href="animate.css"/>
@@ -49,6 +51,7 @@
     <link rel="stylesheet" href="woice.css"/>
     <link rel="stylesheet" href="evezplace.css"/>
     <link rel="stylesheet" href="custom/staticpages/staticpages.css"/>
+
 
     <!-- build:css(.tmp) styles/main.css -->
 
@@ -96,13 +99,13 @@
                 <li><a href="#contactus">Contact Us</a></li>
             </ul>
             <ul class="col-md-4">
-                <li><a href="#recco">Evezown</a></li>
-                <li><a href="#evezplace">EvezPlace</a></li>
-                <li><a href="#wopportunity">W’Opportunity</a></li>
+                <li><a href="#streamit">Mysite</a></li>
+                <li><a href="#evezplace">MarketPlace</a></li>
+                <li><a href="#wopportunity">Jobs</a></li>
             </ul>
             <ul class="col-md-4">
                 <li><a href="#contribute">Contribute</a></li>
-                <li><a href="#advertise">Advertise</a></li>
+                <li><a href="#advertisement">Advertise</a></li>
                 <li><a href="#friends/invite" ng-if="loggedIn">Invite Friends</a>
                 </li>
                 <li><a href="#login" ng-if="!loggedIn">Invite Friends</a></li>
@@ -112,7 +115,7 @@
         <div class="row" style="margin:0px;">
             <div class="col-sm-12 text-center">
                 <p style="margin:0px;">Terms of Use. <a href="#privacy">Privacy Policy</a></p>
-                © 2015 <a target="_blank" href="#" title="">Evezown</a>. All Rights Reserved.
+                © 2015 <a target="_blank" href="#" title="">Evezown</a>. All Rights Reserved. Powered by<a target="_blank" href="http://webinsights.in" title=""> Webinsights Pvt Ltd</a>.
             </div>
         </div>
     </div>
@@ -125,30 +128,55 @@
 <script src="libs/es5-shim/es5-shim.js"></script>
 <script src="libs/jquery/dist/jquery.js"></script>
 <script src="libs/angular/angular.js"></script>
-<script src="libs/angular-route/angular-route.js"></script>
 <script src="libs/angular-animate/angular-animate.js"></script>
-<script src="libs/toastr/toastr.js"></script>
-<script src="libs/spin.js/spin.js"></script>
-<script src="libs/angular-spinner/angular-spinner.js"></script>
-<script src="libs/moment/moment.js"></script>
-<script src="libs/angular-cookies/angular-cookies.js"></script>
 <script src="libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="libs/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
 <script src="libs/angular-loading-bar/build/loading-bar.js"></script>
 <script src="libs/angular-touch/angular-touch.js"></script>
 <script src="libs/bootstrap/dist/js/bootstrap.js"></script>
 <script src="libs/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script>
-<script src="libs/bootstrap-lightbox/docs/assets/js/bootstrap-lightbox.js"></script>
+<script src="libs/angular-cookies/angular-cookies.js"></script>
+<script src="libs/angular-sanitize/angular-sanitize.js"></script>
+<script src="libs/angular-counter/counter.js"></script>
+<script src="libs/moment/moment.js"></script>
+<script src="libs/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="libs/angular-daterangepicker/js/angular-daterangepicker.js"></script>
 <script src="libs/angular-facebook/lib/angular-facebook.js"></script>
-<script src="libs/ngLinkedIn/ngLinkedIn.js"></script>
-<script src="libs/ngDialog/js/ngDialog.js"></script>
 <script src="libs/angular-file-upload/angular-file-upload.min.js"></script>
-<script src="libs/ngGAPI/gapi.js"></script>
+<script src="libs/flexslider/jquery.flexslider.js"></script>
+<script src="libs/angular-flexslider/angular-flexslider.js"></script>
+<script src="libs/angular-google-places-autocomplete/src/autocomplete.js"></script>
+<script src="libs/angular-google-places-autocomplete/dist/autocomplete.min.js"></script>
+<script src="libs/angular-hmac-sha512/angular-hmac-sha512.js"></script>
+<script src="libs/intro.js/intro.js"></script>
+<script src="libs/angular-intro.js/src/angular-intro.js"></script>
+<script src="libs/angular-route/angular-route.js"></script>
+<script src="libs/slick-carousel/slick/slick.min.js"></script>
+<script src="libs/angular-slick/dist/slick.js"></script>
+<script src="libs/angular-social-links/angular-social-links.js"></script>
+<script src="libs/spin.js/spin.js"></script>
+<script src="libs/angular-spinner/angular-spinner.js"></script>
 <script src="libs/sweetalert/lib/sweet-alert.js"></script>
 <script src="libs/angular-sweetalert/SweetAlert.js"></script>
+<script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="libs/angularjs-socialshare/dist/angular-socialshare.min.js"></script>
+<script src="libs/bootstrap-lightbox/docs/assets/js/bootstrap-lightbox.js"></script>
+<script src="libs/Jcrop/js/Jcrop.js"></script>
+<script src="libs/js-xlsx/dist/xlsx.js"></script>
+<script src="libs/angular-messages/angular-messages.js"></script>
+<script src="libs/ng-fab-form/dist/ng-fab-form.js"></script>
+<script src="libs/ng-file-upload/ng-file-upload.js"></script>
 <script src="libs/json3/lib/json3.js"></script>
 <script src="libs/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
 <script src="libs/lodash/lodash.js"></script>
 <script src="libs/ng-password-strength/dist/scripts/ng-password-strength.js"></script>
+<script src="libs/ng-table/dist/ng-table.min.js"></script>
+<script src="libs/ng-tags-input/ng-tags-input.min.js"></script>
+<script src="libs/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
+<script src="libs/ngDialog/js/ngDialog.js"></script>
+<script src="libs/ngGAPI/gapi.js"></script>
+<script src="libs/ngLinkedIn/ngLinkedIn.js"></script>
+<script src="libs/nsPopover/src/nsPopover.js"></script>
 <script src="libs/rangy/rangy-core.js"></script>
 <script src="libs/rangy/rangy-classapplier.js"></script>
 <script src="libs/rangy/rangy-highlighter.js"></script>
@@ -158,35 +186,20 @@
 <script src="libs/textAngular/src/textAngular.js"></script>
 <script src="libs/textAngular/src/textAngular-sanitize.js"></script>
 <script src="libs/textAngular/src/textAngularSetup.js"></script>
-<script src="libs/nsPopover/src/nsPopover.js"></script>
-<script src="libs/ng-videosharing-embed/build/ng-videosharing-embed.min.js"></script>
-<script src="libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
-<script src="libs/angular-google-places-autocomplete/src/autocomplete.js"></script>
-<script src="libs/angular-google-places-autocomplete/dist/autocomplete.min.js"></script>
-<script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="libs/ng-tags-input/ng-tags-input.min.js"></script>
-<script src="libs/flexslider/jquery.flexslider.js"></script>
-<script src="libs/angular-flexslider/angular-flexslider.js"></script>
-<script src="libs/ng-table/dist/ng-table.min.js"></script>
-<script src="libs/angular-social-links/angular-social-links.js"></script>
-<script src="libs/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
-<script src="libs/ng-file-upload/ng-file-upload.js"></script>
-<script src="libs/intro.js/intro.js"></script>
-<script src="libs/angular-intro.js/src/angular-intro.js"></script>
-<script src="libs/angular-messages/angular-messages.js"></script>
-<script src="libs/ng-fab-form/dist/ng-fab-form.js"></script>
-<script src="libs/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script src="libs/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+<script src="libs/toastr/toastr.js"></script>
 <script src="libs/whatsapp-sharing/dist/whatsapp-button.js"></script>
-<script src="libs/angularjs-socialshare/dist/angular-socialshare.min.js"></script>
-<script src="libs/angular-sanitize/angular-sanitize.js"></script>
-<script src="libs/angular-counter/counter.js"></script>
-<script src="libs/Jcrop/js/Jcrop.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
+<script src="libs/js-xlsx/shim.js"></script>
+<script src="libs/js-xlsx/jszip.js"></script>
+<script src="libs/js-xlsx/xlsx.js"></script>
+<script src="libs/js-xlsx/dist/ods.js"></script>
+<script src="custom/angular-read-more/readmore.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
 
 <script src="libs/ng-time-relative/dist/ng-time-relative.min.js"></script>
 <script src="//cdn.jsdelivr.net/satellizer/0.9.2/satellizer.min.js"></script>
+<script src="libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
 <!--<script type="text/javascript" src="http://platform.linkedin.com/in.js">-->
     <!--//here goes the api key, and the callback function-->
     <!--api_key: 78-->
@@ -224,16 +237,19 @@
 <script src="partials/admin/groupService.js"></script>
 <script src="partials/admin/EventService.js"></script>
 <script src="partials/admin/forumService.js"></script>
+<script src="partials/admin/NewsletterCtrl.js"></script>
 <script src="partials/admin/profileDetailsService.js"></script>
 <script src="partials/admin/AdminInviteFrndsCtrl.js"></script>
 <script src="partials/admin/AlbumCtrl.js"></script>
 <script src="partials/admin/adminAlbums.js"></script>
+<script src="partials/admin/Manage/manageStoreLeftMenuController.js"></script>
 
 
 <script src="partials/admin/grouplists.js"></script>
 <script src="partials/admin/eventlist.js"></script>
 
 <script src="partials/home/registerCntrl.js"></script>
+<script src="partials/home/ResetPassword.js"></script>
 <script src="partials/profile/profileCtrl.js"></script>
 <script src="partials/profile/profileService.js"></script>
 
@@ -252,6 +268,7 @@
 <script src="partials/Community/AlbumCtrl.js"></script>
 <script src="partials/Community/friendsService.js"></script>
 <script src="partials/Community/invitefriends.js"></script>
+<script src="partials/Community/inviteHistory.js"></script>
 
 <script src="partials/Community/blogCtrl.js"></script>
 <script src="partials/Community/EditBlogCtrl.js"></script>
@@ -286,10 +303,29 @@
 <script src="partials/evezplace/classifiedsService.js"></script>
 <script src="partials/evezplace/classifiedsListService.js"></script>
 <script src="partials/evezplace/browse/store/storeService.js"></script>
+<!--<script src="scripts/controllers/buyer/BuyerOrdersCtrl.js"></script>-->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 
 <script src="scripts/directives/ngcommentreccorewoicegrade.js"></script>
+<script src="scripts/controllers/buyer/orders.js"></script>
+<script src="scripts/services/orderservice.js"></script>
+<script src="scripts/controllers/store/productline.js"></script>
+<script src="scripts/controllers/manage/store/managerequestinfo.js"></script>
+<script src="scripts/controllers/manage/store/managerequestquote.js"></script>
+<script src="scripts/controllers/classifieds/classifieddetails.js"></script>
+<script src="partials/evezplace/manage/Classifieds/manageClassifieds.js"></script>
+<script src="partials/evezplace/manage/Classifieds/manageClassifiedsMenuCtrl.js"></script>
+<script src="scripts/controllers/evezplace/evezplacepromotion.js"></script>
+<script src="scripts/controllers/admin/evezplace/managepromotion.js"></script>
+<script src="scripts/controllers/evezplace/createbrowsecontroller.js"></script>
+<script src="scripts/services/sectionconstants.js"></script>
+<script src="scripts/services/sectionnames.js"></script>
+<script src="scripts/controllers/admin/evezplace/manage_recommendations.js"></script>
+<script src="scripts/controllers/admin/evezplace/managetrendingitems.js"></script>
+<script src="scripts/controllers/evezplace/recommendation.js"></script>
+<script src="scripts/services/evezplacesection.js"></script>
+<script src="scripts/filters/addlimitellipsis.js"></script>
 <!-- endbuild -->
 
 <!--<script src="libs/ng-password-strength/dist/scripts/ng-password-strength.min.js"></script>-->

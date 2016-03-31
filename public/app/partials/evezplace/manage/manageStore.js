@@ -12,7 +12,8 @@ evezownApp
         $scope.productImages = [];
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.service_url = PATHS.api_url;
-        $scope.AllProductLines = [];
+        $rootScope.AllProductLines = [];
+        //$rootScope.currentProductLine = null;
         $scope.isImageUploadComplete = false;
         $scope.isAddProductHidden = false;
         $scope.isProductSKUHidden = false;
@@ -175,11 +176,11 @@ evezownApp
         $scope.EnablePaymentGateWay = function(storeCommerce)
         {
 
-            if(!storeCommerce.wantPaymentGateway)
+            /*if(!storeCommerce.wantPaymentGateway)
             {
                 toastr.success("Please select payment gateway option", 'Store');
-            }
-            else if(!storeCommerce.billingAddress)
+            }*/
+            if(!storeCommerce.billingAddress)
             {
                 toastr.success("Please enter billing address", 'Store');
             }
@@ -189,7 +190,7 @@ evezownApp
             }
             else if(!storeCommerce.cityStateCountry)
             {
-                toastr.success("Please enter pincode", 'Store');
+                toastr.success("Please enter 6 digits pincode", 'Store');
             }
             else
             {
@@ -269,7 +270,7 @@ evezownApp
             $http.get(PATHS.api_url + 'stores/productline/'+$rootScope.currentStoreId+'/get').
                 success(function (data, status, headers, config)
                 {
-                    $scope.AllProductLines = data;
+                    $rootScope.AllProductLines = data;
 
                 }).error(function (data)
                 {
@@ -285,6 +286,7 @@ evezownApp
         $scope.GetProducts = function (productLine)
         {
             $rootScope.selectedProductLine = productLine;
+            $rootScope.currentProductLine = productLine;
             $http.get(PATHS.api_url + 'stores/productline/products/'+productLine.id+'/get').
                 success(function (data, status, headers, config)
                 {
@@ -312,7 +314,7 @@ evezownApp
                 });
         }
 
-        $scope.SaveProductLine = function(formData)
+        /*$scope.SaveProductLine = function(formData)
         {
             if(formData)
             {
@@ -363,7 +365,7 @@ evezownApp
                 toastr.error('Please enter a store title', 'Store');
             }
 
-        }
+        }*/
 
         $scope.SaveProduct = function(formData)
         {
@@ -642,9 +644,11 @@ evezownApp
         };
         uploader.onSuccessItem = function(fileItem, response, status, headers)
         {
+        	$scope.ImageSize = fileItem.file.size;
             $scope.productImages.push(response.imageName);
         };
         uploader.onErrorItem = function(fileItem, response, status, headers) {
+        	$scope.ImageSize = fileItem.file.size;
             console.info('onErrorItem', fileItem, response, status, headers);
         };
         uploader.onCancelItem = function(fileItem, response, status, headers) {
@@ -656,24 +660,24 @@ evezownApp
         };
         uploader.onCompleteAll = function()
         {
-            $scope.isImageUploadComplete = true;
-        };
-
-
-
-        $scope.EditProductLine = function(selectedProductLine)
-        {
-            $rootScope.editProductLine = selectedProductLine;
-            if(selectedProductLine.type == "0")
+        	if($scope.ImageSize > 2000000)
             {
-
-                $rootScope.selectedType = $scope.productLineTypes[0];
+                toastr.error("Please upload image of size less than 2 MB")
             }
             else
             {
-                $rootScope.selectedType = $scope.productLineTypes[1];
+                $scope.isImageUploadComplete = true;
             }
-            $scope.productLineTypes = [
+            //$scope.isImageUploadComplete = true;
+        };
+
+
+        //editing product line(popup template with data)
+        $scope.EditProductLine = function(selectedProductLine)
+        {
+            $rootScope.editProductLine = selectedProductLine;
+            
+            $rootScope.EditProductLineTypes = [
                 {
                     id: 0,
                     name: 'Product'
@@ -682,9 +686,65 @@ evezownApp
                     id: 1,
                     name: 'Services'
                 }];
-            ngDialog.open({ template: 'templateId' });
+
+                if(selectedProductLine.type == "0")
+                {
+
+                    $rootScope.EditProductLineType = $scope.EditProductLineTypes[0];
+                }
+                else
+                {
+                    $rootScope.EditProductLineType = $scope.EditProductLineTypes[1];
+                }
+                ngDialog.open({ template: 'templateId' });
+            
         }
 
+        //editing product line in the popup template and submitting
+        $scope.SubmitEditProductLine = function(EditPdtLineTitle,EditPdtLineDescription,EditPdtLineType)
+        {
+            
+            $PdtLineId = $rootScope.editProductLine.id;
+            
+            if(!EditPdtLineTitle)
+            {
+                toastr.error('Please enter a title', 'Store');
+            }
+            else if(!EditPdtLineDescription)
+            {
+                toastr.error('Please enter description', 'Store');
+            }
+            else if(!EditPdtLineType)
+            {
+                toastr.error('Please select a product line type', 'Store');
+            }
+            else
+            {
+
+                $http.post(PATHS.api_url + 'stores/productline/'+$PdtLineId+'/update'
+                    , {
+                        data:
+                        {
+                            title:EditPdtLineTitle,
+                            description:EditPdtLineDescription,
+                            productLineType:EditPdtLineType.id
+                        },
+                        headers: {'Content-Type': 'application/json'}
+                    }).
+                    success(function (data, status, headers, config)
+                    {
+                        toastr.success(data.message, 'Store');
+                        ngDialog.close();
+
+                    }).error(function (data)
+                    {
+                        toastr.error(data.error.message, 'Store');
+                    }).then(function()
+                    {
+                        $scope.GetProductLine();
+                    });
+            }
+        }
 
         $scope.AddProductVariant = function (product)
         {
@@ -700,6 +760,14 @@ evezownApp
 
         $scope.UpdateProduct = function(product)
         {
+            angular.forEach($rootScope.AllProductLines, function (value, key)
+            {
+                if($rootScope.currentProductLine.id == value.id)
+                {
+                    $rootScope.currentProductLine = value;
+                }
+            });
+
             $rootScope.currentProduct = product;
             ngDialog.open({ template: 'editProduct' });
         }

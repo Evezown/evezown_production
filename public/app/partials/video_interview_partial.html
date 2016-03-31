@@ -1,6 +1,13 @@
-<div class="col-md-12 content-wrapper" ng-controller="ArticlesNewsInterviewsCtrl">
+<div class="col-md-12 content-wrapper" ng-controller="ArticlesNewsInterviewsCtrl" style="background-color:#FFF5FF;">
     <div class="row">
-        <h4 class="transparent-ribbon">Videos</h4>
+        <h4 class="transparent-ribbon text-center" style="color: #e51385;">Videos<br>
+            _______________
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <a href="" ng-click="showMoreVideos()"><i class="glyphicon glyphicon-menu-hamburger" style="color: #FFFFFF;"></i></a>
+            </span>
+            ______________
+        </h4>
     </div>
     <div class="row">
         <div class="videos-section">
@@ -11,46 +18,41 @@
         </div>
     </div>
     <!--view more link-->
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-md-12 text-right">
             <a href="" ng-click="showMoreVideos()" style="color: #e51385;">
                 <p ng-if="!isShowMoreVideos">Show More</p>
                 <p ng-if="isShowMoreVideos">Show Less</p>
             </a>
         </div>
-    </div>
+    </div> -->
     <!--view more ends-->
 
-    <div class="row">
-        <h4 class="transparent-ribbon">News</h4>
-
-        <div class="news-section">
-            <div class="col-sm-6" ng-repeat="newsItem in news">
-                <p style="text-align:justify;"><b>{{newsItem.title}} </b>{{newsItem.description}} <a
-                        href="{{newsItem.link}}"
-                        target="blank">[Read More]</a></p>
-            </div>
-
+    <div class="col-md-4">
+        <h4 class="transparent-ribbon text-center" style="color: #e51385;">News</h4>
+        <div class="news-section" ng-repeat="newsItem in news">
+        <p style="text-align:justify;font-size:12px;">
+            <a href="{{newsItem.link}}" target="blank" style="text-decoration:none;font-size:13px;"><b>{{newsItem.title | strLimit:35}}</b></a> - {{newsItem.description | strLimit:120 }}<br>
+        </p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <h4 class="transparent-ribbon">Interviews</h4>
-            </div>
 
-            <div class="interviews-section">
-                <div class="row">
-                    <div class="col-md-12" ng-repeat="interview in interviews">
-                        <b style="text-align:justify;">{{interview.title}}</b>
-
-                        <p style="text-align:justify;">{{interview.description}}<a
-                                href="{{interview.link}}"
-                                target="blank"> [Read More]</a></p>
-                    </div>
-                </div>
-            </div>
+    <div class="col-md-4">
+        <h4 class="transparent-ribbon text-center" style="color: #e51385;">Interviews</h4>
+        <div class="interviews-section" ng-repeat="interview in interviews">
+        
+        <div class="col-md-12 no-padding">
+        <div class="col-md-4 no-padding">
+            <img ng-src="" src="img/custom_images/WomenShopping/{{interview.interview_image}}" class="img-responsive thumbnail" width="100" height="100"/>
         </div>
-        <div class="col-md-6" ng-include src='"partials/articles.html"'></div>
+        <div class="col-md-8 no-padding">
+            <p style="text-align:justify;font-size:12px;">
+                <a href="{{interview.link}}" target="blank" style="text-decoration:none;font-size:13px;"><b>{{interview.title | strLimit:25}}</b></a> - {{interview.description | strLimit:120}}<br>
+            </p>
+        </div>
+        </div>
+        </div>
     </div>
+
+    <div class="col-md-4" ng-include src='"partials/articles.html"'></div>
 </div>

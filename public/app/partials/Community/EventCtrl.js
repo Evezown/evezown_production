@@ -15,12 +15,12 @@ evezownApp.controller('eventCtrl' ,function($scope, PATHS,$cookieStore,$http,$ro
     $scope.eventGrade;
     $scope.isProfile = false;
     $scope.date = new Date();
-    $scope.coverImage = null;
+    $rootScope.coverImage = null;
     $scope.myEventActivities = null;
     $scope.activityImages = [];
     $scope.eventactivity ="";
     $scope.imagePath = PATHS.api_url +'image/show/';
-
+    $scope.isActive = ['', 'active', '', ''];
 
     if($routeParams.id != undefined)
     {
@@ -396,7 +396,7 @@ evezownApp.controller('eventCtrl' ,function($scope, PATHS,$cookieStore,$http,$ro
             success(function (data, status, headers, config)
             {
                 ImageService.getImage(PATHS.api_url + 'users/events/' + $routeParams.event_id + '/cover_image/current').success(function(data){
-                    $scope.coverImage = PATHS.api_url +'image/show/'+data;
+                    $rootScope.coverImage = PATHS.api_url +'image/show/'+data;
                 });
                 toastr.success(data.message, 'Events');
             }).error(function (data)
@@ -756,7 +756,14 @@ evezownApp.controller('eventCtrl' ,function($scope, PATHS,$cookieStore,$http,$ro
     }
 
     ImageService.getImage(PATHS.api_url + 'users/events/' + $routeParams.event_id + '/cover_image/current').success(function(data){
-        $scope.coverImage = PATHS.api_url +'image/show/'+data;
+        if(data == "NoCoverImage")
+        {
+            $rootScope.coverImage = null;
+        }
+        else
+        {
+            $rootScope.coverImage = PATHS.api_url +'image/show/'+data;
+        }
     });
 
     $scope.fetchFriends();
@@ -769,6 +776,83 @@ evezownApp.controller('eventCtrl' ,function($scope, PATHS,$cookieStore,$http,$ro
     }
     $scope.GetAllEventInvites();
 
+
+});
+
+/*Event Cover Image change*/
+evezownApp
+    .controller('EventCoverImageChange', function ($scope, AuthService, ngDialog, $location, $controller, $http, $cookieStore, PATHS, FileUploader, $rootScope, $routeParams) {
+
+
+    $scope.ChangeEventCover = function () {
+
+    var cropTitleImageDialog = ngDialog.open(
+        {
+            template: 'EventCover',
+            scope: $scope,
+            className: 'ngdialog-theme-plain',
+            controller: $controller('EventCoverCropCtrl', {
+                $scope: $scope
+            })
+        });
+    }
+});
+
+/*Event Cover Image crop*/
+evezownApp.controller('EventCoverCropCtrl', function ($scope, StoreService,$http, PATHS,ImageService,
+                                                      usSpinnerService, ngDialog, $routeParams, $rootScope) {
+    $scope.slideImage = {};
+    // Must be [x, y, x2, y2, w, h]
+    $scope.slideImage.coords = [100, 100, 200, 200, 100, 100];
+
+    $scope.slideImage.selected = function (coords) {
+        console.log("selected", coords);
+        $scope.slideImage.coords = coords;
+    };
+
+    // You can add a thumbnail if you want
+    $scope.slideImage.thumbnail = false;
+
+    $scope.slideImage.aspectRatio = 800 / 350;
+
+    $scope.slideImage.boxWidth = 350;
+
+    $scope.slideImage.cropConfig = {};
+
+    $scope.slideImage.cropConfig.aspectRatio = 800 / 350;
+
+    $scope.ChangeEventCoverImage = function () {
+
+       usSpinnerService.spin('spinner-1');
+        StoreService.uploadSlideImage(
+            getBase64Image($scope.slideImage.src),
+            $scope.slideImage.coords)
+            .then(function (data) {
+                $http.post(PATHS.api_url + 'users/events/image/update'
+                , {
+                    data: {
+                        image_name: data.imageName,
+                        event_id: $routeParams.event_id
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                }).
+                success(function (data, status, headers, config) {
+                    $rootScope.coverImage = "";
+                    ImageService.getImage(PATHS.api_url + 'users/events/' + $routeParams.event_id + '/cover_image/current').success(function(data){
+                    $rootScope.coverImage = PATHS.api_url +'image/show/'+data;
+                    toastr.success("Event Cover Updated");
+                    ngDialog.close("", data);
+                    });
+                    });
+                    
+            });
+    }
+
+    function getBase64Image(dataURL) {
+        // imgElem must be on the same server otherwise a cross-origin error will be
+        //  thrown "SECURITY_ERR: DOM Exception 18"
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    }
 
 });
 

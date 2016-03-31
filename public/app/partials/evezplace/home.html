@@ -3,161 +3,18 @@
 <div ng-include src='"partials/description/evezown.html"'>
 </div>
 <!--description text ends-->
-<div class="col-md-12" ng-include src='"partials/evezplace/product_menu.html"' ng-controller="ProductMenuController"></div>
+<div ng-include src='"partials/evezplace/create_browse_partial.html"'></div>
 
-<div class="row" id="promotion-section">
-    <div class="col-md-12">
-        <div class="col-md-8 large-cover-pic ">
-            <img ng-src="http://www.newfashioncorner.com/wp-content/uploads/2013/10/Women-Shoes-by-DSW-Designer-Shoe-warehouse-6.jpg"
-                 class="img-responsive" alt=""/>
+<div class="col-md-12" ng-include src='"partials/evezplace/product_menu.html"'
+     ng-controller="ProductMenuController"></div>
 
-            <div id="left-promotion">
-                <h5>Everything you need to know</h5>
+<div ng-include src='"partials/evezplace/promotion_partial.html"'></div>
 
-                <h3>Best place to buy accessories</h3>
-                <a class="btn btn-primary pull-right">Shop Now</a>
-            </div>
-        </div>
-        <div class="col-md-4 small-cover-pic">
-            <div class="small-cover-pic-top">
-                <img ng-src="http://trendymods.com/wp-content/uploads/2015/04/designer-trrendy-flat-shoes.jpg"
-                     class="img-responsive" alt=""/>
 
-                <div class="right-top-promotion">
-                    <h5>Best place to buy glassware</h5>
-                </div>
-            </div>
-            <div class="small-cover-pic-bottom">
-                <img ng-src="http://content5.videojug.com/b1/b1d9e94f-bb00-5010-4773-ff0008ca855a/how-to-shop-for-designer-shoes.WidePlayer.jpg"
-                     class="img-responsive" alt=""/>
-
-                <div class="right-bottom-promotion">
-                    <h5>Best place to buy designer shoes</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div ng-include src='"partials/evezplace/create_browse_partial.html"' ng-controller="CreateBrowseController"></div>
 
 <div class="row">
-<div class="col-xs-12 col-sm-9">
-<div class="evezplace-reco-products-section">
-
-    <div class="col-sm-12" style="padding-left: 0px" id="evezplace-reco-title">
-        <div class="col-sm-9">
-            <h5>EvezPlace Recommendations </h5>
-        </div>
-        <div class="col-sm-3" style="padding-right: 0px">
-            <!-- <a href="#store/products" class="btn btn-link pull-right">Show All <span
-                    class="fa fa-angle-right fa-2x pull-right"></span></a> -->
-            <a href="" class="btn btn-link pull-right">Show All <span
-                    class="fa fa-angle-right fa-2x pull-right"></span></a>
-        </div>
-    </div>
-    <div class="row" ng-controller="EvezplaceImages">
-        <div  ng-repeat="productLine in productLines">
-            <div ng-repeat="product in productLine.products">
-            <div class="col-md-3" ng-repeat="products in product.product_sk_u">
-            <div class="living_box">
-                <a href="#store/products/{{products.product_id}}">
-                    <img ng-src="{{imageUrl + products.product_images[0].image.large_image_url + '/600/600'}}" alt="" style="width: 100%;"
-                    class="img-responsive center-block">
-                </a>
-            </div>
-            <div class="col-sm-12 text-center" style="margin: 10px 0px; font-weight: 600">
-                <h4 style="color: #333333">{{product.title}}</h4>
-
-                <p style="color: #777777">&#8377; {{products.price}}</p>
-            </div>
-            </div>
-            </div>
-        </div>  
-    </div>
-</div>
-<div class="trending-products-section">
-    <div class="col-sm-12" style="padding-left: 0px" id="trending-products-title">
-        <div class="col-sm-9">
-            <h5>Trending This Month</h5>
-        </div>
-        <div class="col-sm-3" style="padding-right: 0px">
-            <!-- <a href="#store/products" class="btn btn-link pull-right">Show All <span
-                    class="fa fa-angle-right fa-2x pull-right"></span></a> -->
-            <a href="" class="btn btn-link pull-right">Show All <span
-                    class="fa fa-angle-right fa-2x pull-right"></span></a>
-        </div>
-    </div>
-    <div class="row" ng-controller="EvezplaceImages">
-        <div  ng-repeat="productLine in productLines2">
-            <div ng-repeat="product in productLine.products">
-            <div class="col-md-3" ng-repeat="products in product.product_sk_u">
-            <div class="living_box">
-                <a href="#store/products/{{products.product_id}}">
-                    <img ng-src="{{imageUrl + products.product_images[0].image.large_image_url + '/600/600'}}" alt="" style="width: 100%;"
-                    class="img-responsive center-block">
-                </a>
-            </div>
-            <div class="col-sm-12 text-center" style="margin: 10px 0px; font-weight: 600">
-                <h4 style="color: #333333">{{product.title}}</h4>
-
-                <p style="color: #777777">&#8377; {{products.price}}</p>
-            </div>
-            </div>
-            </div>
-        </div>  
-    </div>
-</div>
-</div>
-<div class="col-sx-12 col-sm-3" ng-controller="ArticlesNewsInterviewsCtrl">
-    <!--Articles-->
-    <div class="panel panel-primary panel-custom">
-        <div class="panel-heading panel-heading-custom">
-            <h3 class="panel-title">Related Articles</h3>
-        </div>
-        <div class="panel-body panel-body-custom">
-            <div class="interviews-section">
-                <div class="row" ng-repeat="article in articles | limitTo:6">
-                    <div class="col-md-12" style="text-align:justify;">
-                        <p>{{article.title}}<span style="color: #e50880"><a href="{{article.link}}" target="blank"> [Read More] </a></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Interviews-->
-    <div class="panel panel-primary panel-custom">
-        <div class="panel-heading panel-heading-custom">
-            <h3 class="panel-title">Interviews</h3>
-        </div>
-        <div class="panel-body panel-body-custom">
-            <div class="interviews-section">
-                <div class="row" ng-repeat="interview in interviews | limitTo:6">
-                    <div class="col-md-12" style="text-align:justify;">
-                        <p>{{interview.title}}<span style="color: #e50880"><a href="{{interview.link}}" target="blank"> [Read More] </a></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--News-->
-    <div class="panel panel-primary panel-custom">
-        <div class="panel-heading panel-heading-custom">
-            <h3 class="panel-title">News</h3>
-        </div>
-        <div class="panel-body panel-body-custom">
-            <div class="interviews-section">
-                <div class="row" ng-repeat="newsItem in news | limitTo:5">
-                    <div class="col-md-12" style="text-align:justify;">
-                        <p>{{newsItem.title}}<span style="color: #e50880"><a href="{{newsItem.link}}" target="blank"> [Read More] </a></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
+    <div ng-include src='"partials/evezplace/products_partial.html"'></div>
+    <div ng-include src='"partials/evezplace/article_news_interviews_partial.html"'></div>
 </div>
 
 <div ng-include src='"partials/video_interview_partial.html"'></div>

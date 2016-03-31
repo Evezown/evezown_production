@@ -2,10 +2,23 @@
  * Created by Viswanathan on 6/29/2015.
  */
 evezownApp
-    .controller('BrowseClassifiedsCtrl', function ($scope, usSpinnerService, ClassifiedsService, PATHS) {
+    .controller('BrowseClassifiedsCtrl', function ($scope, usSpinnerService,
+                                                   ClassifiedsService, EvezplaceHomeService,
+                                                   PATHS) {
         $scope.browseItems = [];
 
+
         $scope.ImageUrlPath = PATHS.api_url + 'image/show/';
+
+        function loadClassifieds(subCatId) {
+            ClassifiedsService.getClassifieds(subCatId).
+            then(function (data) {
+                console.log(data);
+                $scope.browseItems = data;
+            });
+        }
+
+        loadClassifieds(-1);
 
         $scope.$on('selectedSubCategory', function (event, args) {
             console.log(args.message.id);
@@ -18,60 +31,73 @@ evezownApp
                     $scope.browseItems = data;
                 });
         });
-    });
 
-evezownApp
-    .controller('ClassifiedDetailsCtrl', function ($scope, $routeParams, usSpinnerService,
-                                                   ClassifiedsService, PATHS, $location, ngDialog,
-                                                   $controller) {
-        var classifiedId = $routeParams.id;
+        $scope.classifiedSearchParams = {};
 
+        function getSearchCategories () {
 
-        $scope.shareUrl = function () {
-            return $location.absUrl();
-        };
-
-        $scope.shareHost = function () {
-            return $location.absUrl();
-        };
-
-        ClassifiedsService.getClassified(classifiedId).
-            then(function (data) {
-                console.log(data);
-
-                var imageUrlPath = PATHS.api_url + 'image/show/';
-                $scope.classifiedDetails = data;
-
-                $scope.classifiedDetails.classified_images = [];
-
-                $scope.classifiedDetails.classified_images.push(imageUrlPath + $scope.classifiedDetails.images[0].title_image_name);
-                $scope.classifiedDetails.classified_images.push(imageUrlPath + $scope.classifiedDetails.images[0].body_image1_name);
-                $scope.classifiedDetails.classified_images.push(imageUrlPath + $scope.classifiedDetails.images[0].body_image2_name);
-                $scope.classifiedDetails.classified_images.push(imageUrlPath + $scope.classifiedDetails.images[0].body_image3_name);
-                $scope.classifiedDetails.classified_images.push(imageUrlPath + $scope.classifiedDetails.images[0].body_image4_name);
-            });
-
-        $scope.ClassifiedRfiDialog = function (classifiedId) {
-            var classifiedRfiDialog = ngDialog.open(
-                {
-                    template: 'rfiClassifiedTemplateId',
-                    className: 'ngdialog-theme-plain',
-                    scope: $scope,
-                    controller: $controller('classifiedRfiCtrl', {
-                        $scope: $scope,
-                        classifiedId: classifiedId
-                    })
+            EvezplaceHomeService.getCategories(5)
+                .then(function (data) {
+                    $scope.categories = data;
                 });
+        }
 
-            classifiedRfiDialog.closePromise.then(function (data) {
+        $scope.getSearchSubCategories = function (categoryId) {
 
-                if (data.value.status) {
-                    toastr.success(data.message, 'Classified rfi submitted successfully.');
-                }
-            });
+            EvezplaceHomeService.getSubcategories(categoryId)
+                .then(function (data) {
+                    $scope.classifiedSearchParams.subCategories = data;
+                });
+        }
+
+        getSearchCategories();
+
+        function clearSearchParams () {
+            $scope.classifiedSearchParams = {};
+        }
+
+        $scope.clearSearchParams = function() {
+            clearSearchParams();
+        }
+
+        $scope.closeSearch = function() {
+            $scope.isAdvancedSearch = !$scope.isAdvancedSearch;
+            clearSearchParams();
+        }
+
+        $scope.searchClassifieds = function() {
+
+            ClassifiedsService.searchClassifieds($scope.classifiedSearchParams)
+                .then(function (data) {
+                    $scope.browseItems = data;
+                    $scope.isAdvancedSearch = !$scope.isAdvancedSearch;
+                    clearSearchParams();
+                });
         }
     });
 
+evezownApp.controller('classifiedProfileCtrl', function ($scope, usSpinnerService, ClassifiedsService, PATHS,$cookieStore,$routeParams) {
+
+    $scope.browseItems = [];
+    $scope.loggedInUserId = $cookieStore.get('userId');
+    $scope.currentUserId = $routeParams.id;
+    $scope.ImageUrlPath = PATHS.api_url + 'image/show/';
+    if($routeParams.id == undefined)
+    {
+        $scope.currentUserId = $scope.loggedInUserId;
+    }
+    $scope.getClassifiedsByUserId = function ()
+    {
+        ClassifiedsService.getClassifiedsByUserId($scope.currentUserId).
+        then(function (data)
+        {
+            console.log(data);
+            $scope.browseItems = data;
+        });
+    }
+
+    $scope.getClassifiedsByUserId();
+});
 evezownApp.controller('classifiedRfiCtrl', function ($scope, usSpinnerService, classifiedId,
                                                      ClassifiedsService, ngDialog) {
     console.log(classifiedId);

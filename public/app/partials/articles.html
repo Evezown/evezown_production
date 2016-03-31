@@ -1,12 +1,8 @@
-    <div class="row">
-        <h4 class="transparent-ribbon">Articles</h4>
-    </div>
 
-    <div class="interviews-section">
-        <div class="row" ng-repeat="article in articles">
-            <div class="col-md-12" style="text-align:justify;">
-                <p><b>{{article.title}}</b> - {{article.description}}... <span style="color: #e50880"><a href="{{article.link}}" target="blank">[Read More]</a></span></p>
-            </div>
-        </div>
+    <h4 class="transparent-ribbon text-center" style="color: #e51385;">Articles</h4>
+    <div class="interviews-section" ng-repeat="article in articles">
+        <p style="text-align:justify;font-size:12px;">
+            <a href="{{article.link}}" target="blank" style="text-decoration:none;font-size:13px;"><b>{{article.title | strLimit:35}}</b></a> - {{article.description | strLimit:120}}<br>
+        </p>    
     </div>
       

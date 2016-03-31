@@ -7,46 +7,61 @@
  * # ngCommentReccoRewoiceGrade
  */
 evezownApp
-    .directive('ngCommentReccoRewoiceGrade', function () {
+    .directive('ngCommentReccoRewoiceGrade', function (PATHS) {
+
         return {
-            templateUrl: 'app/scripts/directives/comment-recco-rewoice-grade.tpl.html',
+            templateUrl: 'scripts/directives/comment-recco-rewoice-grade.tpl.html',
             restrict: 'E',
             scope: {
-                comments: '=',
+                ngComments: '=',
+                ngCommentsMetadata: '=',
                 isComments: '=',
                 totalGrade: '=',
                 avgGrade: '=',
-                grades: '=',
+                userGrade: '=',
                 isGrades: '=',
-                isRestream : '=',
-                restreams : '='
+                isRestream: '=',
+                restreams: '=',
+                addComment: '&',
+                loadComments: '&',
+                updateComment: '&',
+                deleteComment: '&',
+                addGrade: '&',
+                addRestream: '&',
             },
-            controller: function($scope, StoreService) {
+            link: function ($scope, $elem, $attr) {
 
+                $scope.$watch('ngComments', function () {
+                    var newCommentElement = document.getElementById('new-comment');
+
+                    if (newCommentElement != null) {
+                        newCommentElement.value = "";
+                    }
+                });
+
+
+            },
+            controller: function ($scope, $log, $cookieStore) {
+
+                $scope.loggedInUserId = $cookieStore.get('userId');
+
+                $scope.editing = false;
+
+                // configuration for pagination control
+
+                $scope.pageChanged = function () {
+                    $log.log('Page changed to: ' + $scope.ngCommentsMetadata.pagination.current_page);
+                };
+
+                $scope.imageUrl = PATHS.api_url + 'image/show/';
                 $scope.isComments = true;
                 $scope.isGrades = true;
                 $scope.isRestream = true;
 
-                $scope.comments = null;
 
-                $scope.totalGrade = 0;
-
-                $scope.loadComments = function() {
+                $scope.toggleComments = function () {
                     $scope.isHideComments = !$scope.isHideComments;
                 };
-
-                $scope.updateLevels = function() {
-
-                };
-
-                $scope.getLevelsByUserId = function() {
-
-                };
-
-                $scope.addRestream = function() {
-
-                };
-
             }
         };
     });

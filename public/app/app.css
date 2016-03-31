@@ -10,6 +10,13 @@
 
 /* Font Awesome style end */
 
+/*This will turn off the spinner(increment/decrement) for input-type="number"*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /* Dynamic search input style start*/
 
 .search-form .form-group {
@@ -65,6 +72,29 @@
 
 /* Dynamic search input style end*/
 
+
+/* Products slider in store front prev next button style*/
+.slick-prev:before,
+.slick-next:before
+{
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+
+    opacity: .75;
+    color: #2F9673;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* Products slider in store front prev next button style end*/
+/*table height in admin newsletter user list*/
+.table-scroll {
+    max-height: 500px;
+    overflow: auto;
+}
+/*table height in admin newsletter user list ends*/
+
 /* Angular style override start */
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
@@ -78,6 +108,11 @@
 }
 
 @media (max-width: 768px) {
+
+    .table {
+        overflow-x: auto;
+        display: block;
+    }
 
     .navbar-default .navbar-toggle {
         margin-top: 40px;
@@ -115,6 +150,11 @@
     padding: 20px;
     margin-bottom: 20px;
     padding-bottom: 60px;
+}
+
+.promotion-jumbotron {
+    font-family: 'Raleway', sans-serif;
+    padding: 10px;
 }
 
 .home-jumbotron h1 {
@@ -231,7 +271,7 @@
     {
 
         display: inline-block; /*compensate for spaces in the source if using this*/
-        width: 20%; /* for 5 li's (100%/5)*/
+        width: 25%; /* for 4 li's (100%/4)*/
         margin: 0;
         padding: 0;
         text-align: center; /* optional */
@@ -419,7 +459,20 @@
 }
 
 /* Navbar styles end */
-
+/*Readmore button in article news interviews*/
+.Readmore
+{
+    border-radius: 8px;
+    font-family: Arial;
+    color: #000000;
+    background: #FFF5FF;
+}
+/*home page image in the description*/
+.description-img
+{
+    float: left;
+    margin: 0px 15px 0px 0px;
+}
 
 /*Spinner Style*/
 /*login*/
@@ -435,6 +488,59 @@ margin-top: -5px;
     margin-top: 5px;
 }
 /*Spinner Style ends*/
+
+.post-camera input
+{
+    opacity: 0;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    font-size: 0;
+    position: absolute;
+    margin-top:-22px; 
+}
+.post-camera span
+{
+    color:#E50880;
+}
+.post-camera span:hover
+{
+    color:#692668;
+}
+.post-img-wrap {
+    position: relative;
+    display: inline-block;
+    font-size: 0;
+}
+.post-img-wrap .close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    background-color: #FFF;
+    padding: 5px 2px 2px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: .2;
+    text-align: center;
+    font-size: 22px;
+    line-height: 10px;
+    border-radius: 50%;
+}
+.post-img-wrap:hover .close {
+    opacity: 1;
+}
+.custom-delete-button
+{
+    color: #C9302C;
+    background-color: #F7F7F7;
+    border:none;
+}
+.form-control
+{
+  border: 1px solid #AA9;
+}
 
 .btn-primary {
     background: #e50880;
@@ -527,6 +633,13 @@ margin-top: -5px;
 }
 
 /* Home screen styles start */
+
+.recommendation-box p {
+    font-weight: 400;
+    font-size: 16px;
+    color: #333333;
+    padding: 5px 0px;
+}
 
 .living_box {
     background: #ffffff;
@@ -769,6 +882,11 @@ h3.trending-item-title {
     background: #fafafa;
     box-shadow: 0px 0px 1px 0px #949393 ;
     margin-bottom: 10px;
+    padding: 10px 5px;
+}
+
+.feedback-section hr {
+    margin: 3px 15px;
 }
 
 /* Footer style starts */
@@ -846,6 +964,33 @@ body,
 
 /* Invite section ends*/
 
+
+/* Password strength indicator starts*/
+input.ng-pristine + ul#strength {
+    display:none;
+}
+ul#strength {
+    display:inline;
+    list-style:none;
+    margin:0;
+    margin-left:15px;
+    padding:0;
+    vertical-align:2px;
+}
+.point:last {
+    margin:0 !important;
+}
+.point {
+    background:#DDD;
+    border-radius:2px;
+    display:inline-block;
+    height:5px;
+    margin-right:1px;
+    width:20px;
+}
+/* Password strength indicator ends */
+
+
 /* Error section starts */
 
 .error-template {padding: 40px 15px;text-align: center;}
@@ -876,9 +1021,9 @@ body,
 /*  bhoechie tab */
 div.bhoechie-tab-container{
     z-index: 10;
+    padding-left:0px;
     background-color: #ffffff;
-    padding: 0 !important;
-    border-radius: 4px;
+    border-radius: 0px;
     -moz-border-radius: 4px;
     border:1px solid #ddd;
     margin-top: 0px;
@@ -891,7 +1036,6 @@ div.bhoechie-tab-container{
     filter: alpha(opacity=97);
 }
 div.bhoechie-tab-menu{
-    padding-right: 0;
     padding-left: 0;
     padding-bottom: 0;
 }
@@ -983,8 +1127,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     background: #2f9673;
     color : #ffffff;
     font-weight: bold;
-    margin-top: 30px;
-    padding: 5px 20px;
+    padding: 5px 20px 15px 0px;
     text-align: right;
 }
 
@@ -992,8 +1135,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     background: #f2ab14;
     color : #ffffff;
     font-weight: bold;
-    margin-top: 30px;
-    padding: 5px 20px;
+    padding: 5px 20px 15px 0px;
     text-align: right;
 }
 
@@ -1001,8 +1143,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     background: #f03157;
     color : #ffffff;
     font-weight: bold;
-    margin-top: 30px;
-    padding: 5px 20px;
+    padding: 5px 20px 15px 0px;
     text-align: right;
 }
 
@@ -1010,9 +1151,16 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     background: #a35f23;
     color : #ffffff;
     font-weight: bold;
-    margin-top: 30px;
-    padding: 5px 20px;
+    padding: 5px 20px 15px 0px;
     text-align: right;
+}
+
+/* Check box style */
+
+.checkbox-primary input[type="checkbox"]:checked + label::before,
+.checkbox-primary input[type="radio"]:checked + label::before {
+    background-color: #692668;
+    border-color: #692668;
 }
 
 /* Tag styles ends */
@@ -1026,7 +1174,20 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 
 .reco-image-gallery .thumbnail>img, .thumbnail a>img {
     width:100%;
-    min-height:150px;
+    min-height:115px;
+    max-height:115px;
+}
+
+.custom-text-over-image
+{
+    left: 0;
+    position:absolute;
+    text-align:center;
+    top: 50px;
+    width: 100%;
+    font-size:24px;
+    color:#ffffff;
+    font-weight: bold;
 }
 
 .reco-image {
@@ -1115,8 +1276,8 @@ canvas {
     -moz-box-shadow: 3px 3px 3px 0 #e3e3e3;
     box-shadow: 3px 3px 3px 0 #e3e3e3;
     border: 1px solid #c3c3c3;
-    width: 100%;
-    margin: 6px 0 0 6px;
+    width: 95%;
+    margin: 6px 0 0 0px;
 }
 
 .progress {
@@ -1480,10 +1641,7 @@ canvas {
     {
         font-size: 8px;
     }
-    .custom-streamIt
-    {
-        width:150%;
-    }/*woice/recco ends*/
+    /*woice/recco ends*/
     
 
     /*home page starts*/
@@ -1544,6 +1702,10 @@ canvas {
         margin-bottom: 50px;
     }
     .custom-invite-eves-button
+    {
+        margin-top: 10px;
+    }
+    .custom-user-button
     {
         margin-top: 10px;
     }

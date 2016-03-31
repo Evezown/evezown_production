@@ -1,32 +1,20 @@
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
-     role="alert" ng-controller="reccoController">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-    </button>
-    <h1>Advanced Search</h1>
-
-    <p>Find a post based on your search key or multiple filter criteria.</p>
-
-
-</div>
 <!-- Static navbar -->
 <nav class="navbar navbar-default" id="navContainer">
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="">
-                <a href="#profile/{{userId}}" class="{{isActive[1]}}">Evezsite</a>
+                <a href="#profile/{{userId}}" >Mysite</a>
             </li>
-            <li ng-class="{ active: isActive('/community')}"><a href="#community" >Build Community</a>
-            </li>
-            <li ng-class="{ active: isActive('/recco')}"><a href="#recco">Stream It</a></li>
+            <li ng-class="{ active: isActive('/streamit')}"><a href="#streamit">Stream It</a></li>
             <li ng-class="{ active: isActive('/explore')}">
                 <!-- Template which needs to be shown on click -->
                 <script type="text/ng-template" id="explore">
                     <div class="triangle"></div>
                     <div class="ns-popover-tooltip">
                         <ul>
-                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">EvezPlace</a></li>
-                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Wopportunity</a></li>
+                            
+                            <li style="padding: 5px; text-align: center"><a  href="#evezplace">MarketPlace</a></li>
+                            <li style="padding: 5px; text-align: center"><a  href="#wopportunity">Jobs</a></li>
                         </ul>
                     </div>
                 </script>
@@ -38,15 +26,26 @@
                     Explore
                 </a>
             </li>
-            <li ng-class="{ active: isActive('/search/advanced')}"><a href="#search/advanced"
-                                                                      id="search">Search&nbsp;<span
-                    class="fa fa-search" id="searchIcon"></span></a>
+            <li ng-class="{ active: isActive('/search/advanced')}"><a href="#search/advanced" class="{{isActive[4]}}" id="search">Search&nbsp;
+                <span class="fa fa-search" id="searchIcon"></span></a>
             </li>
         </ul>
     </div>
     <!--/.nav-collapse -->
 </nav>
-<div class="row" ng-controller="trending">
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron alert alert-dismissible inner-jumbotron shadow " ng-show="caption" id="no-border-round"
+     role="alert" ng-controller="reccoController">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    <h1>Advanced Search</h1>
+
+    <p>Find a post based on your search key or multiple filter criteria.</p>
+
+
+</div>
+
+<div class="row" ng-controller="searchController">
     <!-- Posting area start -->
     <div class="postingContainer">
         <div class="col-md-12">
@@ -65,8 +64,9 @@
                             </div>
                             <div class="col-md-3">
                                 <select class=" form-control" id="post-type"
-                                        ng-options="type as type.type for type in posttypes"
-                                        data-ng-model="selectedType">
+                                        data-ng-model="Search_type">
+                                    <option value="">--Select--</option>
+                                    <option ng-repeat= "type in PostTypes" value="{{type.id}}">{{type.type}}</option>
                                 </select>
                             </div>
                         </div>
@@ -77,8 +77,9 @@
                             </div>
                             <div class="col-md-3">
                                 <select class=" form-control" id="post-type"
-                                        ng-options="type as type.type for type in classifieds_types"
                                         data-ng-model="Search_classification">
+                                    <option value="">--Select--</option>
+                                    <option ng-repeat= "type in Classifications" value="{{type.id}}">{{type.type}}</option>
                                 </select>
                             </div>
                             
@@ -86,8 +87,9 @@
                                 <label>Choose brand</label>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control" ng-model="Search_Brand"
-                                    ng-options="brand as brand.title for brand in brands">
+                                <select class="form-control" ng-model="Search_brand">
+                                    <option value="">--Select--</option>
+                                <option ng-repeat= "brand in brands" value="{{brand.id}}">{{brand.title}}</option>
                                 </select>
                             </div>
                         </div>
@@ -101,10 +103,9 @@
                             </span>
 
                             <div class="col-md-3">
-                                <select class="form-control" id="category-type"
-                                        ng-options="category as category.category_name for category in categories"
-                                        ng-change="GetSubCategories()" data-ng-model="selectedOption">
-
+                                <select class="form-control" id="category-type" data-ng-model="Category"  ng-change="GetSubCategories()" >
+                                <option value="">--Select--</option>
+                                <option ng-repeat= "category in categories" value="{{category.id}}">{{category.category_name}}</option>
                                 </select>
                             </div>
 
@@ -112,10 +113,9 @@
                                 <label for="sub-category-type">choose sub category?</label>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control" id="sub-category-type"
-                                        ng-options="subcategory as subcategory.subcategory_name for subcategory in subcategories"
-                                        data-ng-model="selectedsubcategories">
-
+                                <select class="form-control" id="sub-category-type" data-ng-model="subcategory">
+                                <option value="">--Select--</option>
+                                <option ng-repeat= "subcategory in Subcategory" value="{{subcategory.id}}">{{subcategory.subcategory_name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                 <label for="price-range">Choose price range in &#8377;</label>
                             </div>
                             <div class="col-md-3">
-                                <input class="form-control" type="text" placeholder="eg: 1500 - 2500" id="price-range" ng-model="Search_price_range"/>
+                                <input class="form-control" type="text" placeholder="eg: 1500 - 2500" id="price-range" ng-model="Search_price"/>
                             </div>
                             
                             <div class="col-md-3">
@@ -146,6 +146,7 @@
 
                 <!-- Search results -->
                 <div class="col-md-12" id="searchResults" style="margin-bottom: 40px; margin-top: 15px">
+                    <div class="row search-result-section text-center" ng-if ="NoResult"><h4>No posts related to your search</h4></div>
                     <div class="row search-result-section">
                         <div class="col-md-12 trending-section" ng-repeat="post in postSearchResult">
                             <!--pro pic name and date-->

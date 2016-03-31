@@ -32,6 +32,7 @@ evezownApp
                 $rootScope.firstname = profileData.data.firstname;
                 $rootScope.lastname = profileData.data.lastname;
                 $rootScope.userId = profileData.data.id;
+                $rootScope.roleId = profileData.data.role_id;
                 $rootScope.loggedInUserId = $cookieStore.get('userId');
                 $rootScope.loggedIn = true;
             });
@@ -102,6 +103,8 @@ evezownApp
             $cookieStore.remove('api_key');
             $cookieStore.remove('userId');
             $cookieStore.remove('post');
+            $cookieStore.remove('userToken');
+            //userToken
             Session.destroy();
             $rootScope.loggedIn = false;
             $rootScope.firstname = null;
@@ -135,10 +138,11 @@ evezownApp
 
     });
 
-evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreService) {
+evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreService, PATHS) {
 
     $scope.shoppingCartItems = StoreService.getShoppingCartItems();
 
+    $scope.imageUrl = PATHS.api_url;
     console.log($scope.shoppingCartItems);
 
     $scope.isShoppingCartEmpty = StoreService.isShoppingCartEmpty();
