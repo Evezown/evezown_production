@@ -1,0 +1,109 @@
+<div class="container">
+    <span us-spinner="{radius:6, width:2, length: 2,color: '#e50880'}" spinner-key="spinner-1" spinner-start-active="true">
+
+    </span>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-8 col-xs-9 bhoechie-tab-container">
+            <div class="col-lg-2 col-md-2 col-sm-2 bhoechie-tab-menu">
+                <div 
+                ng-include src='"partials/admin/adminLeftMenu.html"'>
+                </div>
+   </div>
+
+   <div class="col-lg-10 col-md-10 col-sm-10 bhoechie-tab">
+    <!-- flight section -->
+
+    <div class="bhoechie-tab-content active">
+        <center>
+            <div class="table-responsive" ng-controller="AdminListUsers" ng-cloak="">
+                <table ng-table="userAdminTableParams" template-pagination="custom/pager" class="table table-bordred table-striped">
+                <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="search user" ng-model="evesearch"/>
+        </div>
+
+                    <tr ng-repeat="user in $data | filter:evesearch | orderBy:'firstname':true" class="text-center">
+                        <td data-title="'First Name'">{{user.firstname}} </td>
+                        <td data-title="'Last Name'">{{user.lastname}}</td>
+                        <td data-title="'Email'">{{user.email}}</td>
+                        <td>
+                            <p> <span ><a href ng-click="getPersonalInfo(user)" class="topic-link">Edit User</a>|</span>
+                            </p>
+                        </td>
+                        <td>
+                        <p> <span ><a href ng-click="DeleteuserDialog(user.id)" class="topic-link">Delete</a>|</span>
+                        </p>
+                        </td>
+                </table>
+                <script type="text/ng-template" id="custom/pager">
+                <ul class="pager ng-cloak">
+                <li ng-repeat="page in pages"
+                ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo; Previous</a>
+                <a ng-switch-when="next" ng-click="params.page(page.number)" href="">Next &raquo;</a>
+                </li>
+                <li>
+                <div class="btn-group">
+                <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+                <button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+                <button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+                <button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+                </div>
+                </li>
+                </ul>
+                </script>
+            </div>
+        </div>
+    </center>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-sm-4" ng-if="isComments">
+            <div class="commentStyle center-block">
+                <a href ng-click="loadComments()">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <span style="font-size: 14px; font-weight: 600">{{comments.length || 0}} Comments</span>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="col-sm-4" ng-if="isGrades">
+            <div class="rating-back">
+                <div class="ratingStyle text-center">
+                    <bold style="font-size: 12px">Grade It :</bold>
+            <span duo-stars value="{{getLevelsByUserId()}}"
+                  max="4" ng-click="updateLevels(rating)"
+                  data-ng-model="rating">
+            </span>
+                    <p>
+                        <small style="font-size: 12px">Average: 0
+                            Total: {{totalGrade}}
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4" ng-if="isRestream">
+            <div class="rewoiceStyle">
+                <a href ng-click="addRestream()">
+                    <span class="fa fa-share-square"></span>
+                    <span style="font-size: 14px; font-weight: 600">{{restreams}} restreams</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row show-comments" ng-if="isHideComments">
+
+    </div>
+</div>

@@ -1,0 +1,12 @@
+    <div class="row">
+        <h4 class="transparent-ribbon">Articles</h4>
+    </div>
+
+    <div class="interviews-section">
+        <div class="row" ng-repeat="article in articles">
+            <div class="col-md-12" style="text-align:justify;">
+                <p><b>{{article.title}}</b> - {{article.description}}... <span style="color: #e50880"><a href="{{article.link}}" target="blank">[Read More]</a></span></p>
+            </div>
+        </div>
+    </div>
+      
