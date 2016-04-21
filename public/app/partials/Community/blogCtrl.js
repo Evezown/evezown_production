@@ -700,9 +700,15 @@ evezownApp.controller('BlogCoverCropCtrl', function ($scope, StoreService,$http,
     $scope.slideImage.cropConfig.aspectRatio = 800 / 350;
 
     $scope.ChangeBlogCoverImage = function () {
-
-       usSpinnerService.spin('spinner-1');
-        StoreService.uploadSlideImage(
+        
+        if(!$scope.slideImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            StoreService.uploadSlideImage(
             getBase64Image($scope.slideImage.src),
             $scope.slideImage.coords)
             .then(function (data) {
@@ -723,7 +729,11 @@ evezownApp.controller('BlogCoverCropCtrl', function ($scope, StoreService,$http,
                     });
                     });
                     
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error(error.message, 'Please crop the image before upload');
             });
+        }
     }
 
     function getBase64Image(dataURL) {

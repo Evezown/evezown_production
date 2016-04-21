@@ -8,15 +8,19 @@ evezownApp
         $scope.profileMenuItems=[];
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.currentUserId = $routeParams.id;
+        $scope.Role = $cookieStore.get('userRole');
 
         $scope.profileMenuItems.push({
+            name: 'My Profile',
+            link : 'profile/myprofile/' + $routeParams.id
+          },{
             name: 'Recent Activity',
             link : 'profile/' + $routeParams.id
           });
        
         if($scope.loggedInUserId == $routeParams.id)
         {
-            $scope.profileMenuItems.push({name: 'Manage Mysite',
+            $scope.profileMenuItems.push({name: 'Create / Edit Profile',
             link : 'profile/' + $scope.loggedInUserId + '/personalinfo'},
             {
             name: 'Build Community',
