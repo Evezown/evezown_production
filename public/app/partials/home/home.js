@@ -4,7 +4,10 @@
 'use strict';
 
 evezownApp
-    .controller('LoginController', function ($scope, $rootScope, $cookieStore, $location, $http, PATHS, AUTH_EVENTS,AuthService, ngDialog, usSpinnerService) {
+    .controller('LoginController', function ($scope, $rootScope, $cookieStore, $location, $http, PATHS,
+                                             AUTH_EVENTS, AuthService, ngDialog, usSpinnerService, $auth, 
+                                              $routeParams, $filter, $controller, StoreService) {
+                                                     
       
         $scope.title = "Login to Evezown";
 
@@ -51,6 +54,34 @@ evezownApp
             }
         }
 
+        $scope.authenticate = function(provider) {
+            
+          $auth.authenticate(provider)
+            .then(function(data) {
+                console.log(data);
+                AuthService.setUserDetails(data);
+
+                $cookieStore.put('api_key', Session.api_key);
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                toastr.success('Login', 'You have logged in successfully');
+                $location.path('/profile/myprofile/'+ $cookieStore.get('userId'));
+
+            })
+            .catch(function(error) {
+                console.log(error);
+              if (error.error) {
+                // Popup error - invalid redirect_uri, pressed cancel button, etc.
+                toastr.error(error.error);
+              } else if (error.data) {
+                // HTTP response error from server
+                toastr.error(error.data.message, error.status);
+              } else {
+                toastr.error(error);
+              }
+            });
+        };
+
+
         $scope.login = function (credentials) {
             usSpinnerService.spin('spinner-1');
             if (credentials.remember) {
@@ -92,6 +123,8 @@ evezownApp
                 $location.path('/login');
             });
         };
+
+
     });
 
 evezownApp
@@ -127,7 +160,7 @@ evezownApp
     });
 
 evezownApp
-    .controller('HomeController', function ($rootScope, $scope, AuthService, $cookieStore, ArticleService) {
+    .controller('HomeController', function ($rootScope, $scope, AuthService, $cookieStore, ArticleService, $http, PATHS) {
         $scope.caption = true;
         $scope.carouselTitle = "Evezown";
 
@@ -190,6 +223,22 @@ evezownApp
 
         $scope.ShouldAutoStart = false;
 
+
+        $scope.GetCaptions = function(id)
+        {
+           
+            $http.get(PATHS.api_url + 'admin/'+ $cookieStore.get('userId')  +'/'+ id +'/getscreenfields').
+            success(function (data, status, headers, config)
+            {
+                console.log(data);
+                $scope.LandingCaptions = data.data;
+            }).error(function (data)
+            {
+                console.log(data);
+            });
+        }
+        $scope.GetCaptions(3);
+
     });
 
 evezownApp.controller('HomeProductMenuController', function ($rootScope, $scope, $location, EvezplaceHomeService, $routeParams) {
@@ -241,7 +290,7 @@ evezownApp.controller('HomeProductMenuController', function ($rootScope, $scope,
 
 
 evezownApp
-    .controller('ArticlesNewsInterviewsCtrl', function ($scope, ArticleService, BlogService, EventService, ForumService, PATHS) {
+    .controller('ArticlesNewsInterviewsCtrl', function ($scope, ArticleService, BlogService, EventService, ForumService, $http, $cookieStore, PATHS) {
 
         $scope.isShowMoreVideos = false;
 
@@ -309,6 +358,21 @@ evezownApp
                 });
             }
         }
+
+        $scope.GetCaptions = function(id)
+        {
+           
+            $http.get(PATHS.api_url + 'admin/'+ $cookieStore.get('userId')  +'/'+ id +'/getscreenfields').
+            success(function (data, status, headers, config)
+            {
+                console.log(data);
+                $scope.VideoPartialCaptions = data.data;
+            }).error(function (data)
+            {
+                console.log(data);
+            });
+        }
+        $scope.GetCaptions(3);
 
         // Show more video click toggle
         $scope.showMoreVideos = function () {

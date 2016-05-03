@@ -354,26 +354,8 @@ class UsersController extends AppController
 
             $limit = Input::get('limit') ?: 10;
 
-            $invites = Invite::where('referrer_email', $UserEmail)->paginate($limit);
+            $invites = Invite::with('user')->where('referrer_email', $UserEmail)->paginate($limit);
             
-            if (!$invites->isEmpty()) 
-            {
-                foreach ($invites as $key => $value)
-                {
-                  if(empty($value->claimed_at))
-                  {
-                    $check_invite_exist = User::where('email', $value->email)->first();
-
-                    if(!$check_invite_exist)
-                    {
-                      $value->status = 'Pending';
-                    }else{
-                      $value->status = 'Registered';
-                    }
-                  }
-               }
-            }
-
             if (!$invites) {
                 return $this->responseNotFound('Invites Not Found!');
             }
@@ -410,7 +392,7 @@ class UsersController extends AppController
             $NewPass = $inputArray['new_password'];
             $ConfirmPass = $inputArray['confirm_password'];
             
-            $OldPass = DB::select('select password from users where id =?', [$Userid]);
+            $OldPass = DB::select('select password, email from users where id =?', [$Userid]);
             $OldPassword = $OldPass[0]->password;
            
             if (Hash::check($CurrentPass, $OldPassword)) {
@@ -420,6 +402,17 @@ class UsersController extends AppController
                 DB::table('users')
                     ->where('id', $Userid)
                     ->update(array('password' => $Encpt));
+
+                //Send email to user.
+                $emailUser = array(
+                    'email' => $OldPass[0]->email
+                );
+
+                Mail::send('emails.passwordChanged', [], function ($message) use ($emailUser) {
+                    $message->from('Editor@evezown.com', 'Evezown Team');
+                    $message->to($emailUser['email'])->subject('Evezown password changed');
+                });
+
                 return $this->setStatusCode(200)->respond("Password Changed Successfully");
             
             }else{
@@ -471,7 +464,7 @@ class UsersController extends AppController
                 Mail::send('emails.forgotPassword', $data, function($message) use ($user)
                 {
                     $message->from('admin@evezown.com', 'Evezown Team');
-                    $message->to($user['receiver'], $user['receiver'])->subject('Evezown.com Password Assistance');
+                    $message->to($user['receiver'], $user['receiver'])->subject('Reset your password');
                 });
                 return $this->setStatusCode(200)->respond("An email has been sent to the registered emailid");
 
@@ -495,7 +488,7 @@ class UsersController extends AppController
             $inputArray = $input['data'];
             $NewPass = $inputArray['Newpassword'];
             $Code = $inputArray['Code'];
-            $CheckUser = DB::select('select id from users where md5(90*13+id) = ?', [$Code]);
+            $CheckUser = DB::select('select id, email from users where md5(90*13+id) = ?', [$Code]);
             $CheckUserID = $CheckUser[0]->id;
             
             if($CheckUser == null)
@@ -509,6 +502,18 @@ class UsersController extends AppController
                 DB::table('users')
                     ->where('id', $CheckUserID)
                     ->update(array('password' => $Encpt));
+                
+
+                //Send email to user.
+                $emailUser = array(
+                    'email' => $CheckUser[0]->email
+                );
+
+                Mail::send('emails.passwordChanged', [], function ($message) use ($emailUser) {
+                    $message->from('Editor@evezown.com', 'Evezown Team');
+                    $message->to($emailUser['email'])->subject('Evezown password changed');
+                });
+
                 return $this->setStatusCode(200)->respond("Reset Password Successful");
             }
             
@@ -563,8 +568,13 @@ class UsersController extends AppController
      *
      * @return  Illuminate\Http\Response
      */
-    public function logout()
+    public function logout($id)
     {
+
+        $user = User::find($id);
+        $user->online_status = 0;
+        $user->save();
+
         Confide::logout();
 
         return $this->setStatusCode(200)->respond("Logged out successfully!");
@@ -930,5 +940,24 @@ class UsersController extends AppController
             return $this->setStatusCode(500)->respondWithError('Error occured!');
         }
     }
+
+
+    public function checkforPasswordField(){
+
+        try{
+
+            $data     = Input::all();
+            $user_id  = $data['user_id'];
+
+            $checkforPassword = User::where('id', $user_id)->where('password', '')->pluck('id');
+
+            return $checkforPassword;
+
+        }catch (Exception $e){
+             return $this->setStatusCode(500)->respondWithError('Error occured!');  
+        }
+        
+    }
+
 
 }

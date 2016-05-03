@@ -77,6 +77,20 @@ evezownApp
         });
 
 
+        $scope.GetCaptions = function(id)
+        {
+           
+            $http.get(PATHS.api_url + 'admin/'+ $cookieStore.get('userId')  +'/'+ id +'/getscreenfields').
+            success(function (data, status, headers, config)
+            {
+                console.log(data);
+                $scope.FooterCaptions = data.data;
+            }).error(function (data)
+            {
+                console.log(data);
+            });
+        }
+        $scope.GetCaptions(2);
         //AuthService.getProfileImage(PATHS.api_url + 'users/' + $cookieStore.get('userId') + '/profile_image/current').success(function(data) {
         //    $scope.profileImage = PATHS.api_url + 'image/show/' + data;
         //});
@@ -100,8 +114,21 @@ evezownApp
 
         //clear cookies and sessions
         $scope.Logout = function () {
+
+            $http.get(PATHS.api_url + 'users/' + $scope.loggedInUserId + '/logout')
+            .success(function (data)
+            {
+                    console.log(data);
+            })
+            .error(function (err)
+            {
+                console.log(err);
+
+            });
+
             $cookieStore.remove('api_key');
             $cookieStore.remove('userId');
+            $cookieStore.remove('userRole');
             $cookieStore.remove('post');
             $cookieStore.remove('userToken');
             //userToken
@@ -138,7 +165,7 @@ evezownApp
 
     });
 
-evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreService, PATHS) {
+evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreService, PATHS, $http, $rootScope) {
 
     $scope.shoppingCartItems = StoreService.getShoppingCartItems();
 
@@ -151,7 +178,7 @@ evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreServic
 
     $scope.totalPrice = 0;
     $scope.totalShipping = 0;
-    $scope.shoppingCartCount = 0;
+    $rootScope.shoppingCartCount = 0;
 
     angular.forEach($scope.shoppingCartItems, function(value) {
         angular.forEach(value.products, function(product) {
@@ -159,7 +186,7 @@ evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreServic
             $scope.totalShipping = +$scope.totalShipping + +product.shippingCharge;
         });
 
-        $scope.shoppingCartCount = +$scope.shoppingCartCount + +value.products.length;
+        $rootScope.shoppingCartCount = +$rootScope.shoppingCartCount + +value.products.length;
     });
 
     $scope.shoppingCartPopover = {
@@ -205,7 +232,7 @@ evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreServic
         $scope.totalShipping = 0;
 
         $scope.shoppingCartItems = shoppingCartItems;
-        $scope.shoppingCartCount = 0;
+        $rootScope.shoppingCartCount = 0;
 
         angular.forEach($scope.shoppingCartItems, function(value) {
             angular.forEach(value.products, function(product) {
@@ -215,6 +242,24 @@ evezownApp.controller('TopMenuCtrl', function ($scope, $cookieStore, StoreServic
             $scope.shoppingCartCount = +$scope.shoppingCartCount + +value.products.length;
         });
 
-        $scope.isShoppingCartEmpty = !($scope.shoppingCartItems != null && $scope.shoppingCartItems.length > 0);
-    });
+         });
+
+    $scope.GetCaptions = function(id)
+        {
+           
+            $http.get(PATHS.api_url + 'admin/'+ $cookieStore.get('userId')  +'/'+ id +'/getscreenfields').
+            success(function (data, status, headers, config)
+            {
+                console.log(data);
+                $scope.TopMenuCaptions = data.data;
+            }).error(function (data)
+            {
+                console.log(data);
+            });
+        }
+    $scope.GetCaptions(1);
+
+        
+    
+
 });

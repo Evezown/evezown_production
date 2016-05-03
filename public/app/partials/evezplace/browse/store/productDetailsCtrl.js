@@ -5,7 +5,7 @@
 
 evezownApp.controller('ProductDetailsCtrl', function ($scope, $rootScope, ngDialog, $filter,
                                                       $controller, StoreService, $location,
-                                                      $routeParams, PATHS, $cookieStore) {
+                                                      $routeParams, PATHS, $cookieStore, $http) {
 
     $scope.imageUrl = PATHS.api_url + 'image/show/';
 
@@ -15,6 +15,7 @@ evezownApp.controller('ProductDetailsCtrl', function ($scope, $rootScope, ngDial
 
     $scope.productSkuVariants = null;
 
+    $scope.PageSource = $routeParams.pagesrc;
 
     $scope.productDetails.hasRelatedProducts = false;
 

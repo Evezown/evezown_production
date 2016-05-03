@@ -7,6 +7,8 @@ evezownApp
         $scope.loggedInUserId = $cookieStore.get('userId');
         $scope.currentUserId = $routeParams.id;
         $scope.carouselTitle = "Evezown";
+        $scope.Role = $cookieStore.get('userRole');
+        
         if ($routeParams.id != undefined) {
             $scope.currentUserId = $routeParams.id;
         }
@@ -60,15 +62,31 @@ evezownApp
                     $scope.currentProfileImage = AuthService.getImage();
                 });
             });
+            $location.hash('view');
         }
 
         function getStoresByOwnerId() {
-            $http.get(PATHS.api_url + 'stores/owner/' + $scope.currentUserId + '/get').
+            //if loggedin user then get all stores
+            if($scope.loggedInUserId == $scope.currentUserId)
+            {
+                $http.get(PATHS.api_url + 'stores/owner/' + $scope.currentUserId + '/get').
                 success(function (data) {
                     $scope.browseMyItems = data;
                 }).then(function () {
 
                 });
+            }
+            //if visiting friends profile, show active stores only
+            else
+            {
+                $http.get(PATHS.api_url + 'stores/owner/guestuser/' + $scope.currentUserId + '/get').
+                success(function (data) {
+                    $scope.browseMyItems = data;
+                }).then(function () {
+
+                });
+            }
+            
         }
 
         getStoresByOwnerId();
@@ -561,13 +579,19 @@ evezownApp
 
 /*Profile picture crop*/
 evezownApp
-    .controller('ProfileImageCrop', function ($scope, AuthService, ngDialog, $location, $controller, $http, $cookieStore, PATHS, FileUploader, $rootScope, $routeParams) {
+    .controller('ProfileImageCrop', function ($scope, AuthService, ngDialog, $location, $controller, $http, $cookieStore, PATHS, FileUploader, $rootScope, $routeParams, usSpinnerService) {
 
         if ($routeParams.id != undefined) {
             $scope.profileImage = "";
             $scope.currentUserId = $routeParams.id;
             AuthService.getProfileImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/profile_image/current').success(function(data) {
-            $scope.profileImage = PATHS.api_url + 'image/show/' + data +'/250/250';
+                
+                if (data.toLowerCase().indexOf("http") >= 0){
+                    $scope.profileImage = data;
+                }else{
+                    $scope.profileImage = PATHS.api_url + 'image/show/' + data +'/250/250';
+                }
+            
             });
         }
         else {
@@ -686,17 +710,25 @@ evezownApp.controller('LeftCoverCtrl', function ($scope, StoreService,$http, PAT
     // You can add a thumbnail if you want
     $scope.slideImage.thumbnail = false;
 
-    $scope.slideImage.aspectRatio = 800 / 350;
+    $scope.slideImage.aspectRatio = 393 / 220;
 
-    $scope.slideImage.boxWidth = 350;
+    $scope.slideImage.boxWidth = 393;
+
+    $scope.slideImage.boxHeight = 220;
 
     $scope.slideImage.cropConfig = {};
 
-    $scope.slideImage.cropConfig.aspectRatio = 800 / 350;
+    $scope.slideImage.cropConfig.aspectRatio = 393 / 220;
 
     $scope.LeftCoverImage = function () {
-        usSpinnerService.spin('spinner-1');
-        StoreService.uploadSlideImage(
+        if(!$scope.slideImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            StoreService.uploadSlideImage(
             getBase64Image($scope.slideImage.src),
             $scope.slideImage.coords)
             .then(function (data) {
@@ -710,13 +742,17 @@ evezownApp.controller('LeftCoverCtrl', function ($scope, StoreService,$http, PAT
                 }).
                 success(function (data, status, headers, config) {
                     ImageService.getImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/left_image/current').success(function (data) {
-                    $scope.leftCoverImage = PATHS.api_url + 'image/show/' + data;
+                    $scope.leftCoverImage = PATHS.api_url + 'image/show/' + data +'/393/220';
                     toastr.success("Left Cover Updated");
                     ngDialog.close("", data);
                     });
                     });
                     
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error('Please crop the image before upload');
             });
+        }
     }
 
     function getBase64Image(dataURL) {
@@ -741,17 +777,25 @@ evezownApp.controller('BottomCoverCtrl', function ($scope, StoreService,$http, P
     // You can add a thumbnail if you want
     $scope.slideImage.thumbnail = false;
 
-    $scope.slideImage.aspectRatio = 383 / 220;
+    $scope.slideImage.aspectRatio = 383 / 216;
 
-    $scope.slideImage.boxWidth = 350;
+    $scope.slideImage.boxWidth = 383;
+
+    $scope.slideImage.boxHeight = 216;
 
     $scope.slideImage.cropConfig = {};
 
-    $scope.slideImage.cropConfig.aspectRatio = 800 / 350;
+    $scope.slideImage.cropConfig.aspectRatio = 383 / 216;
 
     $scope.BottomCoverImage = function () {
-        usSpinnerService.spin('spinner-1');
-        StoreService.uploadSlideImage(
+        if(!$scope.slideImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            StoreService.uploadSlideImage(
             getBase64Image($scope.slideImage.src),
             $scope.slideImage.coords)
             .then(function (data) {
@@ -765,12 +809,16 @@ evezownApp.controller('BottomCoverCtrl', function ($scope, StoreService,$http, P
                 }).
                 success(function (data, status, headers, config) {
                     ImageService.getImage(PATHS.api_url + 'users/' + $scope.currentUserId + '/bottom_image/current').success(function (data) {
-                    $scope.bottomCoverImage = PATHS.api_url + 'image/show/' + data;
+                    $scope.bottomCoverImage = PATHS.api_url + 'image/show/' + data +'/393/216';
                     toastr.success("Bottom Cover Updated");
                     ngDialog.close("", data);
                     });
                     });         
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error('Please crop the image before upload');
             });
+        }
     }
 
     function getBase64Image(dataURL) {
@@ -795,17 +843,25 @@ evezownApp.controller('RightCoverCtrl', function ($scope, StoreService,$http, PA
     // You can add a thumbnail if you want
     $scope.slideImage.thumbnail = false;
 
-    $scope.slideImage.aspectRatio = 1200 / 700;
+    $scope.slideImage.aspectRatio = 803 / 452;
 
-    $scope.slideImage.boxWidth = 350;
+    $scope.slideImage.boxWidth = 500;
+
+    $scope.slideImage.boxHeight = 452;
 
     $scope.slideImage.cropConfig = {};
 
-    $scope.slideImage.cropConfig.aspectRatio = 1200 / 700;
+    $scope.slideImage.cropConfig.aspectRatio = 803 / 452;
 
     $scope.RightCoverImage = function () {
-        usSpinnerService.spin('spinner-1');
-        StoreService.uploadSlideImage(
+        if(!$scope.slideImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            StoreService.uploadSlideImage(
             getBase64Image($scope.slideImage.src),
             $scope.slideImage.coords)
             .then(function (data) {
@@ -824,7 +880,11 @@ evezownApp.controller('RightCoverCtrl', function ($scope, StoreService,$http, PA
                     ngDialog.close("", data);
                     });
                     });  
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error('Please crop the image before upload');
             });
+        } 
     }
 
     function getBase64Image(dataURL) {
@@ -848,17 +908,24 @@ evezownApp.controller('EvezsiteImageCtrl', function ($scope, AuthService, StoreS
     // You can add a thumbnail if you want
     $scope.slideImage.thumbnail = false;
 
-    $scope.slideImage.aspectRatio = 400 / 300;
+    $scope.slideImage.aspectRatio = 300 / 200;
 
-    $scope.slideImage.boxWidth = 350;
+    $scope.slideImage.boxWidth = 300;
+    $scope.slideImage.boxHeight = 200;
 
     $scope.slideImage.cropConfig = {};
 
-    $scope.slideImage.cropConfig.aspectRatio = 400 / 300;
+    $scope.slideImage.cropConfig.aspectRatio = 300 / 200;
 
     $scope.UpdateEvezsiteImage = function () {
-        usSpinnerService.spin('spinner-1');
-        StoreService.uploadSlideImage(
+        if(!$scope.slideImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            StoreService.uploadSlideImage(
             getBase64Image($scope.slideImage.src),
             $scope.slideImage.coords)
             .then(function (data) {
@@ -879,7 +946,11 @@ evezownApp.controller('EvezsiteImageCtrl', function ($scope, AuthService, StoreS
                     ngDialog.close("", data);
                     });
                     });
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error('Please crop the image before upload');
             });
+        }
     }
 
     function getBase64Image(dataURL) {

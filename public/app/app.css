@@ -1,5 +1,4 @@
 /* Font Awesome style start */
-
 #bottom-nav .fa {
     color: #e50880;
 }
@@ -88,12 +87,20 @@ input[type=number]::-webkit-outer-spin-button {
     -moz-osx-font-smoothing: grayscale;
 }
 /* Products slider in store front prev next button style end*/
-/*table height in admin newsletter user list*/
+
+/*Admin*/
+/*Admin news letter table scroll*/
 .table-scroll {
     max-height: 500px;
     overflow: auto;
 }
-/*table height in admin newsletter user list ends*/
+
+/*admin user list*/
+.userlist.ng-table th
+{
+    text-align: left;
+}
+/*Admin ends*/
 
 /* Angular style override start */
 
@@ -474,12 +481,18 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0px 15px 0px 0px;
 }
 
+/*product catalogue color picker*/
+.colorpicker.dropdown
+{
+    z-index:99999;
+}
+
 /*Spinner Style*/
 /*login*/
 .spinner-style .spinner
 {
 margin-left: -40px;
-margin-top: -5px;
+margin-top: 10px;
 }
 /*stream it*/
 .streamit-spinner-style .spinner
@@ -1241,7 +1254,6 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 .commentdetailsSection
 {
     right: 20px;
-    bottom:20px;
 }
 
 .times-ago1
@@ -1521,7 +1533,7 @@ canvas {
 .introjs-tooltip {
     /*bottom: -450px;*/
     left: -5px;
-    text-align:justify;
+    /*text-align:justify;*/
     max-width: 450px;
     min-width: 190px;
 }
@@ -1576,7 +1588,7 @@ canvas {
     .spinner-style .spinner
     {
     margin-left: -48px;
-    margin-top: 34px;
+    margin-top: -15px;
     }
     /*Spinner Style ends*/
 

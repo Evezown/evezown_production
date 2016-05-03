@@ -7,7 +7,7 @@
  * # createBrowseController
  * Controller of the appApp
  */
-evezownApp.controller('createBrowseController', function ($scope, $rootScope, SECTIONS) {
+evezownApp.controller('createBrowseController', function ($scope, $rootScope, $cookieStore, SECTIONS, $location) {
 
     $scope.storeType = "Stores";
 
@@ -36,4 +36,16 @@ evezownApp.controller('createBrowseController', function ($scope, $rootScope, SE
         $scope.isClassified = index == SECTIONS.classifieds;
         $scope.isProductPlusService = index == SECTIONS.productPlusServices;
     });
+
+    $scope.SearchProducts = function (SearchValue)
+    {
+        if(SearchValue == undefined || SearchValue == "")
+        {
+            toastr.error('Please enter any product name');
+        }
+        else
+        {
+            $location.path('/search/products/' + SearchValue);
+        }
+    }
 });

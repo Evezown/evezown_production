@@ -3,7 +3,7 @@
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li>
-                <a href="#profile/{{userId}}" class="{{isActive[0]}}" ng-class="{ active: isActive('/profile')}">Mysite</a>
+                <a href="#profile/myprofile/{{userId}}" class="{{isActive[0]}}" ng-class="{ active: isActive('/profile')}">Mysite</a>
             </li>
             
             <li ng-if="loggedInUserId == currentUserId">
@@ -123,19 +123,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h3>About Me</h3>
+            </div>
 
-                    <p style="text-align:justify;padding-bottom:10px;">{{ aboutme }}</p>
-                </div>
+            <div class="col-md-12"  id="view">
+                <h3>About Me</h3>
+                <p style="text-align:justify;padding-bottom:10px;">{{ aboutme }}</p>
             </div>
 
         </div>
+        
         <div class="col-md-2 user-menu-btns" ng-include src='"partials/profile/profileLeftMenu.html"'>
             
         </div>
 <div class="col-md-10 user-menu user-pad"  ng-controller="albums">
     <div class="col-md-12 panel-heading">
+    	<div class="col-md-12 panel-heading" style="padding-left: 0px;padding-right: 0px;">
+	        <div class="fragment">
+	            <a><span id='close' onclick='this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); return false;'>x</span></a>
+	            <h4 style="color: #369;font-family:'Raleway', sans-serif;font-size:18px;font-weight:500;">Gallery</h4>
+	            <p>
+	                This is a photo gallery to showcase yourself, your venture, business and aspirations, share with your circles, audience, your can choose.
+	            </p>
+	        </div>
+	    </div>
         <div class="col-md-2">
             <h4>
                Gallery ({{myAlbums.length}})
@@ -169,9 +179,10 @@
     <div class="ngdialog-buttons popuptemplate" ng-controller="albums">
         <h4>Add album</h4>
         <input class="form-control" type="text" placeholder="Album Title"
-               id="circle" ng-model="album" style="margin-bottom: 10px; height: 50px; font-size: 18px"/>
+               id="circle" ng-model="album" maxlength="100" style="margin-bottom: 10px; height: 50px; font-size: 18px"/>
+               <span class="pull-right" ng-hide="album == dirty">{{100 - album.length}}</span>
         <textarea class="form-control" rows="4" placeholder="Album Description (optional)"
-                  ng-model="description"/>
+                  ng-model="description"/><br>
         <button class="btn primary pull-right form-control" type="button" ng-click="SaveAlbum()">Add</button>
     </div>
 </script>

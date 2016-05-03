@@ -117,10 +117,10 @@
     </div>
 
 </div>
-<div class="col-md-12" style="margin-top: 10px;">
+<div class="col-md-12" id="view" style="margin-top: 10px;">
     <ul class="breadcrumb" style="background: transparent; padding-left: 0px" >
         <li><a href="#home">Home</a> <span class="divider"></span></li>
-        <li><a href="#profile/{{userId}}">Profile</a></li>
+        <li><a href="#profile/myprofile/{{userId}}">Profile</a></li>
         <li class="active">Details</li>
     </ul>
 </div>
@@ -132,7 +132,7 @@
         <a href="#profile/{{userId}}/enhance" class="btn btn-block btn-default active">
             <p>Enhance Profile Page</p>
         </a>
-        <a href="#profile/{{userId}}/change_password" class="btn btn-default">
+        <a href="#profile/{{userId}}/change_password" class="btn btn-default" ng-show="checkforPasswordField">
             <p>Change Password</p>
         </a>
         <a href="#profile/{{userId}}/myonline" class="btn btn-default ">
@@ -160,12 +160,16 @@
 </div>
 
 <div class="col-md-10 user-menu user-pad" ng-controller="profileDetailsCtrl">
+	<div class="col-md-12 panel-heading" style="padding-left: 0px;padding-right: 0px;">
+        
+    </div>
     <div class="signup-section">
         <form>
             <div class="form-group">
                 <textarea placeholder="About me" name="aboutme" id="aboutme" class="form-control input-lg"
-                          tabindex="5" ng-model="enhancedProfile.aboutme">
+                          tabindex="5" ng-model="enhancedProfile.aboutme" maxlength="255">
                 </textarea>
+                <span class="pull-right" ng-hide="enhancedProfile.aboutme == dirty" style="color:#E50880;">{{255 - enhancedProfile.aboutme.length}}</span>
             </div>
             <div class="row">
                 <div class="form-horizontal col-md-12">
@@ -215,7 +219,7 @@
             <div class="col-xs-12 form-group">
                 <div class="fileUpload btn btn-primary">
                     <span><i class="fa fa-cloud-upload"></i>Any special uploads you want to show case </span>
-                    <input type="file" class="upload" name="image" nv-file-select="" uploader="uploader"
+                    <input type="file" class="upload" name="image" nv-file-select="" uploader="uploader4"
                            multiple/>
                 </div>
             </div>

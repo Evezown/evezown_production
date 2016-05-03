@@ -35,7 +35,8 @@ class UserRepository
         ));
 
         // Role of User associated to registering member.
-        $role = Role::find(3);
+        $roleId = array_get($input, 'role');
+        $role = Role::find($roleId);
 
         $user = User::find($user->id);
         $user->attachRole( $role );
@@ -63,7 +64,11 @@ class UserRepository
             $input['password'] = null;
         }
 
-        Event::listen('auth.login', function($user){ $user->last_login = new DateTime; $user->save();});
+        Event::listen('auth.login', function($user){ 
+            $user->last_login    = new DateTime; 
+            $user->online_status = 1;
+            $user->save();
+        });
 
 
         return Confide::logAttempt($input, Config::get('confide::signup_confirm'));
@@ -589,6 +594,8 @@ class UserRepository
     public function getUserProfileDetailsOnLogin($input)
     {
         $result = Confide::getUserByEmailOrUsername($input);
+
+        $this->login($input);
 
         $user = User::with('profile')->find($result->id);
 

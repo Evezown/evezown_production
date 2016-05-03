@@ -28,7 +28,11 @@ Route::get('payupaymentsuccess/payupaymentsuccess', function () {
 
 Route::group(array('prefix' => 'v1'), function () {
 
-	
+    // OAuth, Social Login Routes.
+    Route::post('auth/facebook', 'AuthController@facebook');
+    Route::post('auth/google', 'AuthController@google');
+    Route::post('auth/linkedin', 'AuthController@linkedin');
+
     Route::get('mail/send', 'AdminController@sendMail');
     Route::get('admin/{admin_id}/users', 'AdminController@getUsers');
     Route::get('admin/{admin_id}/evezplace/sections', 'AdminController@getEvezplaceSections');
@@ -71,9 +75,13 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::get('videos/more', 'AdminController@getMoreVideos');
 
     Route::post('admin/{admin_id}/users/userAction', 'AdminController@userAction');
-    
+        
     //Creating a post URL for order success.
-   Route::post('order/success/posturl', 'OrderController@orderSuccess');
+    Route::post('order/success/posturl', 'OrderController@orderSuccess');
+
+    Route::get('admin/{admin_id}/allscreens', 'ScreenController@getScreens');
+    Route::get('admin/{admin_id}/{screen_id}/getscreenfields', 'ScreenController@getScreenField');
+    Route::post('admin/{admin_id}/saveScreenFields', 'ScreenController@saveScreenFields');
 
     // Eveplace promotion section
     Route::get('evezplace/{section_id}/promotion', 'AdminEvezplacePromotionController@index');
@@ -83,12 +91,14 @@ Route::group(array('prefix' => 'v1'), function () {
     // Evezplace recommendations section
     Route::get('evezplace/{section_id}/recommendations', 'EvezplaceRecommendationController@index');
     Route::post('admins/{user_id}/evezplace/{section_id}/recommendation', 'EvezplaceRecommendationController@store');
+    Route::post('admins/{user_id}/evezplace/deleteRecommendation', 'EvezplaceRecommendationController@RecomondationDelete');
     Route::get('admin/evezplace/recommendations/{id}', 'EvezplaceRecommendationController@show');
     Route::post('admins/{user_id}/evezplace/{section_id}/recommendation/image/upload', 'EvezplaceRecommendationController@updateRecommendationImage');
 
     // Evezplace trending items section
     Route::get('evezplace/{section_id}/trending/items', 'EvezplaceTrendingController@index');
     Route::post('admins/{user_id}/evezplace/{section_id}/trending/item', 'EvezplaceTrendingController@store');
+    Route::post('admins/{user_id}/evezplace/deleteTrendingItem', 'EvezplaceTrendingController@TrendingDelete');
     Route::get('admin/evezplace/trending/items/{id}', 'EvezplaceTrendingController@show');
     Route::post('admins/{user_id}/evezplace/{section_id}/trending/item/image/upload', 'EvezplaceTrendingController@updateTrendingItemImage');
 
@@ -116,7 +126,7 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::post('change_password/user', 'UsersController@ChangePassword');
     Route::post('users/forgot_password', 'UsersController@doForgotPassword');
     Route::post('users/reset_password', 'UsersController@doResetPassword');
-    Route::get('users/logout', 'UsersController@logout');
+    Route::get('users/{id}/logout', 'UsersController@logout');
     Route::post('users/{id}/aboutme', 'UsersController@updateAboutMe');
     Route::get('users/{id}/profile_image/current', 'UsersController@getCurrentProfilePic');
     Route::get('users/{id}/bottom_image/current', 'UsersController@getBottomProfilePic');
@@ -128,7 +138,8 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::post('users/right_cover_image/update', 'UsersController@updateRightCoverPic');
     Route::post('users/bottom_cover_image/update', 'UsersController@updateBottomCoverPic');
     Route::get('users/{user_id}/invites', 'UsersController@inviteHistory');
-
+    Route::post('users/checkforPasswordField', 'UsersController@checkforPasswordField');
+    
     // User details routes
     Route::get('users/{user_id}/personal_info', 'UserDetailsController@getPersonalInfo');
     Route::post('users/personal_info/save', 'UserDetailsController@savePersonalInfo');
@@ -175,9 +186,18 @@ Route::group(array('prefix' => 'v1'), function () {
 
     Route::post('posts/{post_id}/priority/update', 'WoiceController@updatePostPriority');
 
+     //chat
+    Route::any('chat/messages', 'OneOnOneChatController@getMessages');
+    Route::post('chat/save_message', 'OneOnOneChatController@saveMessage');
+    Route::any('chat/updates', 'OneOnOneChatController@doUpdates');
+    Route::any('chat/mark_read', 'OneOnOneChatController@markRead');
+    Route::get('chatstatusUpdate/','OneOnOneChatController@chatstatusUpdate');
+    Route::any('chat/unread-count', 'OneOnOneChatController@getUnreadCount');
+    Route::any('chat/{user_id}/status','OneOnOneChatController@getUserOnlineStatus');
     //searchPost()
     Route::get('deletePost/{woice_id}', 'WoiceController@deletePost');
     Route::post('updatePost', 'WoiceController@updatePost');
+    Route::post('updatePost/circle', 'WoiceController@updatePostCircle');
     Route::post('users/{user_id}/post/create', 'WoiceController@createPost');
     Route::post('users/{user_id}/posts/{post_id}/rewoice', 'WoiceController@createRewoicePost');
 
@@ -249,6 +269,8 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::post('users/store/updatestorestatus/update', 'StoreController@updateStoreStatus');
     Route::get('users/store/getstorestatus/{store_id}/get', 'StoreController@getStoreStatus');
     Route::get('users/store/getstorestatus/enums', 'StoreController@getStoreStatusEnum');
+    Route::post('users/store/setstorestatus/Accept', 'StoreController@StoreAcceptByAdmin');
+    Route::post('users/store/setstorestatus/Reject', 'StoreController@StoreRejectByAdmin');
 
 
     //UpdateStoreFooterInfo
@@ -264,6 +286,7 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::get('stores/{store_id}/get', 'StoreController@getStoreById');
     Route::get('stores/subcategory/{store_subcategory_id}/get', 'StoreController@getStoreBySubCategoryId');
     Route::get('stores/owner/{user_id}/get', 'StoreController@getStoreByOwner');
+    Route::get('stores/owner/guestuser/{user_id}/get', 'StoreController@getStoreGuestUser');
     Route::get('stores/owner/{user_id}/type/{typeId}/get', 'StoreController@getStoreByOwnerAndType');
     Route::get('stores/type/{typeId}/get', 'StoreController@getStoreByType');
     Route::post('stores/search/advanced', 'StoreController@searchStore');
@@ -277,7 +300,10 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::post('stores/grade', 'StoreFrontController@addGrade');
     Route::post('stores/restream', 'StoreFrontController@createStoreStream');
     Route::get('stores/{store_id}/restreams', 'StoreFrontController@getStoreRestreams');
-
+    Route::post('contract/upload', 'StoreController@storeContract');
+    Route::get('stores/admin/contract', 'StoreController@getStoreContractsAdmin');
+    Route::post('stores/admin/contract/update', 'StoreController@updateStoreContractStatus');
+    
     //Products Route
     Route::post('stores/productline/store', 'ProductController@store');
     Route::post('stores/productline/{storeId}/update', 'ProductController@update');
@@ -285,6 +311,7 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::get('store/productlines/{productline_id}', 'ProductController@getProductLine');
     Route::get('stores/productline/{id}/delete', 'ProductController@destroy');
     Route::get('stores/product/{id}/delete', 'ProductController@deleteProduct');
+    Route::get('products/search/{searchkey}', 'ProductController@searchProduct');
 
     //DeleteProduct
 
@@ -298,7 +325,7 @@ Route::group(array('prefix' => 'v1'), function () {
     Route::get('stores/product/productSKU/{productSKUId}/delete', 'ProductController@DeleteProductSKU');
     Route::get('stores/productline/products/{productlineId}/get', 'ProductController@getAllProducts');
     Route::get('stores/products/{productId}/get', 'ProductController@getProductById');
-    Route::get('stores/productline/products/{productLineId}/get', 'ProductController@getProductsByProductLineId');
+    //Route::get('stores/productline/products/{productLineId}/get', 'ProductController@getProductsByProductLineId');
     Route::post('stores/products/{product_id}/variants', 'ProductController@getProductVariants');
     Route::post('stores/product/trendingproduct/{productSKUId}/update', 'ProductController@UpdateTrendingProduct');
     Route::post('stores/products/{product_id}/rfi/create', 'ProductController@createRequestInfo');

@@ -64,18 +64,30 @@
     </script>
     <!--test comment-->
     <script>
-        window.fbAsyncInit = function() {
-            FB.init({appId: '952205414789604', status: true, cookie: true,
-                xfbml: true});
-        };
-        (function() {
-            var e = document.createElement('script'); e.async = true;
-            e.src = document.location.protocol +
-            '//connect.facebook.net/en_US/all.js';
-            document.getElementById('fb-root').appendChild(e);
-        }());
+
+      var base; 
+      var fbAppId       = '506370999551048';
+      var gmailAppId    = '81816055431-rqsavvo6lqmk0dhscejmq346ohmg6e09.apps.googleusercontent.com';
+      var linkedinAppId = '75i5a2ejgb4098';
+
+       window.fbAsyncInit = function() {
+        FB.init({
+          appId      : fbAppId,
+          xfbml      : true,
+          version    : 'v2.5'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
     </script>
 </head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <body ng-app="evezownapp" ng-controller="ApplicationCtrl">
 
@@ -87,35 +99,40 @@
 
 <div class="container" ng-view>
 
+            
+
 </div>
+
+<div id="chat-container" class="fixed" ng-if="loggedIn" style="display:none;"  ng-include='"partials/chat/chat-form.html"' ng-controller="community"></div>
+
 <!-- /container -->
 <footer id="footer" class="midnight-blue">
     <div class="container center-block ">
         <!-- <div class="col-sm-12 footer-links"> -->
         <div class="row" style="margin:0px;">
             <ul class="col-md-4">
-                <li><a href="#aboutus">About Us</a></li>
-                <li><a href="#careers">Careers</a></li>
-                <li><a href="#contactus">Contact Us</a></li>
+                <li><a href="#aboutus">{{FooterCaptions[0].description}}</a></li>
+                <li><a href="#careers">{{FooterCaptions[3].description}}</a></li>
+                <li><a href="#contactus">{{FooterCaptions[6].description}}</a></li>
             </ul>
             <ul class="col-md-4">
-                <li><a href="#streamit">Mysite</a></li>
-                <li><a href="#evezplace">MarketPlace</a></li>
-                <li><a href="#wopportunity">Jobs</a></li>
+                <li><a href="#streamit">{{FooterCaptions[1].description}}</a></li>
+                <li><a href="#evezplace">{{FooterCaptions[4].description}}</a></li>
+                <li><a href="#wopportunity">{{FooterCaptions[7].description}}</a></li>
             </ul>
             <ul class="col-md-4">
-                <li><a href="#contribute">Contribute</a></li>
-                <li><a href="#advertisement">Advertise</a></li>
-                <li><a href="#friends/invite" ng-if="loggedIn">Invite Friends</a>
+                <li><a href="#contribute">{{FooterCaptions[2].description}}</a></li>
+                <li><a href="#advertisement">{{FooterCaptions[5].description}}</a></li>
+                <li><a href="#friends/invite" ng-if="loggedIn">{{FooterCaptions[8].description}}</a>
                 </li>
-                <li><a href="#login" ng-if="!loggedIn">Invite Friends</a></li>
+                <li><a href="#login" ng-if="!loggedIn">{{FooterCaptions[8].description}}</a></li>
             </ul>
         </div>
         <!-- </div> -->
         <div class="row" style="margin:0px;">
             <div class="col-sm-12 text-center">
-                <p style="margin:0px;">Terms of Use. <a href="#privacy">Privacy Policy</a></p>
-                © 2015 <a target="_blank" href="#" title="">Evezown</a>. All Rights Reserved. Powered by<a target="_blank" href="http://webinsights.in" title=""> Webinsights Pvt Ltd</a>.
+                <p style="margin:0px;">Terms of Use. <a href="#privacy">{{FooterCaptions[9].description}}</a></p>
+                © 2015 <a target="_blank" href="#" title="">Evezown</a>. All Rights Reserved. Powered by<a target="_blank" href="http://webinsights.in" title=""> {{FooterCaptions[10].description}}</a>.
             </div>
         </div>
     </div>
@@ -241,7 +258,7 @@
 <script src="partials/admin/profileDetailsService.js"></script>
 <script src="partials/admin/AdminInviteFrndsCtrl.js"></script>
 <script src="partials/admin/AlbumCtrl.js"></script>
-<script src="partials/admin/adminAlbums.js"></script>
+<script src="partials/admin/Manage/adminScreenCtrl.js"></script>
 <script src="partials/admin/Manage/manageStoreLeftMenuController.js"></script>
 
 
@@ -303,6 +320,7 @@
 <script src="partials/evezplace/classifiedsService.js"></script>
 <script src="partials/evezplace/classifiedsListService.js"></script>
 <script src="partials/evezplace/browse/store/storeService.js"></script>
+<script src="partials/evezplace/productSearch.js"></script>
 <!--<script src="scripts/controllers/buyer/BuyerOrdersCtrl.js"></script>-->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -326,6 +344,13 @@
 <script src="scripts/controllers/evezplace/recommendation.js"></script>
 <script src="scripts/services/evezplacesection.js"></script>
 <script src="scripts/filters/addlimitellipsis.js"></script>
+
+<script src="custom/satellizer.js"></script>
+
+
+
+ 
+
 <!-- endbuild -->
 
 <!--<script src="libs/ng-password-strength/dist/scripts/ng-password-strength.min.js"></script>-->
@@ -337,15 +362,18 @@
              Place some loading notification, so user won't get confused.
              You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. --><script>// <![CDATA[
 (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    var po = document.createElement('script'); 
+    po.type = 'text/javascript'; 
+    po.async = true;
     po.src = 'https://apis.google.com/js/client:plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(po, s);
 })();
 
 // ]]></script><!-- Second script needed for accessing Google API (gapi.*) . It's usage will be described in controller. --><script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 <script type="text/javascript">
+    
     $(document).ready(function () {
-
 
         var clickEvent = false;
         $('#myCarousel').on('click', '.nav a', function () {

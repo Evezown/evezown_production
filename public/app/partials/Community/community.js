@@ -1,7 +1,7 @@
 'use strict';
 
 
-evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,$cookieStore,ngDialog,$routeParams)
+evezownApp.controller('community' ,function($rootScope, $scope, friendsService, PATHS,$http,$cookieStore,ngDialog,$routeParams)
 {
         $scope.caption = true;
         $scope.carouselTitle = "Evezown";
@@ -9,7 +9,7 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
 
         //$scope.currentUserId = $cookieStore.get('userId');
     $scope.loggedInUserId = $cookieStore.get('userId');
-    $scope.currentUserId = $routeParams.id;
+    $scope.currentUserId  = $routeParams.id;
     if ($routeParams.id != undefined) {
         $scope.currentUserId = $routeParams.id;
     }
@@ -17,25 +17,30 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
         $scope.currentUserId = $scope.loggedInUserId;
     }
 
-        $scope.GetProfileImage = function(member)
-        {
-            ////http://creativethoughts.co.in/evezown/api/public/v1/users/{user_id}/profile_image/current
-            //$http.get($scope.service_url + 'users/'+member.id+'/profile_image/current').
-            //    success(function (data, status, headers, config)
-            //    {
-            //        member.profileImage = data;
-            //    })
-            //    .error(function (data)
-            //    {
-            //        console.log(data);
-            //    });
-        }
+    $rootScope.loggedInUserId    = $cookieStore.get('userId');
+    $rootScope.UserOnlinestatus  = '';
+    $rootScope.friendList        = '';
+
+    $scope.GetProfileImage = function(member)
+    {
+        ////http://creativethoughts.co.in/evezown/api/public/v1/users/{user_id}/profile_image/current
+        //$http.get($scope.service_url + 'users/'+member.id+'/profile_image/current').
+        //    success(function (data, status, headers, config)
+        //    {
+        //        member.profileImage = data;
+        //    })
+        //    .error(function (data)
+        //    {
+        //        console.log(data);
+        //    });
+    }
+    
     $scope.fetchFriends = function()
     {
-        $http.get(PATHS.api_url + 'users/' + $scope.currentUserId + '/friends')
+        $http.get(PATHS.api_url + 'users/' + $scope.loggedInUserId + '/friends')
             .success(function (data)
             {
-                    $scope.friendList = data.data;
+                    $rootScope.friendList = data.data;
             })
             .error(function (err)
             {
@@ -46,6 +51,17 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
                 $scope.fetchMembers("");
             });
     }
+
+
+    $scope.getUserOnlineStatus = function()
+    {
+        $http.get(PATHS.api_url + 'chat/' + $scope.loggedInUserId + '/status')
+            .success(function (data)
+            { 
+                $rootScope.UserOnlinestatus = data;
+            });
+    }
+    
 
     $scope.fetchMembers = function(searchkey)
     {
@@ -214,5 +230,6 @@ evezownApp.controller('community' ,function($scope, friendsService, PATHS,$http,
 
         $scope.fetchFriends();
         $scope.GetMemberRequest();
+        $scope.getUserOnlineStatus();
 
 });

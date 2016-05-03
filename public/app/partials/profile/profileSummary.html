@@ -53,10 +53,10 @@
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-if="loggedInUserId == currentUserId">
-                <a href="#profile/{{loggedInUserId}}" ng-class="{ active: isActive('/profile')}">Mysite</a>
+                <a href="#profile/myprofile/{{loggedInUserId}}" ng-class="{ active: isActive('/profile')}">Mysite</a>
             </li>
             <li ng-if="loggedInUserId != currentUserId">
-                <a href="#profile/{{loggedInUserId}}">Mysite</a>
+                <a href="#profile/myprofile/{{loggedInUserId}}">Mysite</a>
             </li>
             <!-- <li ng-if="loggedInUserId == currentUserId"> -->
             <li>
@@ -208,7 +208,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12" id="view">
                     <h3>About Me</h3>
 
                     <p style="text-align:justify;padding-bottom:10px;">{{ aboutme }}</p>
@@ -365,7 +365,7 @@
                 <div class="col-md-12 col-xs-12 summary-box-outer" style="margin-top:10px;">
                     <div class="col-md-12 col-xs-12 no-padding summary-box" style="margin-bottom:10px;">
                         <div class="col-md-12 col-xs-12 no-padding summary-header">
-                            <h5><i class="fa fa-sitemap"></i>&nbsp;&nbsp;You Online Mentions</h5>
+                            <h5><i class="fa fa-sitemap"></i>&nbsp;&nbsp;Your Online Mentions</h5>
                         </div>
                         <div class="col-md-12 col-xs-12 no-padding summary-content">
                             <br>

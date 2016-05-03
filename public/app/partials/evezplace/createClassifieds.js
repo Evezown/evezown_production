@@ -427,10 +427,14 @@ evezownApp.controller('cropTitleImageCtrl', function ($scope, ClassifiedsService
 
     // Crop Title image
     $scope.uploadTitleImage = function () {
-
-        usSpinnerService.spin('spinner-1');
-
-        ClassifiedsService.uploadTitleImage(
+        if(!$scope.titleImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            ClassifiedsService.uploadTitleImage(
             getBase64Image($scope.titleImage.src),
             $scope.selection)
             .then(function (data) {
@@ -438,7 +442,11 @@ evezownApp.controller('cropTitleImageCtrl', function ($scope, ClassifiedsService
                 toastr.success(data.message, 'Upload Title Image');
 
                 ngDialog.close("", data);
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error(error.message, 'Please crop the image before upload');
             });
+        }
     }
 
     function getBase64Image(dataURL) {
@@ -474,12 +482,14 @@ evezownApp.controller('cropBodyImageCtrl', function ($scope, ImageUploadService,
 
     // Crop Title image
     $scope.uploadBodyImage = function () {
-
-        usSpinnerService.spin('spinner-1');
-
-
-
-        ImageUploadService.cropImage(
+        if(!$scope.bodyImage.src)
+        {
+            toastr.error('Please select an image');
+        }
+        else
+        {
+            usSpinnerService.spin('spinner-1');
+            ImageUploadService.cropImage(
             $scope.bodyImage.src,
             $scope.selection)
             .then(function (data) {
@@ -487,7 +497,11 @@ evezownApp.controller('cropBodyImageCtrl', function ($scope, ImageUploadService,
                 toastr.success(data.message, 'Upload Body Image');
 
                 ngDialog.close("", data);
+            }, function (error) {
+                usSpinnerService.stop('spinner-1');
+                toastr.error(error.message, 'Please crop the image before upload');
             });
+        }
     }
 });
 

@@ -182,6 +182,16 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
                     authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator]
                 }
             });
+        
+        $routeProvider
+
+        .when('/admin/store_contract', {
+            templateUrl: 'partials/admin/store_contract.html',
+            controller: 'storelist',
+            data: {
+                authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator]
+            }
+        });
 
         $routeProvider
 
@@ -241,6 +251,17 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
                     authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator]
                 }
             });
+
+        $routeProvider
+
+            .when('/admin/manage/screens', {
+                templateUrl: 'partials/admin/Manage/screens.html',
+                controller: 'adminScreenCtrl',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator]
+                }
+            });
+
         $routeProvider
 
             .when('/admin/evezplace/recommendations', {
@@ -327,6 +348,15 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
         $routeProvider
             .when('/admin/store/:storeId/manage/admin_product_catalogue', {
                 templateUrl: 'partials/admin/Manage/product_catalog.html',
+                controller: 'CreateStoreController',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator]
+                }
+            });
+        
+        $routeProvider
+            .when('/admin/store/:storeId/manage/admin_analytics', {
+                templateUrl: 'partials/admin/Manage/admin_store_analytics.html',
                 controller: 'CreateStoreController',
                 data: {
                     authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator]
@@ -917,7 +947,7 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
 
             .when('/mystores/:id', {
                 templateUrl: 'partials/profile/mystores.html',
-                controller: 'groups',
+                controller: 'profileCtrl',
                 data: {
                     authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user]
                 }
@@ -1249,6 +1279,16 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
 
         $routeProvider
 
+            .when('/search/products/:searchKey', {
+                templateUrl: 'partials/evezplace/productSearch.html',
+                controller: 'SearchProductController',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user, USER_ROLES.guest]
+                }
+            });
+
+        $routeProvider
+
             .when('/store/:storeId/manage/store_info', {
                 templateUrl: 'partials/evezplace/manage/store/store_info.html',
                 data: {
@@ -1404,7 +1444,27 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
 
         $routeProvider
 
+            .when('/store/:id/:pagesrc', {
+                templateUrl: 'partials/evezplace/browse/store/store_front.html',
+                controller: 'StoreFrontController',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user, USER_ROLES.guest]
+                }
+            });
+
+        $routeProvider
+
             .when('/store/products/:id', {
+                templateUrl: 'partials/evezplace/browse/store/product_detail.html',
+                controller: 'ProductDetailsCtrl',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user, USER_ROLES.guest]
+                }
+            });
+
+        $routeProvider
+
+            .when('/store/products/:id/:pagesrc', {
                 templateUrl: 'partials/evezplace/browse/store/product_detail.html',
                 controller: 'ProductDetailsCtrl',
                 data: {
@@ -1427,6 +1487,16 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
         $routeProvider
 
             .when('/classifieds/:id', {
+                templateUrl: 'partials/evezplace/browse/classifieds/classified_details.html',
+                controller: 'ClassifiedDetailsCtrl',
+                data: {
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user, USER_ROLES.guest]
+                }
+            });
+
+        $routeProvider
+
+            .when('/classifieds/:id/:pagesrc/:view', {
                 templateUrl: 'partials/evezplace/browse/classifieds/classified_details.html',
                 controller: 'ClassifiedDetailsCtrl',
                 data: {
@@ -1552,17 +1622,6 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-        // Set your appId through the setAppId method or
-        // use the shortcut in the initialize method directly.
-        FacebookProvider.init('952205414789604');
-
-
-        // Set the linkedin api key
-        $linkedInProvider
-            .set('appKey', '78mct0q0l2nefx')
-            .set('scope', 'r_basicprofile r_network rw_nus w_messages')
-            .set('authorize', true);
-
         ngDialogProvider.setDefaults({
             //className: 'ngdialog-theme-default',
             //plain: true,
@@ -1588,6 +1647,35 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
+
+        base = PATHS.api_url;
+        
+        $authProvider.baseUrl = base;
+
+        $authProvider.facebook({
+          clientId: fbAppId
+        });
+
+        $authProvider.google({
+          clientId: gmailAppId
+        });
+
+        $authProvider.linkedin({
+          clientId: linkedinAppId
+        });
+
+
+        // Set your appId through the setAppId method or
+        // use the shortcut in the initialize method directly.
+        FacebookProvider.init(fbAppId);
+
+        // Set the linkedin api key
+        $linkedInProvider
+            .set('appKey', '78mct0q0l2nefx')
+            .set('scope', 'r_basicprofile r_network rw_nus w_messages')
+            .set('authorize', true);
+
+
 
 //        $authProvider.yahoo({
 //            clientId: 'dj0yJmk9TXF2b3kxd1oyZ0NXJmQ9WVdrOU4zRmpRa1Z3TjJzbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD05Nw--'
@@ -1746,7 +1834,7 @@ evezownApp.constant('AUTH_EVENTS', {
     notAuthorized: 'auth-not-authorized'
 });
 evezownApp.constant('PATHS', {
-     //api_url: 'http://localhost:8000/v1/'
+    // api_url: 'http://localhost:8000/v1/'
     //api_url: 'http://creativethoughts.co.in/evezown/api/public/v1/'
     //api_url: 'http://evezown.com/api/public/v1/'
     //api_url: 'http://evezown.com/beta/api/public/v1/'
@@ -1760,6 +1848,9 @@ evezownApp.constant('USER_ROLES', {
     guest: 'Guest'
 });
 
+evezownApp.constant('GmailCredentials', {
+   client_id: gmailAppId
+});
 // Filter
 
 
@@ -1871,6 +1962,58 @@ evezownApp.directive('select', function ($interpolate) {
         }
     };
 });
+
+
+evezownApp.directive('ngReallyClick', [function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('click', function() {
+                var message = attrs.ngReallyMessage;
+                if (message && confirm(message)) {
+                    scope.$apply(attrs.ngReallyClick);
+                }
+            });
+        }
+    }
+}]);
+
+evezownApp.directive('httpPrefix', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, controller) {
+            function ensureHttpPrefix(value) {
+                // Need to add prefix if we don't have http:// prefix already AND we don't have part of it
+                if(value && !/^(https?):\/\//i.test(value)
+                   && 'http://'.indexOf(value) !== 0 && 'https://'.indexOf(value) !== 0 ) {
+                    controller.$setViewValue('http://' + value);
+                    controller.$render();
+                    return 'http://' + value;
+                }
+                else
+                    return value;
+            }
+            controller.$formatters.push(ensureHttpPrefix);
+            controller.$parsers.splice(0, 0, ensureHttpPrefix);
+        }
+    };
+});
+
+evezownApp.directive('ngEnter', function () {
+        return {
+           link: function (scope, elements, attrs) {
+              elements.bind('keydown keypress', function (event) {
+                  if (event.which === 13) {
+                      scope.$apply(function () {
+                          scope.$eval(attrs.ngEnter);
+                      });
+                      event.preventDefault();
+                  }
+              });
+           }
+        };
+    });
 
 
 evezownApp.directive('sampleCount', function () {
