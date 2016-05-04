@@ -33,27 +33,30 @@ class DatabaseSeeder extends Seeder {
 //
 //		$this->call('VisibilityTableSeeder');
 
-        $this->call('EvezplaceProductsTableSeeder');
+//        $this->call('EvezplaceProductsTableSeeder');
 
-        $this->call('EvezplaceProductSubcategoriesTableSeeder');
+//        $this->call('EvezplaceProductSubcategoriesTableSeeder');
 
-        $this->call('ServicesCategoriesTableSeeder');
+ //       $this->call('ServicesCategoriesTableSeeder');
 
-        $this->call('ServiceSubCategoriesTableSeeder');
+ //       $this->call('ServiceSubCategoriesTableSeeder');
 
-        $this->call('EvezplaceListingTableSeeder');
+  //      $this->call('EvezplaceListingTableSeeder');
 
-        $this->call('EvezplaceListingSubcategoriesTableSeeder');
+  //      $this->call('EvezplaceListingSubcategoriesTableSeeder');
 
-        $this->call('ListingTypeTableSeeder');
+  //      $this->call('ListingTypeTableSeeder');
 
-        $this->call('ProductPlusServiceTableSeeder');
+  //      $this->call('ProductPlusServiceTableSeeder');
 
-        $this->call('ProductPlusServiceSubTableSeeder');
+ //       $this->call('ProductPlusServiceSubTableSeeder');
 
-        $this->call('StoreSubscriptionTypeTableSeeder');
+ //       $this->call('StoreSubscriptionTypeTableSeeder');
 
-        $this->call('ReccoSubscriptionsTableSeeder');
+ //       $this->call('ReccoSubscriptionsTableSeeder');
+
+		$this->call('screensTableSeeder');
+		
 	}
 
 }
