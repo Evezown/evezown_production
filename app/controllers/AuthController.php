@@ -70,7 +70,7 @@ class AuthController extends AppController {
         $providerId        = $profile['id']; 
         $providerUsername  = $profile['name'];
         $providerEmail     = $profile['email']; 
-        $providerPicture   = $profile['picture']['data']['url'];
+        $providerPicture   = isset($profile['picture']['data']['url'])?$profile['picture']['data']['url']: '';
         $providerfirstName = $profile['first_name']; 
         $providerlastName  = $profile['last_name'];
          
@@ -147,7 +147,7 @@ class AuthController extends AppController {
         $providerId        = $profile['sub']; 
         $providerUsername  = $profile['name'];
         $providerEmail     = $profile['email'];
-        $providerPicture   = $profile['picture'];  
+        $providerPicture   = isset($profile['picture'])?$profile['picture']:'';  
         $providerNames     = explode(' ', $profile['name']);
         $providerfirstName = isset($providerNames[0])?$providerNames[0]:''; 
         $providerlastName  = isset($providerNames[1])?$providerNames[1]:'';
@@ -226,7 +226,7 @@ class AuthController extends AppController {
         $providerId        = $profile['id']; 
         $providerUsername  = $profile['firstName'].' '.$profile['lastName'];
         $providerEmail     = $profile['emailAddress']; 
-        $providerPicture   = $profile['pictureUrl'];
+        $providerPicture   = isset($profile['pictureUrl'])?$profile['pictureUrl']:'';
         $providerfirstName = $profile['firstName']; 
         $providerlastName  = $profile['lastName'];
         
@@ -293,8 +293,11 @@ class AuthController extends AppController {
 
         //create user profile image
         if(!empty($providerPicture)){
+
+            $picture = $this->downloadSocialProfileImage($providerPicture, $user->id);
+
             $evezImg = EvezownImage::create([
-                        'large_image_url' => $providerPicture
+                        'large_image_url' => $picture
                     ]
                 );
         }
@@ -341,9 +344,11 @@ class AuthController extends AppController {
 
             //update user profile image
             if(!empty($providerPicture)){
+
+                $picture = $this->downloadSocialProfileImage($providerPicture, $userId);
                 
                 $evezImg = EvezownImage::where('id', $userPictureId)
-                                         ->update(['large_image_url' => $providerPicture]);
+                                         ->update(['large_image_url' => $picture]);
 
             }
             
@@ -351,9 +356,11 @@ class AuthController extends AppController {
 
             //create user profile image
             if(!empty($providerPicture)){
+
+                $picture = $this->downloadSocialProfileImage($providerPicture, $userId);
                 
                 $evezImg = EvezownImage::create([
-                            'large_image_url' => $providerPicture
+                            'large_image_url' => $picture
                         ]
                     );
             
@@ -364,6 +371,25 @@ class AuthController extends AppController {
             }
 
         }
+
+    }
+
+
+    public function downloadSocialProfileImage($providerPicture, $userId){
+
+        $extn      = '.jpg';
+        $filename  = $userId.'_'.$userId.''.$extn;
+        $imagePath = public_path() . '/images/' . $filename;
+
+        $ch = curl_init($providerPicture);
+        $fp = fopen($imagePath, 'wb');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        return $filename;
 
     }
 
