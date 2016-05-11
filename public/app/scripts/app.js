@@ -1174,7 +1174,7 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
                 templateUrl: 'partials/evezplace/whatdoiget.html',
                 controller: 'StoreInfoController',
                 data: {
-                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user]
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user,USER_ROLES.guest]
                 }
             });
 
@@ -1184,7 +1184,7 @@ evezownApp.config(function ($routeProvider, $stateProvider, $urlRouterProvider, 
                 templateUrl: 'partials/evezplace/typeofstores.html',
                 controller: 'StoreInfoController',
                 data: {
-                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user]
+                    authorizedRoles: [USER_ROLES.admin, USER_ROLES.moderator, USER_ROLES.user,USER_ROLES.guest]
                 }
             });
 
@@ -2011,6 +2011,23 @@ evezownApp.directive( 'backButton', function() {
         }
     };
 });
+
+evezownApp.directive('customPopover', function () {
+    return {
+        restrict: 'A',
+        template: '<span>{{label}}</span>',
+        link: function (scope, el, attrs) {
+            scope.label = attrs.popoverLabel;
+            $(el).popover({
+                trigger: 'hover',
+                html: true,
+                content: attrs.popoverHtml,
+                placement: attrs.popoverPlacement
+            });
+        }
+    };
+});
+
 
 evezownApp.directive('ngEnter', function () {
         return {

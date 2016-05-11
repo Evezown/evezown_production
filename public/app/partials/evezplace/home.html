@@ -37,14 +37,24 @@
                 </div>
 
                 <div class="col-md-12 col-xs-12">
-                    <div class="col-md-8 zero-left-padding">
+                    <div class="col-md-4 zero-left-padding">
                         <!-- <p id="eye-buy"><i>Explore Evezown.com. Make it your own place!</i></p> -->
                     </div>
-                    <div class="col-md-2 col-xs-6">
-                        <button class="btn btn-lg btn-primary pull-right" ng-click="CallMe();" style="padding:6px 10px; font-size:16px;font-weight: 400;">{{LandingCaptions[6].description}}</button>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <a class="btn btn-block" id="btn-browse-store" href="#whatdoiget" style="text-align:center; padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Store</a>
                     </div>
-                    <div class="col-md-2 col-xs-6">
-                        <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button" style="padding:6px 10px; font-size:16px;font-weight: 400;"> {{LandingCaptions[7].description}} &raquo;</a>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <a class="btn btn-block" id="btn-browse-store" href="#classifieds/create/step1" style="text-align:center; padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Ads</a>
+                    </div>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <button class="btn btn-lg btn-primary" ng-click="CallMe();" style="padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">{{LandingCaptions[6].description}}</button>
+                    </div>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <a class="btn btn-lg btn-primary" href="#requestinvite" role="button" style="padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;"> {{LandingCaptions[7].description}} &raquo;</a>
                     </div>
                 </div>
             </div>
@@ -54,15 +64,21 @@
                 <p style="text-align:justify;word-break: break-all;">Good to see you, Go ahead create your own place, create your site, build your closed private community, use our single window to create stores, Ads & Campaigns, promote your stores and business through host of promotional features we offer.</p>
 
                 <div class="request-invite">
-                    <div class="col-md-8 zero-left-padding">
-                        <p id="eye-buy"><a href="#profile/{{userId}}/personalinfo" style="text-decoration:none;"><i>Complete your profile now.</i></a></p>
+
+                    <div class="col-md-6 zero-left-padding">
+                        <!-- <p id="eye-buy"><i>Explore Evezown.com. Make it your own place!</i></p> -->
                     </div>
-                    <div class="col-md-4" ng-hide="loggedIn">
-                        <a class="btn btn-lg btn-primary pull-right" href="#requestinvite" role="button">Create Signup Invite &raquo;</a>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <a class="btn btn-block" id="btn-browse-store" href="#whatdoiget" style="text-align:center;padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Store</a>
                     </div>
-                    <div class="col-md-4" ng-show="loggedIn" style="margin-top: 40px">
-                        <a class="btn btn-lg btn-primary pull-right" href="#profile/{{userId}}/personalinfo" role="button">Complete
-                            your profile</a>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <a class="btn btn-block" id="btn-browse-store" href="#classifieds/create/step1" style="text-align:center;padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Ads</a>
+                    </div>
+
+                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <a class="btn btn-lg btn-primary" href="#profile/{{userId}}/personalinfo" role="button" style="padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;"> Complete your profile</a>
                     </div>
                 </div>
             </div>

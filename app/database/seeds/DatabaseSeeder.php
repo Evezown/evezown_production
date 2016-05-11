@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder {
 
 		Eloquent::unguard();
 
-		$this->call('RoleTableSeeder');
+		/*$this->call('RoleTableSeeder');
 
 		$this->call('PermissionsTableSeeder');
 
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder {
 
         $this->call('screensTableSeeder');
 
-        $this->call('PaymentModeTableSeeder');
+        $this->call('PaymentModeTableSeeder');*/
         
         $this->call('StoreStatusEnumTableSeederAdditions');
        // -- Following Seeder are not required. This is for testing purpose. -- 
