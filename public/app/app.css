@@ -583,6 +583,19 @@ margin-top: 10px;
     background: #692668;
 }
 
+.btn-create-store {
+    background: #B573B5;
+    border-color: transparent;
+    border-radius: 0px;
+    font-weight: 100;
+    color:#FFFFFF;
+}
+
+.btn-create-store:hover {
+    background: #B573B5;
+    color:#FFFFFF;
+}
+
 #btn-login {
     color : #ffffff;
     padding: 10px 20px 10px 20px;
