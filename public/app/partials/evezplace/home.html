@@ -14,7 +14,6 @@
              
             <!-- To be shown if not logged in -->
             <div class="col-md-12" ng-hide="loggedIn" style="padding:0px;">
-
                 <div class="col-md-4" >
                 <a href="#profile/{{userId}}" style="text-decoration:none;"><h1 style="font-size:22px;margin-bottom:10px;margin-top:10px;background-color:#FFFFFF;" id="step1" data-target="#step1" data-toggle="tab" data-slide-to="0">{{LandingCaptions[0].description}}</h1></a>
                 <p style="text-align: justify;word-break: break-all;font-size:15px;">
@@ -37,11 +36,12 @@
                 </div>
 
                 <div class="col-md-12 col-xs-12">
-                    <div class="col-md-4 zero-left-padding">
-                        <!-- <p id="eye-buy"><i>Explore Evezown.com. Make it your own place!</i></p> -->
-                    </div>
 
                     <div class="col-md-2 col-xs-6 text-center no-padding">
+                        <button class="btn btn-lg btn-primary" ng-click="CallMe();" style="padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">{{LandingCaptions[6].description}}</button>
+                    </div>
+
+                    <div class="col-md-2 col-xs-6 col-md-offset-2 text-center no-padding">
                         <a class="btn btn-lg btn-create-store" href="#whatdoiget" style="text-align:center; padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Store</a>
                     </div>
 
@@ -49,11 +49,9 @@
                         <a class="btn btn-lg btn-create-store" href="#classifieds/create/step1" style="text-align:center; padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Ads</a>
                     </div>
 
-                    <div class="col-md-2 col-xs-6 text-center no-padding">
-                        <button class="btn btn-lg btn-primary" ng-click="CallMe();" style="padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">{{LandingCaptions[6].description}}</button>
-                    </div>
+                    
 
-                    <div class="col-md-2 col-xs-6 text-center no-padding">
+                    <div class="col-md-2 col-xs-6 col-md-offset-2 text-center no-padding">
                         <a class="btn btn-lg btn-primary" href="#requestinvite" role="button" style="padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;"> {{LandingCaptions[7].description}} &raquo;</a>
                     </div>
                 </div>
@@ -65,16 +63,8 @@
 
                 <div class="request-invite">
 
-                    <div class="col-md-6 zero-left-padding">
+                    <div class="col-md-10 zero-left-padding">
                         <!-- <p id="eye-buy"><i>Explore Evezown.com. Make it your own place!</i></p> -->
-                    </div>
-
-                    <div class="col-md-2 col-xs-6 text-center no-padding">
-                        <a class="btn btn-lg btn-create-store" href="#whatdoiget" style="text-align:center;padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Store</a>
-                    </div>
-
-                    <div class="col-md-2 col-xs-6 text-center no-padding">
-                        <a class="btn btn-lg btn-create-store" href="#classifieds/create/step1" style="text-align:center;padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Ads</a>
                     </div>
 
                     <div class="col-md-2 col-xs-6 text-center no-padding">
