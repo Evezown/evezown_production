@@ -3,7 +3,7 @@
     <div id="navbar1">
         <ul class="nav navbar-nav">
             <li ng-class="">
-                <a href="#profile/myprofile/{{userId}}">Mysite</a>
+                <a href="#mystores/{{userId}}">Mysite</a>
             </li>
             <li ng-class="{ active: isActive('/friend/invite')}"><a class="active" href="#friends/invite">Invite People</a></li>
             <li ng-class="{ active: isActive('/explore')}">
@@ -46,7 +46,7 @@
 <div class="col-md-12" style="margin-top: 10px;">
     <ul class="breadcrumb" style="background: transparent; padding-left: 0px" >
         <li><a href="#home">Home</a> <span class="divider"></span></li>
-        <li><a href="#profile/{{userId}}">Mysite</a></li>
+        <li><a href="#mystores/{{userId}}">Mysite</a></li>
         <li class="active">Build Community</li>
     </ul>
 </div>
@@ -61,6 +61,9 @@
         </a>
         <a href="#circles" class="btn btn-default btn-block">
             <p>Circles</p>
+        </a>
+        <a  href="#manage/database" class="btn btn-default">
+            <p>Manage Database</p>
         </a>
         <a href="#advertise" class="btn btn-default btn-block ">
             <p>Advertise</p>

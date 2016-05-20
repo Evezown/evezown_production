@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="col-md-2 col-xs-6 text-center no-padding">
-                        <a class="btn btn-lg btn-create-store" href="#classifieds/create/step1" style="text-align:center; padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Ads</a>
+                        <a href class="btn btn-lg btn-create-store" ng-click="Create_Campaign();" style="text-align:center; padding:7px 10px; font-size:16px;font-weight: 400; width:95%;margin-top:2px;">Create Ads</a>
                     </div>
 
                     
@@ -78,8 +78,6 @@
 <!--description text ends-->
 <div ng-include src='"partials/evezplace/create_browse_partial.html"'></div>
 
-<div class="col-md-12 hidden-xs" ng-include src='"partials/evezplace/product_menu.html"'
-     ng-controller="ProductMenuController"></div>
 
 <div ng-include src='"partials/evezplace/promotion_partial.html"'></div>
 
@@ -89,5 +87,8 @@
     <div ng-include src='"partials/evezplace/products_partial.html"'></div>
     <div ng-include src='"partials/evezplace/article_news_interviews_partial.html"'></div>
 </div>
+
+<div class="col-md-12 hidden-xs" ng-include src='"partials/evezplace/product_menu.html"'
+     ng-controller="ProductMenuController"></div>
 
 <div ng-include src='"partials/video_interview_partial.html"'></div>
